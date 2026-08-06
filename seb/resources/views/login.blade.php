@@ -17,34 +17,35 @@
         @endif
     </head> 
    <body>
-        <div>
-            
-        </div>
+        <div class="container h-screen">
+            <div class="flex flex-col justify-center items-center h-full">
 
-        <form>
-            <div class="row mb-3">
-                <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
-                <div class="col-sm-10">
-                <input type="email" class="form-control" id="inputEmail3">
+                <div class="shadow-sm card">
+                    <div class="card-header">
+                        <h1 class="font-bold text-">LOGO</h1>
+                    </div>
+
+                    <div class="card-body">
+                        <form method="POST" action="{{ route('login') }}">
+                            @csrf
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required autofocus>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-full">Login</button>
+                        </form>
+                    </div>
+
                 </div>
+
             </div>
-            <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
-                <div class="col-sm-10">
-                <input type="password" class="form-control" id="inputPassword3">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-sm-10 offset-sm-2">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="gridCheck1">
-                    <label class="form-check-label" for="gridCheck1">
-                    Example checkbox
-                    </label>
-                </div>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Sign in</button>
-        </form>
+        </div>
    </body>
 </html>
