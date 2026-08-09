@@ -6,3 +6,7 @@ Route::get('/', function () {
     return view('login');
 });
 
+Route::redirect('/dashboard', function(){
+    return view('homePage');
+});
+

@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        
-        Schema::create('bibliotecaria', function (Blueprint $table) {
+        Schema::create('users', function(Blueprint $table){
             $table->string('nome', 255);
             $table->string('email', 255)->unique();
             $table->string('senha', 255); //mudar dps --> precisa de criptografia
-        });   
+            $table->enum('cargo', ['bibliotecaria', 'visitante'. 'usuario']);
+        });
     }
 
     /**
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        dropIfExists('bibliotecaria');
+        Schema::dropIfExists('users');
     }
 };
