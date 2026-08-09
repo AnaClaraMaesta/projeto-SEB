@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 })->middleware('auth:sanctum');
 */
 
-Route::post('/getLogin', function(Request $request){
+Route::get('/getLogin', function(Request $request){
     try {
         $user = DB::table('users')
             ->where('email', $request->input('email'))
