@@ -11,7 +11,7 @@ class userController extends Controller
      */
     public function index(Request $request)
     {
-        return view('login.index', compact('login'));
+        return view('layouts.cadastroUser');
     }
 
     /**

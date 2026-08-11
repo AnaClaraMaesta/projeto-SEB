@@ -1,17 +1,16 @@
 
-@extends('app')
+@extends('layouts.app')
 @section('login')
-    
 
-<div class="shadow card rounded-xl" style="width: 25rem;">
+<div class="shadow-sm card rounded-xl" style="width: 25rem;">
                 
         <div class="card-header text-center p-4 rounded-top-xl">
             <h1 class="text-2xl font-bold card-title">Login</h1>
-        </div>
+        </div>  
 
-        <div class="card-body p-4 mt-3">
+        <div class="card-body p-4 mt-3 ">
 
-            <form method="POST">
+            <form method="POST" action="" >
                 @csrf
 
                 <div class="mb-3">
@@ -26,12 +25,13 @@
                     <button type="submit" class="btn btn-primary w-100">Login</button>
                 </div>
 
-                <div class="mb-3 text-sm">
+                <div class="mb-3 text-sm text-blue-500 dark:text-cyan-300">
                     <a href="#" class="text-decoration-none">Esqueci a senha</a>
                 </div>
 
                 <div class="mb-3 text-sm">
-                    <a href="{{ route('cadastrarUser') }}" class="text-decoration-none">Não tenho conta</a>
+                    <a href="{{route('usuarios.cadastro')}}" class="text-decoration-none">Não tenho conta</a>
+                    <!-- puxa a rota pelo nome definido -->
                 </div>
 
             </form>
