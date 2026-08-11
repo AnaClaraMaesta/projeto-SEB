@@ -9,7 +9,7 @@ class userController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function cadastro(Request $request)
     {
         return view('layouts.cadastroUser');
     }

@@ -7,16 +7,19 @@
     <title>SEB</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="dark:bg-[#24272b] dark:text-white">
+<body class=" dark:bg-[#24272b] dark:text-white">
 
         <div>
             @yield('dashboard')
         </div>
   
-        <div>
+        <div class="flex justify-center align-center">
             @yield('login')
         </div>
 
+        <div>
+            @yield('cadastroUser')
+        </div>
 
 </body>
 </html>
