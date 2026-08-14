@@ -6,20 +6,18 @@ use Illuminate\Http\Request;
 
 class userController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function cadastro(Request $request)
+
+    public function index(Request $request)
     {
-        return view('layouts.cadastroUser');
+        return view('layouts.login');
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        
+        return view('layouts.createUser');
     }
 
     /**
@@ -35,28 +33,19 @@ class userController extends Controller
      */
     public function show(string $id)
     {
-        //
+        
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::findOrFail(($id));
+
+        $data = $request->validate([
+            
+        ])
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(string $id)
     {
         //
