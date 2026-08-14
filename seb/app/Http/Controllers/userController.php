@@ -41,7 +41,11 @@ class userController extends Controller
         $user = User::findOrFail(($id));
 
         $data = $request->validate([
-            
+            'titulo'=>'required|max:255',
+            'autor'=>'required|max:255',
+            'ano_publicacao'=>'nullable',
+            'codigo'=>'required|max:6|unique',
+
         ])
     }
 
