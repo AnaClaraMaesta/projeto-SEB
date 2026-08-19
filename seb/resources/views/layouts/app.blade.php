@@ -7,11 +7,9 @@
     <title>SEB</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="dark:bg-[#24272b] dark:text-white">
-
-        <div>
-            @yield('dashboard')
-        </div>
+<body class="dark:bg-[#24272b] dark:text-white ">
+        
+        @yield('dashboard')
   
         <div class="h-full flex justify-left p-5">
             @yield('login')

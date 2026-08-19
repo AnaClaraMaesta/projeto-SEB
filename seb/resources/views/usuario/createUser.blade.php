@@ -28,7 +28,7 @@
                 </div>
 
                 <div class="mb-3 text-sm text-blue-500 dark:text-cyan-300">
-                    <a href="{{route('usuarios.index')}}" class="text-decoration-none">Já tenho conta</a>
+                    <a href="{{route('layouts.login')}}" class="text-decoration-none">Já tenho conta</a>
                     <!-- puxa a rota pelo nome definido -->
                 </div>
 

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('titulo', 255);
             $table->string('autor', 255);
             $table->integer('ano_publicacao');
-            $table->string('codigo_isbn', 20)->unique();
+            $table->string('codigo', 6)->unique();
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
         });  

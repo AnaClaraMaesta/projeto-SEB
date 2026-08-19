@@ -17,7 +17,7 @@ class userController extends Controller
      */
     public function create(Request $request)
     {
-        return view('layouts.createUser');
+        return view('usuario.createUser');
     }
 
     /**
@@ -36,19 +36,15 @@ class userController extends Controller
         
     }
 
-    public function update(Request $request, string $id)
-    {
-        $user = User::findOrFail(($id));
+    // public function update(Request $request, string $id)
+   // {
+       // $user = User::findOrFail(($id));
 
-        $data = $request->validate([
-            'titulo'=>'required|max:255',
-            'autor'=>'required|max:255',
-            'ano_publicacao'=>'nullable',
-            'codigo'=>'required|max:6|unique',
-
-        ])
-    }
-
+       // $data = $request->validate([
+     //       ''=>''
+   //     ])
+ //   }
+//
 
     public function destroy(string $id)
     {
