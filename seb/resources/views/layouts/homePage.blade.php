@@ -19,12 +19,31 @@
             </svg>
         </button>
 
+        
+        <!-- x-data gerencia o estado (aberto ou fechado) do item -->
+        <div x-data="{ aberto: false }" class="border border-red-500 rounded mb-2">
+                <!-- Botão que inverte o estado ao clicar -->
+            <button @click="aberto = !aberto" class="w-full text-left p-4  flex justify-between">
+                <span>Título do Accordion</span>
+                <span x-text="aberto ? '-' : '+'"></span>
+            </button>
+
+            <!-- Conteúdo que só aparece se 'aberto' for true -->
+          <div x-show="aberto" x-transition class="p-4 border-t border-yellow-500">
+                Este conteúdo agora abre e fecha perfeitamente!
+          </div>
+        </div>
+
+        
+        
+        
         <div class="hidden absolute">
             <div class="py-2">
                 <a href="">Estoque</a> <!-- dentro de estoque vai ter a opção de cadastrar e excluir além de emitir relatórios também -->
                 <a href="">Emprestar</a> 
             </div>
         </div>
+        
 
     </div>
 </header>
