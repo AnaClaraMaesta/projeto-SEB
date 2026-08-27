@@ -3,8 +3,10 @@
       build: .
       ports:
         - "8000:80"
+        - "5173:5173"
       volumes:
         - .:/var/www/html
+      command: sh -c "npm install && npm run dev & docker-php-entrypoint apache2-foreground" 
       develop:
         watch:
           - action: sync
@@ -13,6 +15,7 @@
             ignore:
             - vendor/
             - .git/
+            - node_modules/
           - action: rebuild
             path: composer.json
       depends_on:
