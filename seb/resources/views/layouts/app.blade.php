@@ -9,16 +9,22 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body class="dark:bg-[#24272b] dark:text-white ">
-        
+ <div class="flex h-full">
+
         @yield('dashboard')
-  
-        <div class="h-full flex justify-left p-5">
-            @yield('login')
-        </div>
 
-        <div class="h-full flex justify-center p-5">
-            @yield('createUser')
-        </div>
+        <main class="flex-1 overflow-y-auto">
 
+            <div class="flex justify-start p-5">
+                @yield('login')
+            </div>
+
+            <div class="flex justify-center p-5">
+                @yield('createUser')
+            </div>
+
+        </main>
+
+    </div>
 </body>
 </html>
