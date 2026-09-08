@@ -10,12 +10,12 @@
 
         <div class="card-body p-6 mt-3">
 
-            <form method="POST" action="" id="formLogin">
+            <form method="POST" action="{{ route('login.store') }}" id="formLogin">
                 @csrf
 
                 <div class="mb-3 rounded-xs" >
                     <label class="block text-xs font-medium text-muted mb-2 tracking-wide uppercase">Email</label>
-                    <input type="email" placeholder="Identificação ou E-mail" 
+                    <input type="email" placeholder="E-mail" 
                     class="w-full bg-card border border-border rounded-lg px-4 py-3 text-parchment text-sm placeholder:text-muted/60 focus:outline-none focus:ring-1 focus:ring-gold focus:border-gold transition-colors"
                     id="email" name="email" 
                     required>

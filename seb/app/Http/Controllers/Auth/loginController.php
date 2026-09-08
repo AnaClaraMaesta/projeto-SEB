@@ -19,15 +19,18 @@ class loginController extends Controller
      */
     public function create()
     {
-        //
+        return view('layouts.login');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(loginRequest $request) : RedirectResponse
     {
-        //
+        $request->authenticate();
+        $request->session()->regenerate();
+
+        return redirect()->intended('dashboard');
     }
 
     /**
