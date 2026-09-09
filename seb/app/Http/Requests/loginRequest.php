@@ -39,7 +39,29 @@ class loginRequest extends FormRequest
                 'email' => trans('auth.failed'),
             ]);
         }
+        RateLimiter::clear($this->throttleKey());
 
-        rateLimiter()->clear($this->throttleKey());
+    }
+
+        protected function ensureIsNotRateLimited(): void
+    {
+        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+            return;
         }
+
+        $seconds = RateLimiter::availableIn($this->throttleKey());
+
+        throw ValidationException::withMessages([
+            'email' => __('Muitas tentativas. Tente novamente em :seconds segundos.', [
+                'seconds' => $seconds,
+            ]),
+        ]);
+    }
+
+    protected function throttleKey(): string
+    {
+        return \Illuminate\Support\Str::transliterate(
+            \Illuminate\Support\Str::lower($this->input('email')).'|'.$this->ip()
+        );
+    }
 }
