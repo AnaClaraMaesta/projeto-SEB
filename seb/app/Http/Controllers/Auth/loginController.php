@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 use App\Http\Requests\loginRequest;
 use Illuminate\Http\Request;
 
-class loginController extends Controller
+class loginController
 {
 
     public function create()

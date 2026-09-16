@@ -30,7 +30,7 @@
                 </div>
                      
                 <div class="mt-3 mb-3 rounded-sm bg-[#3D2F2F] hover:bg-[#2F3D3D] cursor-pointer"> 
-                    <button type="submit" class="btn btn-primary ml-[45%] py-2">ENTRAR</button>
+                    <button type="submit" class="btn btn-primary ml-[45%] py-2 text-white">ENTRAR</button>
                 </div>
 
                 <div class="mb-3 text-sm text-blue-500 dark:text-cyan-300">

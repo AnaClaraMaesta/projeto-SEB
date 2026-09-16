@@ -4,12 +4,12 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class loginRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
@@ -33,7 +33,7 @@ class loginRequest extends FormRequest
         $this->ensureIsNotRateLimited();
 
         if (! auth()->attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            rateLimiter()->hit($this->throttleKey());
+            RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
@@ -43,7 +43,7 @@ class loginRequest extends FormRequest
 
     }
 
-        protected function ensureIsNotRateLimited(): void
+    protected function ensureIsNotRateLimited(): void
     {
         if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
@@ -60,8 +60,8 @@ class loginRequest extends FormRequest
 
     protected function throttleKey(): string
     {
-        return \Illuminate\Support\Str::transliterate(
-            \Illuminate\Support\Str::lower($this->input('email')).'|'.$this->ip()
+        return Str::transliterate(
+            Str::lower($this->input('email')).'|'.$this->ip()
         );
     }
 }
