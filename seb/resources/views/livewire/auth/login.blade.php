@@ -1,6 +1,22 @@
-@extends('layouts.app')
-@section('login')
+<?php
 
+use Livewire\Component;
+
+class login extends Component
+{
+    public string $email = '';
+    public string $senha = '';
+
+    public function login(){
+        $this->validate([
+            'email' => 'required|email',
+            'senha' => 'required|min:6',
+        ]);
+    }
+
+    
+};
+?>
 
 <div class="shadow-sm card rounded-xl bg-[#e6eaf0] dark:bg-[#464a4f]" style="width: 25rem">
                 
@@ -10,7 +26,7 @@
 
         <div class="card-body p-6 mt-3">
 
-            <form method="POST" action="{{ route('login.store') }}" id="formLogin">
+            <form wire:submit="login" action="{{ route('login.store') }}" id="formLogin">
                 @csrf
 
                 <div class="mb-3 rounded-xs" >
@@ -45,5 +61,3 @@
             </form>
         </div>
 </div>
-
-@endsection
