@@ -8,7 +8,7 @@ Route::get('/dashboard', function(){
     return view('layouts.homePage');
 });
 
-Route::get('/login',[loginController::class, 'create']) -> name('login');
+Route::get('/login',[loginController::class, 'index']) -> name('login');
 
 Route::post('/login',[loginController::class, 'store']) -> name('login.store');
 

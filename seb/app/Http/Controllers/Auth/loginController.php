@@ -6,11 +6,15 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
 class loginController
-{
+{   
+    public function index()
+    {
+        return view('layouts.login');
+    }
 
     public function create()
     {
-        return view('layouts.login');
+        return view('layouts.usuarios.createUser');
     }
 
     public function store(loginRequest $request) : RedirectResponse
