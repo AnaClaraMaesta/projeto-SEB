@@ -6,7 +6,7 @@
         - "5173:5173"
       volumes:
         - .:/var/www/html
-      command: sh -c "npm install && npm run dev & docker-php-entrypoint apache2-foreground" 
+      command: sh -c "docker-php-entrypoint apache2-foreground" 
       develop:
         watch:
           - action: sync
