@@ -15,7 +15,7 @@
 
         <main class="flex-1 overflow-y-auto">
 
-            <div class="flex justify-start p-5">
+            <div class="flex justify-center p-5">
                 @yield('login')
             </div>
 

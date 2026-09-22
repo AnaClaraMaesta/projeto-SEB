@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 use App\Http\Requests\loginRequest;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class loginController
 {
