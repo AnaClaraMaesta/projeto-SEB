@@ -12,5 +12,6 @@ Route::get('/login',[loginController::class, 'index']) -> name('login');
 
 Route::post('/login',[loginController::class, 'store']) -> name('login.store');
 
-Route::get('/criar-usuario', [userController::class, 'create']) -> name('usuarios.create');
+Route::get('/usuario/create', [loginController::class, 'create']) -> name('usuarios.create');
+
 /* Route::get('URL', [nome do Controller::class, 'nome da função do controller']) -> definir nome para identificar como rota name('usuarios.cadastro'); */

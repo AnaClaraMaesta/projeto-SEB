@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('createUser')
-
 <div class="shadow-sm card rounded-xl bg-[#e6eaf0] dark:bg-[#464a4f]" style="width: 25rem">
                 
         <div class="card-header text-center p-8 rounded-top-xl">
