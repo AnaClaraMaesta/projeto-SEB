@@ -1,10 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-use App\Http\middleware\loginRequest;
-use App\serivces\login;
+use App\Services\Login;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
 
 class loginController
 {   
@@ -13,17 +11,17 @@ class loginController
         return view('layouts.login');
     }
 
-    public function create(Request $request)
-    {
-        return view('usuario.create');
-    }
+    public function store(Request $request){
+        
+    $dados = $request->validate([
+            'username' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'senha' => 'required|string|min:8',
+        ]);
 
-    public function store(loginRequest $request) : RedirectResponse
-    {
-        $request->authenticate();
-        $request->session()->regenerate();
+        Login::validar($dados);
 
-        return redirect()->intended('dashboard');
+        return redirect()->route('turmas')->with('success', 'Login realizado com sucesso');
     }
 
 }

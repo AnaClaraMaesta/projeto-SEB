@@ -1,30 +1,32 @@
 <?php
 
-namespace App\services;
+namespace App\Services;
+
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 
 class login{
-    private User $user;
 
-    public function __construct(User $user)
-    {
-        $this->user = $user;
+    private static $file = 'users.json';
+
+    public static function validar(array $dados) : bool{
+        $users = self::fetchAll();
+
+        $found = collect($users)->firstWhere('email', $dados['email']);
+
+        if(!$found) return false;
+        
+        return $dados['senha'] === $found['senha'];
     }
 
-    public function login(User $user): view
-    {
-        $filename = 'user.json';
-        $jsonData = file_get_contents($filename);
-        $userData = json_decode($jsonData, true);
+    public static function fetchAll(){
 
-        if(true){
-            echo "Login bem-sucedido!";
-            return redirect()->route('dashboard');
+        if(!Storage::exists(self::$file)){
+            return [];
         }
-        else{
-            echo "Falha no login. Verifique suas credenciais.";
-            
-            return redirect()->route('login');
-        }
+
+        $contents = Storage::get(self::$file);
+        return json_decode($contents, true) ?? [];
     }
 }

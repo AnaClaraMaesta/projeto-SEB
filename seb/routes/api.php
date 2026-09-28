@@ -9,21 +9,3 @@ use Illuminate\Support\Facades\Route;
 })->middleware('auth:sanctum');
 */
 
-Route::get('/getLogin', function(Request $request){
-    try {
-        $user = DB::table('users')
-            ->where('email', $request->input('email'))
-            ->where('senha', $request->input('senha'))
-            ->first();
-
-        if (! $user) {
-            throw new Exception(alert('Cadastro não encontrado'));
-        }
-
-        return route('homePage');
-
-    } catch (Exception $e) {
-        return response()->json(['message' => 'Cadastro não encontrado'], 401);
-    }
-
-});

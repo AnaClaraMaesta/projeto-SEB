@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('createUser')
+
 <div class="shadow-sm card rounded-xl bg-[#e6eaf0] dark:bg-[#464a4f]" style="width: 25rem">
                 
         <div class="card-header text-center p-8 rounded-top-xl">
@@ -8,7 +9,7 @@
 
         <div class="card-body p-6 mt-3">
 
-            <form method="POST" action="" class="">
+            <form method="POST" action="{{ route('usuarios.store') }}" class="">
                 
                 <div class='mb-3 rounded-xs'>
                      <label class=" block text-xs font-medium text-muted ml-10 mb-2 tracking-wide uppercase">Nome</label>
@@ -54,12 +55,13 @@
                 </div>
                      
                 <div class=" flex items-center justify-center mt-3 mb-3 rounded-sm bg-[#3D2F2F] hover:bg-[#2F3D3D] cursor-pointer "> 
-                    <button type="submit" class="flex items-center justify-center  btn btn-primary py-2 text-white">REGISTRAR</button>
+                    <button class="flex items-center justify-center  btn btn-primary py-2 text-white">
+                        REGISTRAR
+                    </button>
                 </div>
 
                 <div class="mb-3 text-sm text-blue-500 dark:text-cyan-300">
                     <a href="{{route('login')}}" class="text-decoration-none">Já tenho conta</a>
-                    <!-- puxa a rota pelo nome definido -->
                 </div>
 
             </form>

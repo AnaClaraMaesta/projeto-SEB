@@ -2,32 +2,31 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 
-#[Fillable(['name', 'email', 'senha'])]
-#[Hidden(['senha', 'remember_token'])]
-class User extends Authenticatable
+class User
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    private static $file = 'users.json';
 
-    /**
-     * Get the attributes that should be cast.seb
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public static function create(array $dados): array
     {
-        return [
-            'senha' => 'hashed',
-        ];
+        //carrega todos os usuarios
+        // $users = self::all();
+        // if(isset($dados['senha'])){
+        //     $dados['senha'] = Hash::make($dados['senha']);
+        // }
+
+        $users[] = $dados;
+
+        Storage::put(self::$file, json_encode($users, JSON_PRETTY_PRINT));
+
+        return $dados;
     }
 
-    
 }
+
+
+
+
+?>

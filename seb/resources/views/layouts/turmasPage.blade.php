@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('dashboard')
+@section('turmas')
 
 <header class="flex flex-col h-screen w-56 bg-[#3D2F2F] text-white dark:bg-[#464a4f] shadow-md">
 
@@ -114,31 +114,37 @@
                 <form action="" class="">
                     <div>
                         <label for="nome_turma">Nome da turma:</label>
-                        <input type="text" name="nome_turma" id="nome_turma" class="rounded-md text-black">
+                        <input type="text" name="nome_turma" id="nome_turma" class="rounded-md text-white">
                     </div>
 
                     <div>
                         <label for="turno_turma">Turno da turma:</label>
-                        <input type="text" name="turno_turma" id="turno_turma" class="rounded-md text-black">
+                        <input type="text" name="turno_turma" id="turno_turma" class="rounded-md text-white">
                     </div>
                     
                     <div>
                         <label for="ano_turma">Ano da turma:</label>
-                        <input type="text" name="ano_turma" id="ano_turma" class="rounded-md text-black">
+                        <input type="text" name="ano_turma" id="ano_turma" class="rounded-md text-white">
                     </div>
-                    
-
 
                     <div>
-                        <select name="professor_turma" id="professor_turma" class="rounded-md text-black">
+                        <select name="professor_turma" id="professor_turma" class="rounded-md text-white">
                             <option value="">Selecione um professor</option>
-                            <option value="p1">Professor 1</option>
-                            <option value="p2">Professor 2</option>
-                            <option value="p3">Professor 3</option>
+                            <option value="professor-1">Professor 1</option>
+                            <option value="professor-2">Professor 2</option>
+                            <option value="professor-3">Professor 3</option>
                         </select>
                     </div>
 
                 </form>
+            </div>
+
+            <div>
+                @@foreach ($Turma as $turma)
+                    <div>
+                        {{$turma->nome}}
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>
