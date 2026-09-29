@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Turma;
 
 class turmaController extends Controller
 {
@@ -11,26 +12,35 @@ class turmaController extends Controller
      */
     public function index()
     {
-        $turmas = Turma::select('nome')->get();
-
-        return view('turmas.index', compact('turmas'));
+        $turmas = Turma::fetchll();
+        return view('turma.turmasPage', compact('turmas'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    
+    public function create(Request $request)
     {
-        //
+    
     }
-
+    
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
-    }
+        $dados = $request->validate([
+            'nome_turma'    => 'required|string|max:255',
+            'turno_turma'   => ['required', 'in:manaha,tarde,noite,integral'],
+            'ano_turma'     => ['required', 'in:fundamentalI,fundamentalII,EM'],
+            'materia_turma' => 'required|string|max:255',
+        ]);
+ 
+        Turma::create($dados);
+
+        return redirect()->route('turmas')->with('Sucesso', 'Turma criada com sucesso');
+    }   
 
     /**
      * Display the specified resource.

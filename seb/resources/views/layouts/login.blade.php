@@ -41,8 +41,8 @@
                     </div>
                 </div>
                      
-                 <div class=" flex items-center justify-center mt-3 mb-3 rounded-sm bg-[#3D2F2F] hover:bg-[#2F3D3D] cursor-pointer "> 
-                    <button type="submit" class="flex items-center justify-center  btn btn-primary py-2 text-white">ENTRAR</button>
+                 <div class=" flex items-center justify-center m-3"> 
+                    <button type="submit" class="flex items-center rounded-sm w-full justify-center bg-[#3D2F2F] hover:bg-[#2F3D3D] cursor-pointer btn py-2 text-white">ENTRAR</button>
                 </div>
 
                 <div class="mb-3 text-sm text-blue-500 dark:text-cyan-300">

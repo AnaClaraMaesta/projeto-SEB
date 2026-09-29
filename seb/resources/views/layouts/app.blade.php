@@ -8,19 +8,22 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="dark:bg-[#24272b] dark:text-white ">
- <div class="flex h-full">
+<body class="dark:bg-[#24272b] dark:text-white">
     
-     @yield('turmas')
-     
-     <main class="flex-1 overflow-y-auto">
-
+    @hasSection ('turmas')
+        @yield('turmas')
+    @else
+    <div class="flex">
+        
+        <main class="flex-1 overflow-y-auto">
+            
             <div class="flex justify-start p-5">
                 @yield('login')
                 @yield('createUser')
             </div>
         </main>
-
+        
     </div>
+    @endif
 </body>
 </html>

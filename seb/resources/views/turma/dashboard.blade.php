@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.turma.turmasPage')
 @section('dashboard')
     <header class="flex flex-col h-screen w-56 bg-[#3D2F2F] text-white dark:bg-[#464a4f] shadow-md">
         <div>

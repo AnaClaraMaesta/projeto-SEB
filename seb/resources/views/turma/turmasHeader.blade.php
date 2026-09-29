@@ -1,8 +1,4 @@
-@extends('layouts.app')
-
-@section('turmas')
-
-<header class="flex flex-col h-screen w-56 bg-[#3D2F2F] text-white dark:bg-[#464a4f] shadow-md">
+<header class="flex flex-col sticky top-0 h-screen w-56 shrink-0 bg-[#3D2F2F] text-white dark:bg-[#464a4f] shadow-md">
 
     <div class="flex justify-start p-3 border-b border-white/10">
         
@@ -13,7 +9,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                 </svg>
 
-                <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-180': open_user}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                 <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-180': open_user}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
 
@@ -40,7 +36,7 @@
             <button @click="open_alunos = !open_alunos" class="btn cursor-pointer p-3 w-full flex items-center justify-between">
                 ALUNOS
                 
-                <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-180': open_alunos}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                 <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-180': open_alunos}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
 
@@ -69,7 +65,7 @@
             <button @click="open_livros = !open_livros" class="btn cursor-pointer p-3 flex w-full items-center justify-between">
                 LIVROS  
                 
-                <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-180': open_livros}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-180': open_livros}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
             </button>
@@ -96,59 +92,3 @@
     </div>
         
 </header>
-
-<body class="bg-[#3D2F2F] text-white dark:bg-[#464a4f]">
-    <div class="grid grid-3">
-        <div class="justify-start m-3" x-data="{ add_turma: false }"  >
-            
-            <button @click="add_turma = !add_turma"  class="btn cursor-pointer bg-[#3D2F2F] hover:bg-[#2F3D3D] w-30 rounded-md">
-                Adicionar turma
-            </button>
-
-            <div 
-                x-show="add_turma" 
-                @click.away="add_turma = false"
-                x-transition
-                class="m-2 rounded-md bg-[#3D2F2F] dark:bg-[#464a4f] h-96 w-96"
-            >
-                <form action="" class="">
-                    <div>
-                        <label for="nome_turma">Nome da turma:</label>
-                        <input type="text" name="nome_turma" id="nome_turma" class="rounded-md text-white">
-                    </div>
-
-                    <div>
-                        <label for="turno_turma">Turno da turma:</label>
-                        <input type="text" name="turno_turma" id="turno_turma" class="rounded-md text-white">
-                    </div>
-                    
-                    <div>
-                        <label for="ano_turma">Ano da turma:</label>
-                        <input type="text" name="ano_turma" id="ano_turma" class="rounded-md text-white">
-                    </div>
-
-                    <div>
-                        <select name="professor_turma" id="professor_turma" class="rounded-md text-white">
-                            <option value="">Selecione um professor</option>
-                            <option value="professor-1">Professor 1</option>
-                            <option value="professor-2">Professor 2</option>
-                            <option value="professor-3">Professor 3</option>
-                        </select>
-                    </div>
-
-                </form>
-            </div>
-
-            <div>
-                @@foreach ($Turma as $turma)
-                    <div>
-                        {{$turma->nome}}
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
-</body>
-
-
-@endsection
