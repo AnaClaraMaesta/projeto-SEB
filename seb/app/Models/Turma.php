@@ -9,9 +9,17 @@ class Turma extends Model
 {
         private static $file = 'turmas.json';
 
+        protected $fillable = [
+            'id',
+            'nome_turma',
+            'turno_turma',
+            'ano_turma',
+            'materia_turma'
+        ];
+
         public static function create(array $dados): array
         {
-            $turmas = static::fetchAll();
+            $turmas = static::listar();
 
             $dados['id'] = count($turmas) > 0 ? max(array_column($turmas, 'id')) + 1 : 1;
             //se n tiver turma o id é 1 se não vai somar os demais ids
@@ -24,7 +32,7 @@ class Turma extends Model
             return $dados;
         }
 
-        public static function fetchAll(): array{
+        public static function listar(): array{
 
             if (!Storage::exists(static::$file)) {
                 return [];

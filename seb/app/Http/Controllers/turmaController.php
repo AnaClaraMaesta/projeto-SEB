@@ -11,9 +11,9 @@ class turmaController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $turmas = Turma::fetchll();
-        return view('turma.turmasPage', compact('turmas'));
+    {   
+        $turmas = Turma::all();
+        return view('turma.turmasBody', compact('turmas'));
     }
 
     /**

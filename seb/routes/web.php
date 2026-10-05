@@ -8,9 +8,7 @@ use App\Http\Controllers\turmaController;
 
 // Route::get('/turmas',[turmaController::class, 'index']) -> name('turmas'); //depois de configurar o controller
 
-Route::get('/turmas', function(){
-    return view('turma.turmasBody');
-})->name('turmas');
+Route::get('/turmas',[turmaController::class, 'index']) -> name('turmas');
 
 Route::post('/turmas/create', [turmaController::class, 'store'])->name('turma.store');
 
