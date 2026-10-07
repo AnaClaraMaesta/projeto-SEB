@@ -8,16 +8,20 @@ use App\Http\Controllers\turmaController;
 
 // Route::get('/turmas',[turmaController::class, 'index']) -> name('turmas'); //depois de configurar o controller
 
-Route::get('/turmas',[turmaController::class, 'index']) -> name('turmas');
 
+Route::get('/turmas',[turmaController::class, 'index']) -> name('turmas');
+Route::get('/turmas/create', [turmaController::class, 'create'])->name('turma.create');
 Route::post('/turmas/create', [turmaController::class, 'store'])->name('turma.store');
+Route::get('/turmas/{id}', [turmaController::class, 'show'])->name('turma.show');
+
 
 Route::get('/login',[loginController::class, 'index']) -> name('login');
 
+
 Route::post('/login',[loginController::class, 'store']) -> name('login.store');
 
-Route::get('/usuario/create', [userController::class, 'index'])->name('usuarios.create');
 
+Route::get('/usuario/create', [userController::class, 'index'])->name('usuarios.create');
 Route::post('/usuario/create', [userController::class, 'store']) -> name('usuarios.store');
 /* Route::get('URL', [nome do Controller::class, 'nome da função do controller']) -> definir nome para identificar como rota name('usuarios.cadastro'); */
 
