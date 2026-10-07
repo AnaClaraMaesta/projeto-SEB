@@ -10,9 +10,8 @@ use App\Http\Controllers\turmaController;
 
 
 Route::get('/turmas',[turmaController::class, 'index']) -> name('turmas');
-Route::get('/turmas/create', [turmaController::class, 'create'])->name('turma.create');
-Route::post('/turmas/create', [turmaController::class, 'store'])->name('turma.store');
-Route::get('/turmas/{id}', [turmaController::class, 'show'])->name('turma.show');
+Route::post('/turmas', [turmaController::class, 'store'])->name('turma.store');
+Route::get('/turmas/{turma}', [turmaController::class, 'show'])->name('turma.show');
 
 
 Route::get('/login',[loginController::class, 'index']) -> name('login');

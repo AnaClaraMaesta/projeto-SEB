@@ -31,19 +31,14 @@ class turmaController extends Controller
     {   
         $dados = $request->validate([
             'nome_turma'    => 'required|string|max:255',
-            'turno_turma'   => ['required', 'in:manaha,tarde,noite,integral'],
-            'ano_turma'     => ['required', 'in:fundamentalI,fundamentalII,EM'],
+            'turno_turma'   => ['required', 'in:manha,tarde,noite,integral'],
+            'ano_turma'     => ['required', 'in:fundamentali,fundamentalii,em'],
             'materia_turma' => 'required|string|max:255',
-            'deleted_at'    => 'nullable|timestamp',
         ]);
  
         Turma::create($dados);
 
-        return response()->json([
-            'success'=>'true',
-            'message' => 'Turma criada com sucesso!',
-            'turma' => $dados
-        ], 201);
+        return redirect()->route('turmas')->with('Sucesso', 'Turma criada com sucesso!');
     }  
 
     /**
@@ -73,7 +68,7 @@ class turmaController extends Controller
         $dados = $request->validate([
             'nome_turma'    => 'required|string|max:255',
             'turno_turma'   => ['required', 'in:manha,tarde,noite,integral'],
-            'ano_turma'     => ['required', 'in:fundamentalI,fundamentalII,EM'],
+            'ano_turma'     => ['required', 'in:fundamentali,fundamentalii,em'],
             'materia_turma' => 'required|string|max:255',
             'deleted_at'    => 'nullable|timestamp',
         ]);

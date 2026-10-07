@@ -112,21 +112,21 @@
     </div>
 
     <div class="m-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        @forelse ($turmas as $turmas)
+        @forelse ($turmas as $turma)
         <div class="rounded-lg overflow-hidden shadow-lg bg-[#3D2F2F] dark:bg-[#464a4f] text-white flex flex-col">
 
             <div class="p-4 border-b border-white/10">
-                <h2 class="text-lg font-bold">{{ $turmas->nome_turma }}</h2>
+                <h2 class="text-lg font-bold">{{ $turma->nome_turma }}</h2>
             </div>
 
             <div class="p-4 flex-1">
-                <p class="text-gray-300">{{ $turmas->materia_turma }}</p>
-                <p class="text-gray-300">{{ $turmas->ano_turma }}</p>
-                <p class="text-gray-300">{{ $turmas->turno_turma }}</p>
+                <p class="text-gray-300">{{ $turma->materia_turma }}</p>
+                <p class="text-gray-300">{{ $turma->ano_turma }}</p>
+                <p class="text-gray-300">{{ $turma->turno_turma }}</p>
             </div>
 
             <div class="p-4 flex justify-end">
-                <a href="{{ route('turma.dashboard', ['turma' => $turmas->id]) }}"
+                <a href="{{ route('turma.show', ['turma' => $turma->id]) }}"
                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Acessar
                 </a>
