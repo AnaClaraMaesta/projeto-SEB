@@ -10,6 +10,7 @@
         <div class="card-body p-6 mt-3">
 
             <form method="POST" action="{{ route('usuarios.store') }}" class="">
+                @csrf
                 
                 <div class='mb-3 rounded-xs'>
                      <label class=" block text-xs font-medium text-muted ml-10 mb-2 tracking-wide uppercase">Nome</label>
@@ -20,7 +21,7 @@
                             <path fill="currentColor" d="M16 2a14 14 0 1 0 14 14A14.016 14.016 0 0 0 16 2m7.993 22.926A5 5 0 0 0 19 20h-6a5 5 0 0 0-4.992 4.926a12 12 0 1 1 15.985 0" />
                         </svg>
                         <input type="text" placeholder="Nome do Usuario"  class=" justify-end w-full bg-card border border-border rounded-lg px-4 py-3 text-parchment text-sm placeholder:text-muted/60 focus:outline-none focus:ring-1 focus:ring-gold focus:border-gold transition-colors"
-                        id="nome" name="nome" 
+                        id="nome" name="name" 
                         required>
 
                     </div>
@@ -55,16 +56,14 @@
                 </div>
                      
                 <div class=" flex items-center justify-center mt-3 mb-3 rounded-sm bg-[#3D2F2F] hover:bg-[#2F3D3D] cursor-pointer "> 
-                    <button class="flex items-center justify-center  btn btn-primary py-2 text-white">
+                    <button type="submit" class="flex items-center justify-center  btn btn-primary py-2 text-white">
                         REGISTRAR
                     </button>
                 </div>
-
-                <div class="mb-3 text-sm text-blue-500 dark:text-cyan-300">
+            </form>
+             <div class="mb-3 text-sm text-blue-500 dark:text-cyan-300">
                     <a href="{{route('login')}}" class="text-decoration-none">Já tenho conta</a>
                 </div>
-
-            </form>
         </div>
 </div>
 
