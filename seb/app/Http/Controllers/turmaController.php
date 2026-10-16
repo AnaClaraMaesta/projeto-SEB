@@ -30,10 +30,14 @@ class turmaController extends Controller
     public function store(Request $request)
     {   
         $dados = $request->validate([
+            'id'           => 'integer',
             'nome_turma'    => 'required|string|max:255',
             'turno_turma'   => ['required', 'in:manha,tarde,noite,integral'],
             'ano_turma'     => ['required', 'in:fundamentali,fundamentalii,em'],
             'materia_turma' => 'required|string|max:255',
+            'deleted_at'    => 'nullable|timestamp',
+            'created_at'    => 'nullable|timestamp',
+            'updated_at'    => 'nullable|timestamp',
         ]);
  
         Turma::create($dados);
@@ -55,7 +59,8 @@ class turmaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $turma = Turma::findOrFail($id);
+        return view('turma.turmasBody', compact('turma'));
     }
 
     /**
@@ -70,16 +75,11 @@ class turmaController extends Controller
             'turno_turma'   => ['required', 'in:manha,tarde,noite,integral'],
             'ano_turma'     => ['required', 'in:fundamentali,fundamentalii,em'],
             'materia_turma' => 'required|string|max:255',
-            'deleted_at'    => 'nullable|timestamp',
         ]);
 
         $turma->update($dados);
 
-        return response()->json([
-            'success'=>'true',
-            'message' => 'Turma atualizada com sucesso!',
-            'turma' => $dados
-        ], 200);
+        return redirect()->route('turmas')->with('Sucesso', 'Turma atualizada com sucesso!');
     }
 
     /**
@@ -90,10 +90,7 @@ class turmaController extends Controller
         $turma = Turma::findOrFail($id);
         $turma->delete();
 
-        return response()->json([
-            'success'=>'true',
-            'message' => 'Turma deletada com sucesso!',
-        ], 200);
+        return redirect()->route('turmas')->with('Sucesso', 'Turma excluída com sucesso!');
     }
 
 }

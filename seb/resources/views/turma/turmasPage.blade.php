@@ -5,7 +5,7 @@
     @include('turma.turmasHeader')
 
     <main class="flex-1">
-        @yield('turmasBody')
+        @yield('turmasBody');
     </main>
 </div>
 @endsection

@@ -12,12 +12,14 @@ use App\Http\Controllers\turmaController;
 Route::get('/turmas',[turmaController::class, 'index']) -> name('turmas');
 Route::post('/turmas', [turmaController::class, 'store'])->name('turma.store');
 Route::get('/turmas/{turma}', [turmaController::class, 'show'])->name('turma.show');
+Route::put('/turmas/{turma}', [turmaController::class, 'update'])->name('turma.update');
+Route::delete('/turmas/{turma}', [turmaController::class, 'destroy'])->name('turma.destroy');
+
 
 
 Route::get('/login',[loginController::class, 'index']) -> name('login');
-
-
 Route::post('/login',[loginController::class, 'store']) -> name('login.store');
+
 
 
 Route::get('/usuario/create', [userController::class, 'index'])->name('usuarios.create');
