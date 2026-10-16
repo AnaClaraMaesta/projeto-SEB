@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
@@ -15,7 +16,7 @@ class userController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $dados = $request->validate([
             'name' => 'required|string|max:255',
@@ -23,9 +24,9 @@ class userController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
-        User::create($dados);
+        $user = User::create($dados);
+        $user -> sendEmailVerificationNotification();
 
-        return redirect()->route('login')->with('success', 'Usuário salvo com sucesso');
 
     }
 
@@ -47,6 +48,6 @@ class userController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+       //
     }
 }
