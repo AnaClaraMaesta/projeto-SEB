@@ -15,7 +15,7 @@
 
             </button>
 
-            <div 
+            <div
                 x-show="open_user"
                 @click.away="open_user = false"
                 x-transition
@@ -41,6 +41,7 @@
                 </svg>
 
             </button>
+            
             <div 
                 x-show="open_alunos" 
                 @click.away="open_alunos = false"
