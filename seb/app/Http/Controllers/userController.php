@@ -7,6 +7,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Auth;
 
 class userController extends Controller
 {
@@ -25,7 +26,9 @@ class userController extends Controller
         ]);
 
         $user = User::create($dados);
+        Auth::login($user);
         $user -> sendEmailVerificationNotification();
+        return redirect()->route('verification.notice')->with('necessaria autenticação de email');
 
 
     }
