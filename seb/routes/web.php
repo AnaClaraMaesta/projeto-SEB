@@ -20,7 +20,7 @@ Route::get('/email/verify/{id}/{hash}', fn(EmailVerificationRequest $request)=> 
 
 Route::get('/turmas',[turmaController::class, 'index']) -> name('turmas');
 Route::post('/turmas', [turmaController::class, 'store'])->name('turma.store');
-Route::get('/turmas/{turma}', [turmaController::class, 'show'])->name('turma.show');
+Route::get('/turmas/{turma}/', [turmaController::class, 'show'])->name('turma.show');
 Route::put('/turmas/{turma}', [turmaController::class, 'update'])->name('turma.update');
 Route::delete('/turmas/{turma}', [turmaController::class, 'destroy'])->name('turma.destroy');
 

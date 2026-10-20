@@ -51,7 +51,7 @@ class turmaController extends Controller
     public function show(string $id)
     {
         $turma = Turma::findOrFail($id);
-        return view('turma.turmasBody', compact('turma'));
+        return view('turma.show', compact('turma'));
     }
 
     /**
