@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\Login;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class loginController extends Controller
 {   
@@ -23,7 +24,13 @@ class loginController extends Controller
 
         if (Auth::attempt($dados, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended('turmas');
+            /** @var User $user */
+            $user = Auth::user(); 
+                if (! $user->hasVerifiedEmail()){
+                    $user -> sendEmailVerificationNotification();
+                    return redirect()->route('verification.notice');
+                }
+           return redirect()->intended(route('turmas'));
         }
 
         return back()->withErrors([
