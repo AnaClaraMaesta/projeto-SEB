@@ -16,4 +16,9 @@ class Turma extends Model
         'materia_turma',
     ];
 
+    public function alunos()
+    {
+        return $this->hasMany(aluno::class);
+    }
+
 }

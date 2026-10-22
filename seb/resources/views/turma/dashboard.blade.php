@@ -1,5 +1,5 @@
 @extends('turma.turmasPage')
-@section('turmasBody')
+@section('dashboard')
 
 <script>
          function showAlert(event){
@@ -21,7 +21,7 @@
 </script>
                 
 
-<div class="bg-white dark:bg-[#24272b] text-black min-h-screen p-3 dark:bg-[#24272b] dark:text-white">
+<div class="bg-[#e6eaf0] text-black min-h-screen p-3 dark:bg-[#24272b] dark:text-white">
     <div class="m-3 gap-2 flex justify-between" x-data="{ add_turma: false }" @keydown.escape.window="add_turma = false">
         <button
             @click="add_turma = !add_turma" 
@@ -142,7 +142,7 @@
                 </div>
 
                 
-                {{-- botao de update --}}
+                {{-- update --}}
     
                 <div class="p-4 flex justify-end" x-data="{ edit_turma: false }" @keydown.escape.window="edit_turma = false">
     
@@ -211,7 +211,9 @@
                             </form>
                         </div>
                     </div>
-                    {{-- botao de deletar --}}
+
+                    {{-- deletar --}}
+                    
                     <form action="{{ route('turma.destroy', ['turma' => $turma->id]) }}" method="POST" class="inline" onSubmit="showAlert(event)">
                         @csrf
                         @method('DELETE')
@@ -223,14 +225,10 @@
                         </button>
                     </form>
                 </div>
-
-
-
         </div>
-        
-
 
         @empty
+        
         <div class="col-span-full flex flex-col items-center justify-center text-center py-16 w-full">
             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="size-16 mb-3 text-gray-400 dark:text-gray-500" viewBox="0 0 16 16">
                 <path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5H2zm13-3H1V2h14v1z"/>
@@ -239,6 +237,7 @@
         </div>
 
         @endforelse
+    
     </div>  
 
 </div>

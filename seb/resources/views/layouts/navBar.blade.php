@@ -1,7 +1,7 @@
 <div  x-data="{ open_nav: true }" class="flex">
 
-    <header  x-data="{ open_nav: true }"
-        :class="open_nav ? 'w-56' : 'w-14' 'bg-[#3D2F2F] dark:bg-[#464a4f]'"
+    <header
+        :class="open_nav ? 'w-56' : 'w-14'"
         class="sticky top-0 h-screen shrink-0 flex flex-col overflow-hidden
         bg-[#3D2F2F] text-white dark:bg-[#464a4f] shadow-md
         transition-all duration-300">
@@ -18,8 +18,6 @@
         
         <div x-show="open_nav" x-cloak x-transition.opacity
           class="w-56 flex flex-col gap-2 whitespace-nowrap">
-                 
-
 
                  <div x-data="{ open_user: false }" class="relative" >
                      <button @click="open_user = !open_user" class="btn cursor-pointer p-3 w-full items-center justify-between gap-2">
@@ -67,14 +65,14 @@
                          class="m-2 bg-[#3D2F2F] dark:bg-[#464a4f]"
                      >
                          <div class="p-0.5">
-                             <button class="btn cursor-pointer border-gray-500">
+                             <a href="{{ route('aluno.create') }}" class="btn cursor-pointer border-gray-500">
                                  CADASTRAR
-                             </button> <!-- dentro de estoque vai ter a opção de cadastrar e excluir além de emitir relatórios também -->
+                             </a>
                          </div>
                          <div class="p-0.5"> 
-                             <button class="btn cursor-pointe border-gray-500">
+                             <a href="#" class="btn cursor-pointer border-gray-500">
                                  CONSULTAR
-                             </button>
+                             </a>
                          </div>
                      </div>
                  </div>

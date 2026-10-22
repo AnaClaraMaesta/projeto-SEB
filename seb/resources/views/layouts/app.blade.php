@@ -10,12 +10,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<body class="dark:bg-[#24272b] dark:text-white">
+<body class="bg-white dark:bg-[#464a4f] dark:text-white">
     
-    @hasSection ('turmas')
-        @yield('turmas')
-    @else
-    <div class="flex">
+    @yield('turmas')
+    @yield('alunos')
+        
+    <div class="flex">  
         
         <main class="flex-1 overflow-y-auto">
             
@@ -26,6 +26,5 @@
         </main>
         
     </div>
-    @endif
 </body>
 </html>
