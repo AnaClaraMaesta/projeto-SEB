@@ -13,7 +13,7 @@ class turmaController extends Controller
      */
     public function index(Request $request)
     {   
-        $turmas = Turma::latest('id')->get();
+        $turmas = Turma::all();
         return view('turma.dashboard', compact('turmas'));
     }
 
@@ -22,7 +22,8 @@ class turmaController extends Controller
      */
     public function create(Request $request)
     {   
-        return view('turma.dashboard');
+       $turmas = Turma::all();
+        return view('turma.turmasBody', compact('turmas'));
     }
     /**
      * Store a newly created resource in storage.
@@ -34,13 +35,16 @@ class turmaController extends Controller
             'turno_turma'   => ['required', 'in:manha,tarde,noite,integral'],
             'ano_turma'     => ['required', 'in:fundamentali,fundamentalii,em'],
             'materia_turma' => 'required|string|max:255',
+            'deleted_at'    => 'nullable|timestamp',
+            'created_at'    => 'nullable|timestamp',
+            'updated_at'    => 'nullable|timestamp',
         ]);
 
         $dados['user_id'] = Auth::id();
         
         Turma::create($dados);
 
-        return redirect()->route('turmas')->with('success', 'Turma criada com sucesso!');
+        return redirect()->route('turmas')->with('Sucesso', 'Turma criada com sucesso!');
     }  
 
     /**
@@ -49,7 +53,6 @@ class turmaController extends Controller
     public function show(string $id)
     {
         $turma = Turma::findOrFail($id);
-        $turma->load('alunos.livro');
         return view('turma.show', compact('turma'));
     }
 
@@ -59,7 +62,7 @@ class turmaController extends Controller
     public function edit(string $id)
     {
         $turma = Turma::findOrFail($id);
-        return view('turma.dashboard', compact('turma'));
+        return view('turma.turmasBody', compact('turma'));
     }
 
     /**

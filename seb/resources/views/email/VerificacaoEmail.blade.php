@@ -7,10 +7,10 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="bg-gray-100 font-sans antialiased text-gray-900">
+<body class="bg-gray-100 font-sans antialiased text-gray-900 dark:bg-[#24272b] dark:text-white ">
     <div class="min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
         
-        <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-md border border-gray-200">
+        <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-md dark:bg-[#464a4f] dark:text-white">
             
             <!-- Ícone -->
             <div class="flex justify-center mb-4">
@@ -22,18 +22,18 @@
             </div>
 
             <!-- Título -->
-            <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">
+            <h2 class="text-2xl font-bold text-center  mb-2">
                 Verifique seu endereço de e-mail
             </h2>
 
             <!-- Mensagem explicativa -->
-            <p class="text-sm text-gray-600 text-center mb-6">
+            <p class="text-sm  text-center mb-6">
                 Obrigado por se cadastrar! Antes de começar, por favor, verifique seu e-mail clicando no link que acabamos de enviar para você. Se não recebeu o e-mail, podemos enviar outro com prazer.
             </p>
 
             <!-- Alerta de confirmação de reenvio -->
             @if (session('status') == 'verification-link-sent')
-                <div class="mb-4 text-sm font-medium text-green-600 bg-green-50 p-3 rounded-md text-center border border-green-200">
+                <div class="mb-4 text-sm font-medium text-green-800 bg-green-100 p-3 rounded-md text-center border border-green-200">
                     Um novo link de verificação foi enviado para o endereço de e-mail fornecido no cadastro.
                 </div>
             @endif
@@ -52,7 +52,7 @@
                 <!-- Formulário para Sair (Logout) -->
                 <form method="POST" action="{{ route('logout') }}" class="w-full sm:w-auto">
                     @csrf
-                    <button type="submit" class="w-full sm:w-auto text-sm text-gray-600 hover:text-gray-900 underline text-center focus:outline-none">
+                    <button type="submit" class="w-full sm:w-auto text-sm  hover:text-white underline text-center focus:outline-none">
                         Sair da conta
                     </button>
                 </form>
