@@ -10,6 +10,7 @@ class Turma extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'user_id',
         'nome_turma',
         'turno_turma',
         'ano_turma',

@@ -41,7 +41,7 @@ class alunoController extends Controller
         ]);
 
         Aluno::create($dados);
-        return redirect()->route('alunos')->with('sucesso', 'Aluno criado');
+        return redirect()->route('turma.show', $dados['turma_id'])->with('success', 'Aluno cadastrado!');
     }
 
     /**

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('data_emprestimo')->nullable();
             $table->date('data_devolucao')->nullable();
             $table->date('data_devolucao_prevista')->nullable();
-            $table->string('status')->nullable();
+            $table->enum('status', ['emprestado', 'disponivel'])->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

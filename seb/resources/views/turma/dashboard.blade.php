@@ -129,23 +129,30 @@
 
     <div class="m-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         @forelse ($turmas as $turma)
-        <div class="rounded-lg overflow-hidden shadow-lg bg-[#3D2F2F] dark:bg-[#464a4f] text-white flex flex-col transition-transform duration-300 ease-out hover:scale-105">
+        <div class="relative rounded-lg overflow-hidden shadow-lg bg-[#3D2F2F] dark:bg-[#464a4f] text-white flex flex-col transition-transform duration-300 ease-out hover:scale-105">
+                
+                <a href="{{ route('turma.show', $turma->id) }}" class="absolute inset-0 z-0  "
+                        aria-label="Abrir turma {{ $turma->nome_turma }}">
+                </a>
+
                 <div class="p-4 border-b border-white/10">
                     <h2 class="text-lg font-bold">{{ $turma->nome_turma }}</h2>
                 </div>
-    
-                <div class="p-4 flex-1 hover:zoom-in transition-transform duration-300">
-                    
+        
+                <div class="p-4 flex-1 transition-transform duration-300">
+                        
                     <p class="text-gray-300">{{ $turma->turno_turma }}</p>
                     <p class="text-gray-300">{{ $turma->ano_turma }}</p>
                     <p class="text-gray-300">{{ $turma->materia_turma }}</p>
                 </div>
 
                 
-                {{-- update --}}
+                {{-- rodape --}}
     
-                <div class="p-4 flex justify-end" x-data="{ edit_turma: false }" @keydown.escape.window="edit_turma = false">
-    
+                <div class="relative z-10 p-4 flex justify-end" x-data="{ edit_turma: false }" @keydown.escape.window="edit_turma = false">
+                    
+                    {{-- update --}}
+
                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
                         @click="edit_turma = !edit_turma"
                     >
@@ -154,66 +161,69 @@
                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                         </svg>
                     </button>
-                        
-                        
-    
-                    <div 
-                        x-show="edit_turma" 
-                        x-transition.opacity
-                        @click.self="edit_turma = false"
-                        x-cloak
-                        class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
-                    >
-                        <div class="w-[64vw] h-[90vh] flex flex-col rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
-    
-                            <form action="{{ route('turma.update', $turma->id) }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                            
-                                <div class="flex flex-col gap-1 p-1.5">
-                                    <label for="nome_turma" class="font-bold">Nome da turma:</label>
-                                    <input type="text" name="nome_turma" id="nome_turma" value="{{ old('nome_turma', $turma->nome_turma) }}" required maxlength="255"
-                                        class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
-                                </div>
-    
-                                <div class="flex flex-col gap-1 p-1.5">
-                                    <label for="turno_turma" class="font-bold">Turno:</label>
-                                    
-                                    <select name="turno_turma" id="turno_turma" class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
-                                        <option value="" class="text-black">Selecione o turno</option>
-                                        <option value="manha" class="text-black" @selected(old('turno_turma', $turma->turno_turma) === 'manha')>Manhã</option>
-                                        <option value="tarde" class="text-black" @selected(old('turno_turma', $turma->turno_turma) === 'tarde')>Tarde</option>
-                                        <option value="noite" class="text-black" @selected(old('turno_turma', $turma->turno_turma) === 'noite')>Noite</option>
-                                        <option value="integral" class="text-black" @selected(old('turno_turma', $turma->turno_turma) === 'integral')>Integral</option>
-                                    </select>
-                                </div>
-                                        
-                                <div class="flex flex-col gap-1 p-1.5">
-                                    <label for="ano_turma" class="font-bold">Nível:</label>
-                                    <select name="ano_turma" id="ano_turma" class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
-                                        <option value="" class="text-black">Selecione o nível</option>
-                                        <option value="fundamentali" class="text-black" @selected(old('ano_turma', $turma->ano_turma) === 'fundamentali')>Fundamental I</option>
-                                        <option value="fundamentalii" class="text-black" @selected(old('ano_turma', $turma->ano_turma) === 'fundamentalii')>Fundamental II</option>
-                                        <option value="em" class="text-black" @selected(old('ano_turma', $turma->ano_turma) === 'em')>Ensino Médio</option>
-                                    </select>
-                                </div>
-    
-                                <div class="flex flex-col gap-1 p-1.5">
-                                    <label for="materia_turma" class="font-bold">Matéria:</label>
-                                    <input type="text" name="materia_turma" id="materia_turma" class="rounded-md bg-white/10 border border-white/20 px-2 py-1" value="{{ old('materia_turma', $turma->materia_turma) }}" required>
-                                </div>
-    
-                                <div class="flex justify-end p-1.5">
-                                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                        Salvar
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
 
-                    {{-- deletar --}}
-                    
+                    <template x-teleport="body">
+                        
+                         
+                        <div 
+                            x-show="edit_turma" 
+                            x-transition.opacity
+                            @click.self="edit_turma = false"
+                            x-cloak
+                            class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+                        >
+                            <div class="w-[64vw] h-[90vh] flex flex-col rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
+    
+                                <form action="{{ route('turma.update', $turma->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                
+                                    <div class="flex flex-col gap-1 p-1.5">
+                                        <label for="nome_turma" class="font-bold">Nome da turma:</label>
+                                        <input type="text" name="nome_turma" id="nome_turma" value="{{ old('nome_turma', $turma->nome_turma) }}" required maxlength="255"
+                                        class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
+                                    </div>
+        
+                                    <div class="flex flex-col gap-1 p-1.5">
+                                        <label for="turno_turma" class="font-bold">Turno:</label>
+                                    
+                                        <select name="turno_turma" id="turno_turma" class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
+                                            <option value="" class="text-black">Selecione o turno</option>
+                                            <option value="manha" class="text-black" @selected(old('turno_turma', $turma->turno_turma) === 'manha')>Manhã</option>
+                                            <option value="tarde" class="text-black" @selected(old('turno_turma', $turma->turno_turma) === 'tarde')>Tarde</option>
+                                            <option value="noite" class="text-black" @selected(old('turno_turma', $turma->turno_turma) === 'noite')>Noite</option>
+                                            <option value="integral" class="text-black" @selected(old('turno_turma', $turma->turno_turma) === 'integral')>Integral</option>
+                                        </select>
+                                    </div>
+                                                                
+                                    <div class="flex flex-col gap-1 p-1.5">
+                                        <label for="ano_turma" class="font-bold">Nível:</label>
+                                            
+                                        <select name="ano_turma" id="ano_turma" class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
+                                            <option value="" class="text-black">Selecione o nível</option>
+                                            <option value="fundamentali" class="text-black" @selected(old('ano_turma', $turma->ano_turma) === 'fundamentali')>Fundamental I</option>
+                                            <option value="fundamentalii" class="text-black" @selected(old('ano_turma', $turma->ano_turma) === 'fundamentalii')>Fundamental II</option>
+                                            <option value="em" class="text-black" @selected(old('ano_turma', $turma->ano_turma) === 'em')>Ensino Médio</option>
+                                        </select>
+                                    </div>
+                            
+                                    <div class="flex flex-col gap-1 p-1.5">
+                                        <label for="materia_turma" class="font-bold">Matéria:</label>
+                                        <input type="text" name="materia_turma" id="materia_turma" class="rounded-md bg-white/10 border border-white/20 px-2 py-1" value="{{ old('materia_turma', $turma->materia_turma) }}" required>
+                                    </div>
+                            
+                                    <div class="flex justify-end p-1.5">
+                                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                           Salvar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </template>
+
+                        {{-- deletar --}}
+                                         
                     <form action="{{ route('turma.destroy', ['turma' => $turma->id]) }}" method="POST" class="inline" onSubmit="showAlert(event)">
                         @csrf
                         @method('DELETE')
@@ -224,7 +234,9 @@
                             </svg>
                         </button>
                     </form>
+
                 </div>
+                              
         </div>
 
         @empty
