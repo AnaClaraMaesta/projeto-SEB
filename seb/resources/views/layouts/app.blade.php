@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<body class="bg-white dark:bg-[#464a4f] dark:text-white">
+<body class="bg-white dark:bg-[#24272b] dark:text-white">
     
     @yield('turmas')
     @yield('alunos')
@@ -23,6 +23,12 @@
                 @yield('login')
                 @yield('createUser')
             </div>
+
+            <div class="flex justify-center mt-20">
+                 @yield('forgot-password')
+                 @yield('reset-password')
+            </div>
+
         </main>
         
     </div>

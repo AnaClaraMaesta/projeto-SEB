@@ -10,7 +10,7 @@
 
         <div class="card-body p-6 mt-3">
 
-            <form method="POST" action="{{ route('login.store') }}" id="formLogin">
+            <form method="POST" action="{{ route('login.store') }}" id="formLogin" class="">
                 @csrf
 
                 <div class="mb-3 rounded-xs" >
@@ -47,7 +47,7 @@
             </form>
 
             <div class="mb-3 text-sm text-blue-500 dark:text-cyan-300">
-                <a href="" class="text-decoration-none">Esqueci a senha</a>
+                <a href="{{route('password.request')}}" class="text-decoration-none">Esqueci a senha</a>
             </div>
 
             <div class="mb-3 text-sm">

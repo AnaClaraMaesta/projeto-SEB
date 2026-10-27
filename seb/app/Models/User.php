@@ -10,6 +10,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Notifications\CustomVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Turma;
+use App\Notifications\CustomEmailResetSenha;
 
 
 /** 
@@ -41,6 +44,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendEmailVerificationNotification()
     {
         $this->notify(new CustomVerifyEmail);
+    }
+
+     public function sendEmailResetSenha()
+    {
+        $this->notify(new CustomEmailResetSenha);
+    }
+
+    public function turmas(): HasMany
+    {
+        return $this->hasMany(Turma::class);
     }
 
 }
