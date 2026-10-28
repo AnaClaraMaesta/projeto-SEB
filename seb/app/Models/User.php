@@ -46,9 +46,9 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->notify(new CustomVerifyEmail);
     }
 
-     public function sendEmailResetSenha()
+     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new CustomEmailResetSenha);
+        $this->notify(new CustomEmailResetSenha($token));
     }
 
     public function turmas(): HasMany
