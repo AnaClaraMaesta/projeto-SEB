@@ -3,27 +3,31 @@
 
     <div class="bg-white text-black min-h-screen p-3 dark:bg-[#24272b] dark:text-white">
 
+        
         <a href="{{ route('turmas') }}" class="m-3 inline-block text-sm text-gray-500 dark:text-gray-400 hover:underline">
-            <- Voltar
+            &larr; Voltar
         </a>
-
-        <div class="bg-[#f0f0f0] dark:bg-[#3a3d41] p-10 rounded-lg shadow-md w-1/2 mx-auto">
+        
+        <div class="bg-[#f0f0f0] dark:bg-[#3a3d41] p-10 rounded-lg shadow-md w-full max-w-xl mx-auto">
             <h1 class="text-center text-2xl font-bold">{{ $turma->nome_turma }}</h1>
         </div>
         
         
-        <div x-data ="{add_aluno : false}" @keydown.escape.window="add_aluno = false">
-            
-            <button type="button" @click = "add_aluno = !add_aluno" 
-                class="btn cursor-pointer text-white bg-[#3D2F2F] hover:bg-[#2F3D3D] px-4 py-2 rounded-md whitespace-nowrap">
+         <div x-data="{ add_aluno: false }"
+            @abrir-add-aluno.window="add_aluno = true"
+            @keydown.escape.window="add_aluno = false"
+            class="m-3">
+
+            <button type="button" @click="$dispatch('abrir-add-aluno')"
+                    class="cursor-pointer text-white bg-[#3D2F2F] hover:bg-[#2F3D3D] px-4 py-2 rounded-md whitespace-nowrap">
                 + Novo
             </button>
+
         
-            <div x-show="add_aluno"
-            x-transition
-            @click.self="add_aluno = false  "
-            class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
-            >
+            <div x-show="add_aluno" x-cloak x-transition.opacity
+             @click.self="add_aluno = false"
+             class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+
         
                 <div class="w-[64vw] h-[90vh] flex flex-col rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
             

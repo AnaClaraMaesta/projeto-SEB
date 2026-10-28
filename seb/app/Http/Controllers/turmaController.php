@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Turma;
 
 class turmaController extends Controller
@@ -30,7 +31,6 @@ class turmaController extends Controller
     public function store(Request $request)
     {   
         $dados = $request->validate([
-            'id'           => 'integer',
             'nome_turma'    => 'required|string|max:255',
             'turno_turma'   => ['required', 'in:manha,tarde,noite,integral'],
             'ano_turma'     => ['required', 'in:fundamentali,fundamentalii,em'],
@@ -39,7 +39,9 @@ class turmaController extends Controller
             'created_at'    => 'nullable|timestamp',
             'updated_at'    => 'nullable|timestamp',
         ]);
- 
+
+        $dados['user_id'] = Auth::id();
+        
         Turma::create($dados);
 
         return redirect()->route('turmas')->with('Sucesso', 'Turma criada com sucesso!');

@@ -49,27 +49,27 @@
              <div class="flex flex-col gap-1 p-2">
                  <div  x-data="{ open_alunos: false}" class="relative">
                  
-                     <button @click="open_alunos = !open_alunos" class="btn cursor-pointer p-3 w-full flex items-center justify-between">
-                         ALUNOS
-                         
-                          <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-180': open_alunos}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                         </svg>
-         
-                     </button>
+                    
+                    <button type="button" @click="open_alunos = !open_alunos"
+                            class="cursor-pointer p-3 w-full flex items-center justify-between hover:bg-[#2F3D3D] rounded-md">
+                        ALUNOS
+                        <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-180': open_alunos}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
                      
-                     <div 
-                         x-show="open_alunos" 
-                         @click.away="open_alunos = false"
-                         x-transition
-                         class="m-2 bg-[#3D2F2F] dark:bg-[#464a4f]"
-                     >
-                         <div class="p-0.5">
-                             <a href="{{ route('aluno.create') }}" class="btn cursor-pointer border-gray-500">
-                                 CADASTRAR
-                             </a>
-                         </div>
-                         <div class="p-0.5"> 
+                     <div x-show="open_alunos" x-cloak x-transition
+                            @click.outside="open_alunos = false"
+                            class="m-2 bg-[#3D2F2F] dark:bg-[#464a4f]">
+
+                            <div class="p-0.5">
+                                <a href="{{ route('aluno.create') }}"
+                                @click.prevent="$dispatch('abrir-add-aluno'); open_alunos = false"
+                                class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]">
+                                    CADASTRAR
+                                </a>
+                            </div>
+                            <div class="p-0.5"> 
                              <a href="#" class="btn cursor-pointer border-gray-500">
                                  CONSULTAR
                              </a>
