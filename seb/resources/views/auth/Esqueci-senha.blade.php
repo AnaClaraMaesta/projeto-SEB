@@ -25,12 +25,17 @@
                      required>
                  </div>
             </div>
+            
 
             @if (session('status') == 'reset-link-sent')
                 <div class="mb-4 text-sm font-medium text-green-800 bg-green-100 p-3 rounded-md text-center border border-green-200">
                     Um novo link de redefinição foi enviado para o endereço de e-mail fornecido no cadastro.
                 </div>
             @endif
+
+            @error('email')
+            <span style="color: #700909; font-size: 0.875rem;">{{ $message }}</span>
+            @enderror
 
             <div class="  flex items-center justify-center mt-3 mb-3 rounded-sm bg-[#3D2F2F] hover:bg-[#2F3D3D] cursor-pointer "> 
              <button type="submit" class="flex items-center justify-center  btn btn-primary py-2 text-white w-full">

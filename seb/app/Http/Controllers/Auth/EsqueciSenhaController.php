@@ -11,28 +11,20 @@ use Illuminate\Support\Facades\Auth;
 class EsqueciSenhaController extends Controller
 {
     public function showLinkRequestForm(){
-        return view('auth.forgot-password');
+        return view('auth.Esqueci-senha');
     }
 
     public function enviarLinkResetEmail(Request $request){
-            $dados = $request->validate(['email' => 'required|email']);
-            $user = User::where('email', $request->email)->first();
+            $request->validate(['email' => 'required|email|exists:users,email'],
+            ['email.exists' => 'E-mail não identificado, crie um usuário primeiro.',
+             'email.required' => 'O campo de e-mail é obrigatório.',
+             'email.email' => 'Digite um formato de e-mail válido.',
+             ]);
            
-        
-           if ($user && is_null($user->email_verified_at)) {
-                // Guarda o e-mail na sessão temporária
-                session(['email_for_verification' => $user->email]);
-    
-                // Redireciona para a rota 'verification.notice' (email/verify)
-                $user -> sendEmailVerificationNotification();
-                return redirect()->route('verification.notice')
-                ->with('warning', 'Seu e-mail ainda não foi verificado. Por favor, confirme seu e-mail antes de redefinir a senha.');
-            }
-
             $status = Password::sendResetLink($request->only('email'));
 
         return $status === Password::RESET_LINK_SENT
-            ? back()->with('status', __($status))
+            ? back()->with('status','reset-link-sent')
             : back()->withErrors(['email' => __($status)]); 
     }
 }
