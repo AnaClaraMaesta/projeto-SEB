@@ -89,3 +89,4 @@ Route::get('/usuario/create', [userController::class, 'create'])->name('usuarios
 Route::post('/usuario/create', [userController::class, 'store']) -> name('usuarios.store');
 /* Route::get('URL', [nome do Controller::class, 'nome da função do controller']) -> definir nome para identificar como rota name('usuarios.cadastro'); */
 
+Route::get('/aluno', [alunoController::class, 'store'])->name('aluno.store');

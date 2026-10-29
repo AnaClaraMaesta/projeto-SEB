@@ -3,8 +3,10 @@
 
 <script>
          function showAlert(event){
+
             event.preventDefault();
-            const form = event.target.closest('form');
+
+            const form = event.target.closest('#form-delete');
             Swal.fire({
                 title: "Voce tem certeza?",
                 theme: "auto",
@@ -22,10 +24,14 @@
 
 <script>
     function workedAlert(event){
+
         event.preventDefault();
-        const from = event.target.closest('form');
+
+        const from = event.target.closest('#form-create');
+
         Swal.fire({
-            title: "Drag me!",
+            title: "Turma criada com sucesso!",
+            theme: "auto",
             icon: "success",
             draggable: true
         }).then((result) => {
@@ -85,7 +91,7 @@
         >
             <div class="w-[64vw] h-[90vh] flex flex-col rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
 
-                <form action="{{ route('turma.store') }}" method="POST" class="flex flex-col flex-1 min-h-0" onSubmit='workedAlert(event)'>
+                <form action="{{ route('turma.store') }}" method="POST" class="flex flex-col flex-1 min-h-0" id='form-create'>
                     @csrf
 
                     <div class="flex flex-col gap-1 p-1.5">
@@ -120,7 +126,7 @@
                         <input type="text" name="materia_turma" id="materia_turma" class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
                     </div>
 
-                    <div class="flex justify-end p-1.5">
+                    <div class="flex justify-end p-1.5" onSubmit='workedAlert(event)'>
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Criar Turma
                         </button>
@@ -238,7 +244,7 @@
 
                         {{-- deletar --}}
                                          
-                    <form action="{{ route('turma.destroy', ['turma' => $turma->id]) }}" method="POST" class="inline" onSubmit="showAlert(event)">
+                    <form action="{{ route('turma.destroy', ['turma' => $turma->id]) }}" method="POST" class="inline" onSubmit="showAlert(event)" id="form-delete">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2">

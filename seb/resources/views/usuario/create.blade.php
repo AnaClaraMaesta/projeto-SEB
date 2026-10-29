@@ -1,13 +1,19 @@
 @extends('layouts.app')
 @section('createUser')
 
-@push('scripts')
-    @if ($errors->any())
-        <script>
+    {{-- @if ($errors->any()) --}}
+<script>
+    function showErro(event){
+        event.preventDefault();
+        const form = event.target.closest('form');
+        if($errors->any()){
             Swal.fire({ icon: 'error', title: 'Não foi possível criar a conta', text: @json($errors->first()) });
-        </script>
-    @endif
-@endpush
+        }
+        else form.submit();
+    }
+</script>
+
+
 
 <div class="shadow-sm card rounded-xl bg-[#e6eaf0] dark:bg-[#464a4f]" style="width: 25rem">
                 
@@ -74,6 +80,7 @@
                     </div>
                     <p :class="valor.length < minimo ? 'text-red-400' : 'text-green-600'">
                         <span x-text="valor.length"></span> 
+                        |
                         <span x-text="minimo"></span>
                         caracteres
                     </p>
@@ -81,7 +88,7 @@
 
                 </div>
                      
-                <div class=" flex items-center justify-center mt-3 mb-3 rounded-sm bg-[#3D2F2F] hover:bg-[#2F3D3D] cursor-pointer "> 
+                <div class=" flex items-center justify-center mt-3 mb-3 rounded-sm bg-[#3D2F2F] hover:bg-[#2F3D3D] cursor-pointer" onsubmit="showErro(event)"> 
                     <button type="submit" class="flex items-center justify-center  btn btn-primary py-2 text-white">
                         REGISTRAR
                     </button>

@@ -40,6 +40,18 @@
                                 class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
                         </div>
 
+                        <div class="flex flex-col gap-1 p-1.5">
+                            <label for="telefone_aluno" class="font-bold">telefone:</label>
+                            <input type="text" name="telefone_aluno" id="telefone_aluno"
+                                class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
+                        </div>
+
+                        <div class="flex flex-col gap-1 p-1.5">
+                            <label for="endereco_aluno" class="font-bold">endereco:</label>
+                            <input type="text" name="endereco_aluno" id="endereco_aluno"
+                                class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
+                        </div>
+
                         
 
                         <div class="flex justify-end p-1.5">

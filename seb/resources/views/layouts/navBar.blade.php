@@ -63,7 +63,7 @@
                             class="m-2 bg-[#3D2F2F] dark:bg-[#464a4f]">
 
                             <div class="p-0.5">
-                                <a href="{{ route('aluno.create') }}"
+                                <a href="{{ route('aluno.store') }}"
                                 @click.prevent="$dispatch('abrir-add-aluno'); open_alunos = false"
                                 class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]">
                                     CADASTRAR
