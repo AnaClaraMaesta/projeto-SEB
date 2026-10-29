@@ -20,11 +20,16 @@ class userController extends Controller
     public function store(Request $request)
     {
         $dados = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|regex:/^[\p{L}\s]+$/u',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:8',
         ],[
+            'name.required' => 'o campo nome é obrigatorio',
+            'name.regex' => 'O nome deve conter apenas letras e espaços válidos (sem símbolos ou acentos isolados).',
+            'email.required' => 'o campo email é obrigatorio',
+            'email.email' => 'Por favor, insira um endereço de email valido',
             'email.unique'   => 'Já existe uma conta com esse e-mail.',
+            'password.required' => 'o campo senha é obrigatorio',
             'password.min'   => 'A senha precisa ter pelo menos 8 caracteres.',
         ]);
 
