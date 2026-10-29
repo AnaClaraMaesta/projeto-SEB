@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class userController extends Controller
 {
-    public function index(Request $request){
+    public function create(Request $request){
         return view('usuario.create');
     }
     /**
@@ -23,6 +23,9 @@ class userController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:8',
+        ],[
+            'email.unique'   => 'Já existe uma conta com esse e-mail.',
+            'password.min'   => 'A senha precisa ter pelo menos 8 caracteres.',
         ]);
 
         $user = User::create($dados);

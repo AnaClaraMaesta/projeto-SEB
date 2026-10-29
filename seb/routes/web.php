@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\alunoController;
 use App\Http\Controllers\Auth\EsqueciSenhaController;
 use App\Http\Controllers\Auth\ResetSenhaController;
 use Illuminate\Support\Facades\Route;
@@ -82,7 +83,9 @@ Route::post('/login',[loginController::class, 'store']) -> name('login.store');
 
 
 
-Route::get('/usuario/create', [userController::class, 'index'])->name('usuarios.create');
+Route::get('/usuario/create', [userController::class, 'create'])->name('usuarios.create');
 Route::post('/usuario/create', [userController::class, 'store']) -> name('usuarios.store');
 /* Route::get('URL', [nome do Controller::class, 'nome da função do controller']) -> definir nome para identificar como rota name('usuarios.cadastro'); */
 
+Route::get('/aluno/create', [alunoController::class, 'create'])->name('aluno.create');
+Route::get('/aluno/create', [alunoController::class, 'store'])->name('aluno.store');

@@ -1,6 +1,14 @@
 @extends('layouts.app')
 @section('createUser')
 
+@push('scripts')
+    @if ($errors->any())
+        <script>
+            Swal.fire({ icon: 'error', title: 'Não foi possível criar a conta', text: @json($errors->first()) });
+        </script>
+    @endif
+@endpush
+
 <div class="shadow-sm card rounded-xl bg-[#e6eaf0] dark:bg-[#464a4f]" style="width: 25rem">
                 
         <div class="card-header text-center p-8 rounded-top-xl">
@@ -66,5 +74,4 @@
                 </div>
         </div>
 </div>
-
 @endsection
