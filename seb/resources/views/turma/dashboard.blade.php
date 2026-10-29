@@ -19,6 +19,20 @@
         });
     }
 </script>
+
+<script>
+    function workedAlert(event){
+        event.preventDefault();
+        const from = event.target.closest('form');
+        Swal.fire({
+            title: "Drag me!",
+            icon: "success",
+            draggable: true
+        }).then((result) => {
+            if(result.isConfirmed) form.submit();
+        });
+    }
+</script>
                 
 
 <div class="bg-[#e6eaf0] text-black min-h-screen p-3 dark:bg-[#24272b] dark:text-white">
@@ -71,7 +85,7 @@
         >
             <div class="w-[64vw] h-[90vh] flex flex-col rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
 
-                <form action="{{ route('turma.store') }}" method="POST" class="flex flex-col flex-1 min-h-0">
+                <form action="{{ route('turma.store') }}" method="POST" class="flex flex-col flex-1 min-h-0" onSubmit='workedAlert(event)'>
                     @csrf
 
                     <div class="flex flex-col gap-1 p-1.5">
