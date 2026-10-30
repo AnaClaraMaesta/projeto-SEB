@@ -31,24 +31,24 @@
         
                 <div class="w-[64vw] h-[90vh] flex flex-col rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
             
-                    <form action="{{route('aluno.store')}}" method="post" class="flex flex-col flex-1 min-h-0">
+                    <form action="{{route('aluno.store', $turma)}}" method="post" class="flex flex-col flex-1 min-h-0">
                         @csrf
 
                         <div class="flex flex-col gap-1 p-1.5">
-                            <label for="nome_aluno" class="font-bold">Nome:</label>
-                            <input type="text" name="nome_aluno" id="nome_aluno"
+                            <label for="nome" class="font-bold">Nome:</label>
+                            <input type="text" name="nome" id="nome"
                                 class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
                         </div>
 
                         <div class="flex flex-col gap-1 p-1.5">
-                            <label for="telefone_aluno" class="font-bold">telefone:</label>
-                            <input type="text" name="telefone_aluno" id="telefone_aluno"
+                            <label for="telefone" class="font-bold">telefone:</label>
+                            <input type="text" name="telefone" id="telefone"
                                 class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
                         </div>
 
                         <div class="flex flex-col gap-1 p-1.5">
-                            <label for="endereco_aluno" class="font-bold">endereco:</label>
-                            <input type="text" name="endereco_aluno" id="endereco_aluno"
+                            <label for="endereco" class="font-bold">endereco:</label>
+                            <input type="text" name="endereco" id="endereco"
                                 class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
                         </div>
 

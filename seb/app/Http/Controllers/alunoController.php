@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Aluno;
+use App\Models\aluno;
+use App\Models\Turma;
 
 class alunoController extends Controller
 {
@@ -26,21 +27,22 @@ class alunoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Turma $turma)
     {
         $dados = $request->validate([
-            'nome_aluno' => 'required|string|max:255',
-            'telefone_aluno' => 'required|string|max:15',
-            'endereco_aluno' => 'required|string|max:255',
-            'livro_id' => 'required|integer|exists:livros,id',
-            'turma_id' => 'required|integer|exists:turmas,id',
+            'nome' => 'required|string|max:255',
+            'telefone' => 'required|string|max:15',
+            'endereco' => 'required|string|max:255',
+            'livro_id' => 'nullable|integer|exists:livros,id',
             'data_emprestimo' => 'nulable|date',
             'data_devolucao' => 'nullable|date',
             'data_devolucao_prevista' => 'nulable|date',
-            'status' => ['required', 'in:no prazo,atrasado'],
+            'status' => ['nullable', 'in:no prazo,atrasado'],
         ]);
 
-        Aluno::create($dados);
+        $dados['turma_id'] = $turma->id;
+
+        aluno::create($dados);
         return redirect()->route('turma.show', $dados['turma_id'])->with('success', 'Aluno cadastrado!');
     }
 

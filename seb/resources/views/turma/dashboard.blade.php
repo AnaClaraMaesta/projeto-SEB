@@ -22,25 +22,6 @@
     }
 </script>
 
-<script>
-    function workedAlert(event){
-
-        event.preventDefault();
-
-        const from = event.target.closest('#form-create');
-
-        Swal.fire({
-            title: "Turma criada com sucesso!",
-            theme: "auto",
-            icon: "success",
-            draggable: true
-        }).then((result) => {
-            if(result.isConfirmed) form.submit();
-        });
-    }
-</script>
-                
-
 <div class="bg-[#e6eaf0] text-black min-h-screen p-3 dark:bg-[#24272b] dark:text-white">
     <div class="m-3 gap-2 flex justify-between" x-data="{ add_turma: false }" @keydown.escape.window="add_turma = false">
         <button
@@ -126,7 +107,7 @@
                         <input type="text" name="materia_turma" id="materia_turma" class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
                     </div>
 
-                    <div class="flex justify-end p-1.5" onSubmit='workedAlert(event)'>
+                    <div class="flex justify-end p-1.5">
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Criar Turma
                         </button>
@@ -273,5 +254,26 @@
     </div>  
 
 </div>
+
+@if (session('success'))
+        <div
+            x-data="{ show: true }"
+            x-init="setTimeout(() => show = false, 4000)"
+            x-show="show"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 translate-y-4"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-300"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 translate-y-4"
+            class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3
+                   rounded-lg border border-green-500 bg-green-500/10 backdrop-blur
+                   px-5 py-3 shadow-lg text-sm text-green-600 dark:text-green-400"
+            role="status"
+        >
+            <span>{{ session('success') }}</span>
+            <button type="button" @click="show = false" class="ml-2 opacity-70 hover:opacity-100" aria-label="Fechar">✕</button>
+        </div>
+@endif
 
 @endsection

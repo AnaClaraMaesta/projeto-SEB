@@ -44,7 +44,7 @@ class turmaController extends Controller
         
         Turma::create($dados);
 
-        return redirect()->route('turmas')->with('Sucesso', 'Turma criada com sucesso!');
+        return redirect()->route('turmas')->with('success', 'Turma criada com sucesso!');
     }  
 
     /**
