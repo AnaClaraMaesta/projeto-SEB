@@ -34,3 +34,13 @@
     </div>
 </body>
 </html>
+
+{{-- <div x-data="{ consultar_aluno: false }" 
+@abrir-consultar-aluno.window="consultar_aluno = true"
+@keydown.escape.window="consultar_aluno = false"
+class="m-3">
+
+    <div>
+
+    </div>
+</div> --}}

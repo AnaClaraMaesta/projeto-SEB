@@ -32,18 +32,18 @@ class alunoController extends Controller
         $dados = $request->validate([
             'nome' => 'required|string|max:255',
             'telefone' => 'required|string|max:15',
-            'endereco' => 'required|string|max:255',
             'livro_id' => 'nullable|integer|exists:livros,id',
-            'data_emprestimo' => 'nulable|date',
+            'data_emprestimo' => 'nullable|date',
             'data_devolucao' => 'nullable|date',
-            'data_devolucao_prevista' => 'nulable|date',
+            'data_devolucao_prevista' => 'nullable|date',
             'status' => ['nullable', 'in:no prazo,atrasado'],
         ]);
 
-        $dados['turma_id'] = $turma->id;
+         $turma->alunos()->create($dados);
 
-        aluno::create($dados);
-        return redirect()->route('turma.show', $dados['turma_id'])->with('success', 'Aluno cadastrado!');
+        return redirect()
+            ->route('turma.show', $turma)
+            ->with('success', 'Aluno cadastrado!');
     }
 
     /**
@@ -51,7 +51,8 @@ class alunoController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $aluno = aluno::findOrFail($id);
+        return view('turma.show', compact('aluno'));
     }
 
     /**
@@ -65,16 +66,34 @@ class alunoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Turma $turma, string $id)
     {
-        //
+        $aluno = aluno::findOrFail($id);    
+
+        $dados = $request->validate([
+            'nome' => 'required|string|max:255',
+            'telefone' => 'required|string|max:15',
+            'livro_id' => 'nullable|integer|exists:livros,id',
+            'data_emprestimo' => 'nullable|date',
+            'data_devolucao' => 'nullable|date',
+            'data_devolucao_prevista' => 'nullable|date',
+            'status' => ['nullable', 'in:no prazo,atrasado'],
+        ]);
+
+        $aluno->update($dados);
+        return redirect()->route('turma.show', $turma)->with('success', 'aluno updated');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Turma $turma, Aluno $aluno)
     {
-        //
+        abort_if($aluno->turma_id !== $turma->id, 404);        
+        $aluno->delete();
+        
+        return redirect()
+        ->route('turma.show', $turma)
+        ->with('success', 'Aluno removido!');
     }
 }

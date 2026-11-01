@@ -70,7 +70,9 @@
                                 </a>
                             </div>
                             <div class="p-0.5"> 
-                             <a href="#" class="btn cursor-pointer border-gray-500">
+                             <a href="#" 
+                             @click.prevent="$dispatch('abrir-consultar-aluno'); open_alunos = false"
+                             class="btn cursor-pointer border-gray-500">
                                  CONSULTAR
                              </a>
                          </div>

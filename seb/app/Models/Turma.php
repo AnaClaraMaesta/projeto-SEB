@@ -48,5 +48,4 @@ class Turma extends Model
             }
         });
     }
-
 }

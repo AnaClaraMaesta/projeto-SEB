@@ -90,3 +90,5 @@ Route::post('/usuario/create', [userController::class, 'store']) -> name('usuari
 /* Route::get('URL', [nome do Controller::class, 'nome da função do controller']) -> definir nome para identificar como rota name('usuarios.cadastro'); */
 
 Route::post('/turmas/{turma}/aluno', [alunoController::class, 'store'])->name('aluno.store');
+Route::delete('/turmas/{turma}/aluno/{aluno}', [alunoController::class, 'destroy'])->name('aluno.destroy');
+Route::put('/turma/{turma}/aluno/{aluno}', [alunoController::class, 'update'])->name('aluno.update');

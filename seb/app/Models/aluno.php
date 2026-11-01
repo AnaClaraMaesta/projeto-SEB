@@ -14,7 +14,6 @@ class aluno extends Model
     protected $fillable = [
         'nome',
         'telefone',
-        'endereco',
         'id_livro',
         'id_turma',
         'data_emprestimo',
@@ -34,8 +33,8 @@ class aluno extends Model
         return $this->belongsTo(Turma::class);
     }
 
-    public function livro(): BelongsTo
-    {
-        return $this->belongsTo(Livro::class, 'id_livro');
-    }
+    // public function livro(): BelongsTo
+    // {
+    //     return $this->belongsTo(Livro::class, 'id_livro');
+    // }
 }
