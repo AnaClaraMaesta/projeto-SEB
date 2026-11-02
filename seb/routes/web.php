@@ -73,22 +73,26 @@ Route::post('/logout', function (Request $request) {
 
 Route::get('/email/verify', fn() => view('email.VerificacaoEmail')) -> name('verification.notice');
 
-
+/* Turmas */
+Route::get('/turmas/pdf', [turmaController::class, 'gerarPDF'])->name('turma.pdf');
 Route::post('/turmas', [turmaController::class, 'store'])->name('turma.store');
 Route::get('/turmas/{turma}', [turmaController::class, 'show'])->name('turma.show');
 Route::put('/turmas/{turma}', [turmaController::class, 'update'])->name('turma.update');
 Route::delete('/turmas/{turma}', [turmaController::class, 'destroy'])->name('turma.destroy');
 
-
+/* Login */
 Route::get('/login',[loginController::class, 'index']) -> name('login');
 Route::post('/login',[loginController::class, 'store']) -> name('login.store');
 
-
-
+/* Usuario */
 Route::get('/usuario/create', [userController::class, 'create'])->name('usuarios.create');
 Route::post('/usuario/create', [userController::class, 'store']) -> name('usuarios.store');
 /* Route::get('URL', [nome do Controller::class, 'nome da função do controller']) -> definir nome para identificar como rota name('usuarios.cadastro'); */
 
+/* Alunos */
+Route::get('alunos/pdf', [alunoController::class, 'gerarPDFGeral'])->name('aluno.pdfGeral');
+Route::get('/turma/{turma}/aluno/pdf', [alunoController::class, 'gerarPDF'])->name('aluno.pdf');
+Route::get('/alunos', [alunoController::class, 'index'])->name('aluno.index');
 Route::post('/turmas/{turma}/aluno', [alunoController::class, 'store'])->name('aluno.store');
+Route::put('/turmas/{turma}/aluno/{aluno}', [alunoController::class, 'update'])->name('aluno.update');
 Route::delete('/turmas/{turma}/aluno/{aluno}', [alunoController::class, 'destroy'])->name('aluno.destroy');
-Route::put('/turma/{turma}/aluno/{aluno}', [alunoController::class, 'update'])->name('aluno.update');

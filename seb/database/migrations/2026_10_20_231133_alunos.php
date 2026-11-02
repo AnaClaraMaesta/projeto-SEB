@@ -16,12 +16,11 @@ return new class extends Migration
             $table->foreignId('turma_id')->nullable()->constrained('turmas')->cascadeOnDelete();
             $table->string('nome');
             $table->string('telefone');
-            $table->string('endereco');
             $table->foreignId('livro_id')->nullable()->constrained('livros')->nullOnDelete();
             $table->date('data_emprestimo')->nullable();
             $table->date('data_devolucao')->nullable();
             $table->date('data_devolucao_prevista')->nullable();
-            $table->enum('status', ['emprestado', 'disponivel'])->nullable();
+            $table->enum('status', ['Sem emprestimo', 'No prazo', 'Atrasado'])->default('Sem emprestimo');
             $table->softDeletes();
             $table->timestamps();
         });

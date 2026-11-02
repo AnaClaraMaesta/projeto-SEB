@@ -14,8 +14,8 @@ class aluno extends Model
     protected $fillable = [
         'nome',
         'telefone',
-        'id_livro',
-        'id_turma',
+        'livro_id',
+        'turma_id',
         'data_emprestimo',
         'data_devolucao',
         'data_devolucao_prevista',
@@ -28,13 +28,13 @@ class aluno extends Model
         'data_devolucao_prevista' => 'date',
     ];
 
-    public function turma(): BelongsTo
+    public function turma()
     {
-        return $this->belongsTo(Turma::class);
+        return $this->belongsTo(Turma::class, 'turma_id');    
     }
 
-    // public function livro(): BelongsTo
-    // {
-    //     return $this->belongsTo(Livro::class, 'id_livro');
-    // }
+    public function livro(): BelongsTo
+    {
+        return $this->belongsTo(Livro::class, 'livro_id');
+    }
 }

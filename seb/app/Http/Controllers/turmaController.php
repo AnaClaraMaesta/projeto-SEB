@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Turma;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class turmaController extends Controller
 {
@@ -34,7 +35,6 @@ class turmaController extends Controller
             'nome_turma'    => 'required|string|max:255',
             'turno_turma'   => ['required', 'in:manha,tarde,noite,integral'],
             'ano_turma'     => ['required', 'in:fundamentali,fundamentalii,em'],
-            'materia_turma' => 'required|string|max:255',
             'deleted_at'    => 'nullable|timestamp',
             'created_at'    => 'nullable|timestamp',
             'updated_at'    => 'nullable|timestamp',
@@ -76,7 +76,6 @@ class turmaController extends Controller
             'nome_turma'    => 'required|string|max:255',
             'turno_turma'   => ['required', 'in:manha,tarde,noite,integral'],
             'ano_turma'     => ['required', 'in:fundamentali,fundamentalii,em'],
-            'materia_turma' => 'required|string|max:255',
         ]);
 
         $turma->update($dados);
@@ -95,4 +94,11 @@ class turmaController extends Controller
         return redirect()->route('turmas')->with('Sucesso', 'Turma excluída com sucesso!');
     }
 
+    public function gerarPDF()
+    {
+        $turmas = Turma::all();
+        $pdf = Pdf::loadView('turma.pdf', compact('turmas'));
+        $pdf->setPaper('a4', 'portrait');
+        return $pdf->download('relatorio_turmas.pdf');
+    }
 }

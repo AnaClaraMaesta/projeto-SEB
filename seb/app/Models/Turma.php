@@ -19,12 +19,11 @@ class Turma extends Model
         'nome_turma',
         'turno_turma',
         'ano_turma',
-        'materia_turma',
     ];
 
     public function alunos()
     {
-        return $this->hasMany(aluno::class);
+        return $this->hasMany(aluno::class, 'turma_id');
     }
 
     public function user(): BelongsTo
@@ -41,11 +40,19 @@ class Turma extends Model
             }
         });
 
+        static::deleting(function (Turma $turma) {
+            $turma->alunos()->delete();
+        });
+
         // Atribui o user_id automaticamente na hora de criar
         static::creating(function ($turma) {
             if (Auth::check() && ! $turma->user_id) {
                 $turma->user_id = Auth::id();
             }
+        });
+        
+        static::restoring(function (Turma $turma) {
+            $turma->alunos()->withTrashed()->restore();
         });
     }
 }

@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('nome_turma');
             $table->enum('turno_turma', ['manha', 'tarde', 'noite', 'integral']);
             $table->enum('ano_turma', ['fundamentali', 'fundamentalii', 'em']);
-            $table->string('materia_turma');
             $table->timestamp('deleted_at')->nullable()->default(null);
             $table->timestamps();
         });

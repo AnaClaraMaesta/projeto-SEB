@@ -69,10 +69,11 @@
                                     CADASTRAR
                                 </a>
                             </div>
+
                             <div class="p-0.5"> 
-                             <a href="#" 
-                             @click.prevent="$dispatch('abrir-consultar-aluno'); open_alunos = false"
-                             class="btn cursor-pointer border-gray-500">
+                             <a href="{{ route('aluno.index') }}" 
+                             {{-- @click.prevent="$dispatch('abrir-consultar-aluno'); open_alunos = false" --}}
+                            class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]">
                                  CONSULTAR
                              </a>
                          </div>
@@ -81,7 +82,8 @@
          
                  <div x-data="{ open_livros: false }" class="relative">
          
-                     <button @click="open_livros = !open_livros" class="btn cursor-pointer p-3 flex w-full items-center justify-between">
+                     <button @click="open_livros = !open_livros" 
+                        class="cursor-pointer p-3 w-full flex items-center justify-between hover:bg-[#2F3D3D] rounded-md">
                          LIVROS  
                          
                          <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-180': open_livros}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,17 +95,17 @@
                          x-show="open_livros" 
                          @click.away="open_livros = false"
                          x-transition
-                         class="m-2 rounded-md bg-[#3D2F2F] dark:bg-[#464a4f]"
+                         class="m-2 bg-[#3D2F2F] dark:bg-[#464a4f]"
                      >
                          <div class="p-0.5">
-                             <button class="btn cursor-pointer border-gray-500">
+                             <a class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]">
                                  CADASTRAR
-                             </button> <!-- dentro de estoque vai ter a opção de cadastrar e excluir além de emitir relatórios também -->
+                             </a> 
                          </div>
                          <div class="p-0.5">
-                             <button class="btn cursor-pointer border-gray-500">
+                             <a class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]">
                                  EMPRESTAR
-                             </button>
+                             </a>
                          </div>
                      </div>
                  </div>

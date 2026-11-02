@@ -11,36 +11,21 @@
 </head>
 
 <body class="bg-white dark:bg-[#24272b] dark:text-white">
-    
-    @yield('turmas')
-    @yield('alunos')
         
-    <div class="flex">  
-        
-        <main class="flex-1 overflow-y-auto">
-            
-            <div class="flex justify-start p-5">
+            <div class="flex">
                 @yield('login')
                 @yield('createUser')
             </div>
 
-            <div class="flex justify-center mt-20">
+            <div class="flex">
                  @yield('forgot-password')
                  @yield('reset-password')
             </div>
-
-        </main>
-        
-    </div>
+     @auth
+        <x-modal-aluno :turmas="$turmasNav" />
+        @yield('turmas')
+        @yield('alunos')
+    @endauth
+    @stack('scripts')
 </body>
 </html>
-
-{{-- <div x-data="{ consultar_aluno: false }" 
-@abrir-consultar-aluno.window="consultar_aluno = true"
-@keydown.escape.window="consultar_aluno = false"
-class="m-3">
-
-    <div>
-
-    </div>
-</div> --}}

@@ -5,15 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\aluno;
 use App\Models\Turma;
+use App\Models\Livro;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class alunoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Turma $turma)
     {
-        //
+        $alunos = Aluno::with('turma')->get();        
+        return view('aluno.index', compact('alunos', 'turma'));
     }
 
     /**
@@ -36,7 +39,7 @@ class alunoController extends Controller
             'data_emprestimo' => 'nullable|date',
             'data_devolucao' => 'nullable|date',
             'data_devolucao_prevista' => 'nullable|date',
-            'status' => ['nullable', 'in:no prazo,atrasado'],
+            'status' => ['in:Sem emprestimo,No prazo,Atrasado'],
         ]);
 
          $turma->alunos()->create($dados);
@@ -77,7 +80,7 @@ class alunoController extends Controller
             'data_emprestimo' => 'nullable|date',
             'data_devolucao' => 'nullable|date',
             'data_devolucao_prevista' => 'nullable|date',
-            'status' => ['nullable', 'in:no prazo,atrasado'],
+            'status' => ['in:Sem emprestimo,No prazo,Atrasado'],
         ]);
 
         $aluno->update($dados);
@@ -89,11 +92,30 @@ class alunoController extends Controller
      */
     public function destroy(Turma $turma, Aluno $aluno)
     {
-        abort_if($aluno->turma_id !== $turma->id, 404);        
+        $aluno = aluno::findOrFail($aluno->id);
         $aluno->delete();
         
         return redirect()
         ->route('turma.show', $turma)
         ->with('success', 'Aluno removido!');
+    }
+
+    public function gerarPDF(Turma $turma, Livro $livro)
+    {
+        $alunos = aluno::where('turma_id', $turma->id)
+        ->with(['turma', 'livro'])
+        ->orderBy('nome')
+        ->get();
+
+        $pdf = Pdf::loadView('aluno.pdf', compact('alunos', 'turma'));
+        $pdf->setPaper('A4', 'landscape');
+        return $pdf->stream('alunos_' . $turma->id . '.pdf');
+    }
+
+    public function gerarPdfGeral(){
+        $alunos = aluno::whereHas('turma')->with(['turma', 'livro'])->orderBy('nome')->get();
+        $pdf = Pdf::loadView('aluno.pdf', compact('alunos'));
+        $pdf->setPaper('A4', 'landscape');
+        return $pdf->stream('alunos_geral.pdf');
     }
 }
