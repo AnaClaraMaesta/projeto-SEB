@@ -1,13 +1,14 @@
 <?php
 
-use App\Http\Controllers\alunoController;
+use App\Http\Controllers\AlunoController;
 use App\Http\Controllers\Auth\EsqueciSenhaController;
 use App\Http\Controllers\Auth\ResetSenhaController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\userController;
-use App\Http\Controllers\loginController;
-use App\Http\Controllers\turmaController;
-use App\Services\login;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\TurmaController;
+use App\Http\Controllers\LivroController;
+use App\Services\Login;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -83,6 +84,26 @@ Route::post('/login',[loginController::class, 'store']) -> name('login.store');
 /* Usuario */
 Route::get('/usuario/create', [userController::class, 'create'])->name('usuarios.create');
 Route::post('/usuario/create', [userController::class, 'store']) -> name('usuarios.store');
+<<<<<<< HEAD
 Route::get('/usuario/{usuario}/edit', [userController::class, 'edit'])->name('usuarios.edit');
 Route::put('/usuario/{usuario}', [userController::class, 'update'])->name('usuarios.update');
 Route::delete('/usuario/{usuario}', [userController::class, 'destroy'])->name('usuarios.destroy');
+=======
+/* Route::get('URL', [nome do Controller::class, 'nome da função do controller']) -> definir nome para identificar como rota name('usuarios.cadastro'); */
+
+/* Alunos */
+Route::get('alunos/pdf', [alunoController::class, 'gerarPDFGeral'])->name('aluno.pdfGeral');
+Route::get('/turma/{turma}/aluno/pdf', [alunoController::class, 'gerarPDF'])->name('aluno.pdf');
+Route::get('/alunos', [alunoController::class, 'index'])->name('aluno.index');
+Route::post('/turmas/{turma}/aluno', [alunoController::class, 'store'])->name('aluno.store');
+Route::put('/turmas/{turma}/aluno/{aluno}', [alunoController::class, 'update'])->name('aluno.update');
+Route::delete('/turmas/{turma}/aluno/{aluno}', [alunoController::class, 'destroy'])->name('aluno.destroy');
+
+/* Livros */
+    Route::get('/livros', [LivroController::class, 'index'])->name('livro.index');
+    Route::get('/livros/pdf', [LivroController::class, 'gerarPDF'])->name('livro.pdf');
+    Route::post('/livros', [LivroController::class, 'store'])->name('livro.store');
+    Route::put('/livros/{livro}', [LivroController::class, 'update'])->name('livro.update');
+    Route::delete('/livros/{livro}', [LivroController::class, 'destroy'])->name('livro.destroy');
+
+>>>>>>> fb4a92be9bf2ce8108de393cae023beddfda02fa

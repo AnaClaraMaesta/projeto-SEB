@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\aluno;
+use App\Models\Aluno;
 use App\Models\Turma;
 use App\Models\Livro;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class alunoController extends Controller
+class AlunoController extends Controller
 {
     /**
      * Display a listing of the resource.

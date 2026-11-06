@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
-
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Turma extends Model
 {
@@ -23,7 +21,7 @@ class Turma extends Model
 
     public function alunos()
     {
-        return $this->hasMany(aluno::class, 'turma_id');
+        return $this->hasMany(Aluno::class, 'turma_id');
     }
 
     public function user(): BelongsTo
@@ -50,7 +48,7 @@ class Turma extends Model
                 $turma->user_id = Auth::id();
             }
         });
-        
+
         static::restoring(function (Turma $turma) {
             $turma->alunos()->withTrashed()->restore();
         });

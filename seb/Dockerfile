@@ -23,11 +23,16 @@ WORKDIR /var/www/html
 #copia os arquivos de configuração para aproveitar o cache do docker e nao baixar tudo de novo sempre que houver alteracao no codigo
 COPY composer.json composer.lock* ./
 
+#instala as dependencias dentro do container: a pasta vendor/ e ignorada pelo .dockerignore
+#e antes vinha do bind mount da maquina host
+RUN composer install --no-interaction --no-scripts --prefer-dist --no-progress
+
 #copia o resto da aplicacao para dentro do container
 COPY . .
 
-#certifica de que os diretorios existem e que tem as devidas permissoes para o laravel funcionar corretamente
-RUN chown -R www-data:www-data /var/www/html \
+#regenera o autoloader otimizado agora que app/ existe, e ajusta as permissoes do laravel
+RUN composer dump-autoload --no-interaction --no-scripts --optimize \
+    && chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage bootstrap/cache
 
 EXPOSE 80
