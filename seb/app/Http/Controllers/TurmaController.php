@@ -7,7 +7,7 @@ use App\Models\Turma;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 
-class turmaController extends Controller
+class TurmaController extends Controller
 {
     /**
      * Display a listing of the resource.

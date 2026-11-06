@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Auth;
 
-class userController extends Controller
+class UserController extends Controller
 {
     public function create(Request $request){
         return view('usuario.create');

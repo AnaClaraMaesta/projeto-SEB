@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\aluno;
+use App\Models\Aluno;
 use Illuminate\Auth\Access\Response;
 
 class AlunoPolicy

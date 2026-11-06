@@ -4,8 +4,9 @@
       ports:
         - "8000:80"
         - "5173:5173"
-      volumes:
-        - .:/var/www/html
+      # Sem bind mount: o codigo vem da imagem e o `docker compose watch` sincroniza
+      # as alteracoes para dentro do container. Isso evita o overhead do 9p do
+      # WSL2 em Windows, que deixava cada request do Laravel varios segundos lento.
       command: sh -c "docker-php-entrypoint apache2-foreground" 
       develop:
         watch:
@@ -16,8 +17,16 @@
             - vendor/
             - .git/
             - node_modules/
+            - storage/
+            - bootstrap/cache/
+            - .env
+            - database/*.sqlite
           - action: rebuild
             path: composer.json
+          - action: rebuild
+            path: composer.lock
+          - action: rebuild
+            path: Dockerfile
       env_file:
         - .env
     mailpit:

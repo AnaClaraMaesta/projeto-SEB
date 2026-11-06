@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
-
-class aluno extends Model
+class Aluno extends Model
 {
     use SoftDeletes;
 
@@ -19,7 +20,7 @@ class aluno extends Model
         'data_emprestimo',
         'data_devolucao',
         'data_devolucao_prevista',
-        'status'
+        'status',
     ];
 
     protected $casts = [
@@ -28,9 +29,9 @@ class aluno extends Model
         'data_devolucao_prevista' => 'date',
     ];
 
-    public function turma()
+    public function turma(): BelongsTo
     {
-        return $this->belongsTo(Turma::class, 'turma_id');    
+        return $this->belongsTo(Turma::class, 'turma_id');
     }
 
     public function livro(): BelongsTo

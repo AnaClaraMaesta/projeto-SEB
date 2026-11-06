@@ -25,6 +25,7 @@
         <x-modal-aluno :turmas="$turmasNav" />
         @yield('turmas')
         @yield('alunos')
+        @yield('livros')
     @endauth
     @stack('scripts')
 </body>

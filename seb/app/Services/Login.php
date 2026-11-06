@@ -3,11 +3,9 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
-use App\Models\User;
-use Illuminate\Http\RedirectResponse;
 
-class login{
-
+class Login
+{
     private static $file = 'users.json';
 
     public static function validar(array $dados) : bool{
@@ -27,6 +25,7 @@ class login{
         }
 
         $contents = Storage::get(self::$file);
+
         return json_decode($contents, true) ?? [];
     }
 }
