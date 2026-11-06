@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('alunos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('turma_id')->nullable()->constrained('turmas')->cascadeOnDelete();
-            $table->string('nome');
-            $table->string('telefone');
+            $table->string('nome', 255);
+            $table->string('telefone', 11);
             $table->foreignId('livro_id')->nullable()->constrained('livros')->nullOnDelete();
             $table->date('data_emprestimo')->nullable();
             $table->date('data_devolucao')->nullable();

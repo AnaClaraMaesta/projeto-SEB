@@ -30,7 +30,7 @@ class loginController extends Controller
                     $user -> sendEmailVerificationNotification();
                     return redirect()->route('verification.notice');
                 }
-           return redirect()->intended(route('turmas'));
+           return redirect('/turmas');
         }
 
         return back()->withErrors([
