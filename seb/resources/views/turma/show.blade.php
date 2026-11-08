@@ -4,7 +4,7 @@
     <div class="bg-white text-black min-h-screen p-3 dark:bg-[#24272b] dark:text-white">
 
         
-        <a href="{{ route('turmas') }}" class="m-3 inline-block text-sm text-gray-500 dark:text-gray-400 hover:underline">
+        <a href="{{ route('turma.index') }}" class="m-3 inline-block text-sm text-gray-500 dark:text-gray-400 hover:underline">
             &larr; Voltar
         </a>
         

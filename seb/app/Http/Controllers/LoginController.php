@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Services\Login;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 
 class LoginController extends Controller
-{   
+{
     public function index(Request $request)
     {
         return view('layouts.login');
     }
 
-    public function store(Request $request){
-        
-    $dados = $request->validate([
+    public function store(Request $request)
+    {
+
+        $dados = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
@@ -25,12 +24,14 @@ class LoginController extends Controller
         if (Auth::attempt($dados, $request->boolean('remember'))) {
             $request->session()->regenerate();
             /** @var User $user */
-            $user = Auth::user(); 
-                if (! $user->hasVerifiedEmail()){
-                    $user -> sendEmailVerificationNotification();
-                    return redirect()->route('verification.notice');
-                }
-           return redirect()->intended(route('turmas'));
+            $user = Auth::user();
+            if (! $user->hasVerifiedEmail()) {
+                $user->sendEmailVerificationNotification();
+
+                return redirect()->route('verification.notice');
+            }
+
+            return redirect()->intended(route('turma.index'));
         }
 
         return back()->withErrors([
@@ -47,5 +48,4 @@ class LoginController extends Controller
 
         return redirect('/login');
     }
-
 }

@@ -28,6 +28,15 @@ class Livro extends Model
         'data_devolucao_prevista' => 'date',
     ];
 
+    protected static function booted()
+    {
+        static::saving(function (Livro $livro) {
+            $livro->status = (int) $livro->estoque > 1
+                ? 'Disponível'
+                : 'Indisponível';
+        });
+    }
+
     public function alunos(): HasMany
     {
         return $this->hasMany(Aluno::class);

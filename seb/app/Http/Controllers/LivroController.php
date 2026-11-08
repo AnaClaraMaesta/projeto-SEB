@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Livro;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 
 class LivroController extends Controller
 {
     public function index()
     {
-        $livros = Livro::orderBy('titulo')->get();
+        $livros = $this->livrosOrdenados();
 
         return view('livro.index', compact('livros'));
     }
@@ -43,11 +44,23 @@ class LivroController extends Controller
 
     public function gerarPDF()
     {
-        $livros = Livro::orderBy('titulo')->get();
+        $livros = $this->livrosOrdenados();
         $pdf = Pdf::loadView('livro.pdf', compact('livros'));
         $pdf->setPaper('A4', 'landscape');
 
         return $pdf->download('relatorio_livros.pdf');
+    }
+
+    /**
+     * Ordena numericamente pelo código (12 < 50 < 102), sem depender
+     * de CAST específico de banco. Funciona em PostgreSQL e SQLite.
+     */
+    private function livrosOrdenados(): Collection
+    {
+        return Livro::query()
+            ->get()
+            ->sortBy('codigo', SORT_NATURAL)
+            ->values();
     }
 
     /**
@@ -61,12 +74,11 @@ class LivroController extends Controller
             'ano_publicacao' => 'required|integer|min:1|max:2100',
             'codigo' => [
                 'required',
-                'string',
-                'max:6',
+                'integer',
+                'max:999999',
                 Rule::unique('livros', 'codigo')->ignore($livro),
             ],
             'estoque' => 'required|integer|min:0',
-            'status' => ['required', 'in:Disponível,Emprestado,Indisponível'],
         ];
     }
 }

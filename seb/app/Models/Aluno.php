@@ -29,6 +29,18 @@ class Aluno extends Model
         'data_devolucao_prevista' => 'date',
     ];
 
+    protected static function booted()
+    {
+        static::addGlobalScope('user_turmas', function (Builder $builder) {
+            if (Auth::check() && Auth::user()) {
+                // Filtra alunos cujas turmas pertencem ao usuário logado
+                $builder->whereHas('turma', function ($query) {
+                    $query->where('user_id', Auth::id());
+                });
+            }
+        });
+    }
+
     public function turma(): BelongsTo
     {
         return $this->belongsTo(Turma::class, 'turma_id');

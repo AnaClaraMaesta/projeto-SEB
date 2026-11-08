@@ -53,7 +53,7 @@
     <div x-show="modal" x-cloak x-transition.opacity @click.self="fechar()" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
         {{-- adicionar --}}
         <div x-show="modal === 'add'" class="w-[64vw] h-[90vh] flex flex-col rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
-            <form :action="actionAdd" method="POST" class="flex flex-col flex-1 min-h-0" id='form-create' @submit.prevent="salvarTurma($event, formAdd)"">
+            <form :action="actionAdd" method="POST" class="flex flex-col flex-1 min-h-0" id='form-create' @submit.prevent="salvarTurma($event, formAdd)">
                 @csrf
 
                 <div class="flex flex-col gap-1 p-1.5">
