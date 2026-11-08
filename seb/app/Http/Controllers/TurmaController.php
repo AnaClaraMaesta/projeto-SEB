@@ -24,7 +24,7 @@ class TurmaController extends Controller
                 $query->where('turno_turma', 'like', "%{$request->turno_turma}%");
             })
             ->orderBy('nome_turma')
-            ->paginate(15)  
+            ->paginate(15)
             ->withQueryString();
 
         return view('turma.dashboard', compact('turmas'));
@@ -59,7 +59,7 @@ class TurmaController extends Controller
         Turma::create($dados);
 
         return redirect()->route('turma.index')->with('success', 'Turma criada com sucesso!');
-    }  
+    }
 
     /**
      * Display the specified resource.
@@ -130,5 +130,4 @@ class TurmaController extends Controller
 
         return $pdf->download('relatorio_turmas.pdf');
     }
-
 }
