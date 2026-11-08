@@ -54,11 +54,11 @@
     
                 <div class="mb-3 text-sm">
                     <a href="{{route('usuarios.create')}}" class="text-decoration-none">Não tenho conta</a>
-                    <!-- puxa a rota pelo nome definido -->
                 </div>
     
             </div>
     </div>
+
 </div>
 
 @endsection
