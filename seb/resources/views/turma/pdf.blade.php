@@ -67,7 +67,6 @@
                 <th>Turma</th>
                 <th>Turno</th>
                 <th>Nível/Ano</th>
-                <th>Matéria</th>
             </tr>
         </thead>
         <tbody>

@@ -21,14 +21,14 @@
     @abrir-edit-aluno.window="abrir('edit', $event.detail ?? {})"
     @abrir-del-aluno.window="abrir('del', $event.detail ?? {})"
     @keydown.escape.window="fechar()">
-    <div x-show="modal" x-cloak x-transition.opacity @click.self="fechar()" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div x-show="modal" x-cloak x-transition.opacity @click.self="fechar()" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" x-data = "{ loading: false}">
         
         {{-- adicionar --}}
 
         <div x-show="modal === 'add'" class="w-[64vw] h-[90vh] flex flex-col rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
             <h2 class="text-lg font-bold mb-3">Novo aluno</h2>
                 
-            <form :action="actionAdd" method="POST" class="flex flex-col flex-1 min-h-0">
+            <form :action="actionAdd" method="POST" class="flex flex-col flex-1 min-h-0" @submit="loading = true; axios.post(actionAdd, new FormData($event.target)).then(()=> {loading = false})">
                 @csrf
 
                 <div class="flex flex-col gap-1">
@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="flex flex-col gap-1 p-1.5">
-                    <label for="telefone" class="font-bold">telefone:</label>
+                    <label for="telefone" class="font-bold">Contato do responsável:</label>
                     <input type="text" name="telefone" id="telefone"
                     class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
                 </div>
@@ -66,8 +66,12 @@
 
                 <div class="flex justify-end p-1.5" class="w-full max-w-lg rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
                         
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Criar Aluno
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    :disabled="loading"
+                    :class="{ 'opacity-50 cursor-not-allowed': loading }"
+                    >
+                        <span  x-text="loading ? 'Salvando...' : 'Criar Aluno'"></span>
+
                     </button>
                 </div>
 
@@ -85,6 +89,7 @@
 
                 <div class="flex flex-col gap-1 p-1.5">
                     <label for="nome" class="font-bold">Nome:</label>
+                    <p class='text-red-500'>*</p>
                         <input type="text" name="nome" id="nome"
                         class="rounded-md bg-white/10 border border-white/20 px-2 py-1"
                         x-model="aluno.nome"
@@ -92,7 +97,8 @@
                 </div>
 
                 <div class="flex flex-col gap-1 p-1.5">
-                    <label for="telefone" class="font-bold">telefone:</label>
+                    <label for="telefone" class="font-bold">Contato do responsável:</label>
+                    <p class='text-red-500'>*</p>
                     <input type="text" name="telefone" id="telefone"
                     class="rounded-md bg-white/10 border border-white/20 px-2 py-1"
                     x-model="aluno.telefone"
@@ -111,8 +117,11 @@
 
 
                 <div class="flex justify-end p-1.5">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Salvar
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    :disabled="loading"
+                    :class="{ 'opacity-50 cursor-not-allowed': loading }"
+                    >
+                        <span  x-text="loading ? 'Salvando...' : 'Salvar'"></span>
                     </button>
                 </div>
 

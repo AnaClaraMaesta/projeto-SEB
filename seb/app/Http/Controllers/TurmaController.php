@@ -14,7 +14,18 @@ class TurmaController extends Controller
      */
     public function index(Request $request)
     {
-        $turmas = Turma::all();
+        $turmas = Turma::query()
+            ->when($request->input('search'), function ($query, $search) {
+                $query->where('nome_turma', 'like', "%{$search}%")
+                    ->orWhere('turno_turma', 'like', "%{$search}%")
+                    ->orWhere('ano_turma', 'like', "%{$search}%");
+            })
+            ->when($request->filled('turno_turma'), function ($query) use ($request) {
+                $query->where('turno_turma', 'like', "%{$request->turno_turma}%");
+            })
+            ->orderBy('nome_turma')
+            ->paginate(15)  
+            ->withQueryString();
 
         return view('turma.dashboard', compact('turmas'));
     }
@@ -48,7 +59,7 @@ class TurmaController extends Controller
         Turma::create($dados);
 
         return redirect()->route('turma.index')->with('success', 'Turma criada com sucesso!');
-    }
+    }  
 
     /**
      * Display the specified resource.
@@ -99,12 +110,25 @@ class TurmaController extends Controller
         return redirect()->route('turma.index')->with('Sucesso', 'Turma excluída com sucesso!');
     }
 
-    public function gerarPDF()
+    public function gerarPDF(Request $request)
     {
-        $turmas = Turma::all();
+        $turmas = Turma::query()
+            ->when($request->input('search'), function ($query, $search) {
+                $query->where('nome_turma', 'like', "%{$search}%")
+                    ->orWhere('turno_turma', 'like', "%{$search}%")
+                    ->orWhere('ano_turma', 'like', "%{$search}%");
+            })
+            ->when($request->filled('turno_turma'), function ($query) use ($request) {
+                $query->where('turno_turma', 'like', "%{$request->turno_turma}%");
+            })
+            ->orderBy('nome_turma')
+            ->paginate(15)  
+            ->withQueryString();
+
         $pdf = Pdf::loadView('turma.pdf', compact('turmas'));
         $pdf->setPaper('a4', 'portrait');
 
         return $pdf->download('relatorio_turmas.pdf');
     }
+
 }

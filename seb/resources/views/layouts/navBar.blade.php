@@ -18,27 +18,28 @@
         
         <div x-show="open_nav" x-cloak x-transition.opacity
           class="w-56 flex flex-col gap-2 whitespace-nowrap">
-
-                 <div x-data="{ open_user: false }" class="relative" >
-                     <button @click="open_user = !open_user" class="btn cursor-pointer p-3 w-full items-center justify-between gap-2">
-         
+        
+          <div x-data="{ open_user: false }" class="relative p-2" >
+                     <button @click="open_user = !open_user" class="btn cursor-pointer p-3 w-full items-center justify-between gap-3 flex">
                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                          </svg>
+
          
                           <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-180': open_user}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                          </svg>
          
                      </button>
-         
+                    <div class="text-bold opacity-75">{{ auth()->user()->name }}</div>
+
                      <div
                          x-show="open_user"
                          @click.away="open_user = false"
                          x-transition
-                         class="rounded-md"
+                         class="rounded-md m-2"
                      >
-                         <div class="p-0.5">
+                         <div class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]">
                              <button class="btn cursor-pointer border-gray-500 hover:">
                                  EDITAR
                              </button>
@@ -73,7 +74,7 @@
                             <div class="p-0.5"> 
                              <a href="{{ route('aluno.index') }}" 
                              {{-- @click.prevent="$dispatch('abrir-consultar-aluno'); open_alunos = false" --}}
-                            class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]">
+                                class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]">
                                  CONSULTAR
                              </a>
                          </div>

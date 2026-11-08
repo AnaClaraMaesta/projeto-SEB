@@ -80,10 +80,10 @@
         <thead>
             <tr>
                 <th>Nome</th>
+                <th>CONTATO</th>
                 <th>Turma</th>
                 <th>Turno</th>
                 <th>Ano</th>
-                <th>Matéria</th>
                 <th>Livro</th>
                 <th>Empréstimo</th>
                 <th>Devolução</th>
@@ -95,10 +95,10 @@
             @foreach ($alunos as $aluno)
                 <tr>
                     <td>{{ $aluno->nome }}</td>
+                    <td>{{ $aluno->telefone }}</td>
                     <td>{{ $aluno->turma?->nome_turma ?? 'Sem Turma' }}</td>
                     <td>{{ $aluno->turma?->turno_turma ?? 'N/A' }}</td>
                     <td>{{ $aluno->turma?->ano_turma ?? 'N/A' }}</td>
-                    <td>{{ $aluno->turma?->materia_turma ?? 'N/A' }}</td>
                     <td>{{ $aluno->livro?->nome_livro ?? 'N/A' }}</td>
                     <td>{{ $aluno->data_emprestimo ?? 'N/A' }}</td>
                     <td>{{ $aluno->data_devolucao ?? 'N/A' }}</td>
