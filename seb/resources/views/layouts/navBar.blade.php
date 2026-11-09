@@ -52,7 +52,7 @@
                          </div>
                          
                          <div class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]" x-data="{logout:false}">
-                            <a href="{{ route('logout'), auth()->id())  }}">
+                            <a href="{{ route('logout')}}">
                                 SAIR
                             </a>
                              
