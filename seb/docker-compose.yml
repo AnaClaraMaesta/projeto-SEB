@@ -4,29 +4,19 @@
       ports:
         - "8000:80"
         - "5173:5173"
-      # Sem bind mount: o codigo vem da imagem e o `docker compose watch` sincroniza
-      # as alteracoes para dentro do container. Isso evita o overhead do 9p do
-      # WSL2 em Windows, que deixava cada request do Laravel varios segundos lento.
-      command: sh -c "docker-php-entrypoint apache2-foreground" 
-      develop:
-        watch:
-          - action: sync
-            path: .
-            target: /var/www/html
-            ignore:
-            - vendor/
-            - .git/
-            - node_modules/
-            - storage/
-            - bootstrap/cache/
-            - .env
-            - database/*.sqlite
-          - action: rebuild
-            path: composer.json
-          - action: rebuild
-            path: composer.lock
-          - action: rebuild
-            path: Dockerfile
+      # Bind mount do codigo do host para dentro do container: qualquer alteracao
+      # feita no editor aparece no Apache imediatamente ao dar F5.
+      # vendor/, node_modules/, storage/ e bootstrap/cache/ ficam em volumes nomeados
+      # para manter as permissoes do www-data e o desempenho (evita 9p do WSL2).
+      # Se composer.json/composer.lock mudar, atualize o vendor com:
+      #   docker compose run --rm app composer install
+      volumes:
+        - .:/var/www/html
+        - vendor:/var/www/html/vendor
+        - node_modules:/var/www/html/node_modules
+        - storage:/var/www/html/storage
+        - bootstrap-cache:/var/www/html/bootstrap/cache
+      command: sh -c "docker-php-entrypoint apache2-foreground"
       env_file:
         - .env
     mailpit:
@@ -36,3 +26,9 @@
         - "1025:1025"
         - "8025:8025"
       restart: unless-stopped
+
+  volumes:
+    vendor:
+    node_modules:
+    storage:
+    bootstrap-cache:

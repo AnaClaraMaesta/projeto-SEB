@@ -21,6 +21,7 @@
     @abrir-edit-aluno.window="abrir('edit', $event.detail ?? {})"
     @abrir-del-aluno.window="abrir('del', $event.detail ?? {})"
     @keydown.escape.window="fechar()">
+    
     <div x-show="modal" x-cloak x-transition.opacity @click.self="fechar()" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" x-data = "{ loading: false}">
         
         {{-- adicionar --}}

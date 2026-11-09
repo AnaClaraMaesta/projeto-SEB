@@ -26,6 +26,7 @@
         @yield('turmas')
         @yield('alunos')
         @yield('livros')
+        @yield('edit-user')
     @endauth
     @stack('scripts')
 </body>

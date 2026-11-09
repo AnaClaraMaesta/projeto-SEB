@@ -1,3 +1,9 @@
+<script>
+    function logout(){
+
+    }
+</script>
+
 <div  x-data="{ open_nav: true }" class="flex">
 
     <header
@@ -40,9 +46,16 @@
                          class="rounded-md m-2"
                      >
                          <div class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]">
-                             <button class="btn cursor-pointer border-gray-500 hover:">
-                                 EDITAR
-                             </button>
+                             <a href="{{ route('usuarios.update', auth()->id()) }}">
+                                EDITAR
+                             </a>
+                         </div>
+                         
+                         <div class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]" x-data="{logout:false}">
+                            <a href="{{ route('logout'), auth()->id())  }}">
+                                SAIR
+                            </a>
+                             
                          </div>
                      </div>
                  </div>

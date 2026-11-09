@@ -16,9 +16,10 @@ use Illuminate\Support\Facades\Auth;
 //passar as rotas de senha para ca quando o logout estiver pronto
 Route::middleware('guest')->group(function () {
         
-Route::post('/forgot-password', [EsqueciSenhaController::class, 'enviarLinkResetEmail'])->name('password.email');
-Route::get('forgot-password', [EsqueciSenhaController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('/reset-password', [ResetSenhaController::class, 'resetSenha'])->name('password.update');
+    Route::post('/forgot-password', [EsqueciSenhaController::class, 'enviarLinkResetEmail'])->name('password.email');
+    Route::get('forgot-password', [EsqueciSenhaController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('/reset-password', [ResetSenhaController::class, 'resetSenha'])->name('password.update');   
+
 });
     
 // rotas que n precisam necessariamente do email autenticado mas o usuario precisa existir
@@ -82,6 +83,7 @@ Route::post('/login',[loginController::class, 'store']) -> name('login.store');
 /* Usuario */
 Route::get('/usuario/create', [userController::class, 'create'])->name('usuarios.create');
 Route::post('/usuario/create', [userController::class, 'store']) -> name('usuarios.store');
-Route::get('/usuario/{usuario}/edit', [userController::class, 'edit'])->name('usuarios.edit');
+Route::get('/usuario/{usuario}', [UserController::class, 'edit'])->name('usuarios.edit');
 Route::put('/usuario/{usuario}', [userController::class, 'update'])->name('usuarios.update');
 Route::delete('/usuario/{usuario}', [userController::class, 'destroy'])->name('usuarios.destroy');
+Route::get('/logout', [UserController::class, 'logout'])->middleware('auth')->name('logout');   

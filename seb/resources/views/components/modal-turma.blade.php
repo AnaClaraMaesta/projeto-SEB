@@ -57,14 +57,14 @@
                 @csrf
 
                 <div class="flex flex-col gap-1 p-1.5">
-                    <label for="nome_turma" class="font-bold">Nome da turma:</label>
+                    <label for="nome_turma" class="font-bold">Nome da turma: <span class="text-white/40 font-normal">*</span></label>
                     <input type="text" name="nome_turma" id="nome_turma"
                     x-model="formAdd.nome_turma"
                     class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
                 </div>
 
                 <div class="flex flex-col gap-1 p-1.5">
-                    <label for="turno_turma" class="font-bold">Turno:</label>
+                    <label for="turno_turma" class="font-bold">Turno: <span class="text-white/40 font-normal">*</span></label>
                     <select name="turno_turma" id="turno_turma" 
                     x-model="formAdd.turno_turma"
                     class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
@@ -77,7 +77,7 @@
                 </div>
                         
                 <div class="flex flex-col gap-1 p-1.5">
-                    <label for="ano_turma" class="font-bold">Nível:</label>
+                    <label for="ano_turma" class="font-bold">Nível: <span class="text-white/40 font-normal">*</span></label>
                     <select name="ano_turma" id="ano_turma" 
                     x-model="formAdd.ano_turma"
                     class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
@@ -111,7 +111,7 @@
                 @method('PUT')
 
                 <div class="flex flex-col gap-1 p-1.5">
-                    <label for="nome_turma" class="font-bold">Nome da turma:</label>
+                    <label for="nome_turma" class="font-bold">Nome da turma: <span class="text-white/40 font-normal">*</span></label>
                     <input type="text" name="nome_turma" id="nome_turma"
                     class="rounded-md bg-white/10 border border-white/20 px-2 py-1"
                     x-model="turma.nome_turma"
@@ -119,7 +119,7 @@
                 </div>
 
                 <div class="flex flex-col gap-1 p-1.5">
-                    <label for="turno_turma" class="font-bold">Turno:</label>
+                    <label for="turno_turma" class="font-bold">Turno: <span class="text-white/40 font-normal">*</span></label>
                     <select name="turno_turma" id="turno_turma" class="rounded-md bg-white/10 border border-white/20 px-2 py-1"
                     x-model="turma.turno_turma"
                     >
@@ -132,7 +132,7 @@
                 </div>
 
                 <div class="flex flex-col gap-1 p-1.5">
-                    <label for="ano_turma" class="font-bold">Nível:</label>
+                    <label for="ano_turma" class="font-bold">Nível: <span class="text-white/40 font-normal">*</span></label>
                     <select name="ano_turma" id="ano_turma" class="rounded-md bg-white/10 border border-white/20 px-2 py-1"
                     x-model="turma.ano_turma"
                 >
