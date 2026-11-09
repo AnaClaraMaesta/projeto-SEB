@@ -44,7 +44,7 @@ class CustomVerifyEmail extends Notification
         ->greeting('Ola,' . $notifiable -> name)
         ->line('Por favor verifique o seu email é muito importante, basta clicar no botão abaixo')
         ->action('Verificar Email', $verificacaoURL)
-        ->line('Este link de verificação expira em ' . Config::get('auth.verification.expire', 1) . ' minutos.')
+        ->line('Este link de verificação expira em ' . Config::get('auth.verification.expire', 60) . ' minutos.')
         ->line('Se você não criou nenhuma conta em nosso sistema, ignore essa mensagem')
         ->salutation('Atenciosamente, Equipe SEB ;)');
     }
@@ -53,7 +53,7 @@ class CustomVerifyEmail extends Notification
     {
        return URL::temporarySignedRoute(
             'verification.verify',
-            Carbon::now()->addMinutes(Config::get('auth.verification.expire', 1)),
+            Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
             [
                 'id' => $notifiable->getKey(),
                 'hash' => sha1($notifiable->getEmailForVerification()),

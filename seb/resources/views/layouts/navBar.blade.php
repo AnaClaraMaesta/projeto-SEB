@@ -93,32 +93,104 @@
                          </div>
                      </div>
                  </div>
+
+                <div  x-data="{ open_turma: false}" class="relative">
+                 
+                    
+                    <button type="button" @click="open_turma = !open_turma"
+                            class="cursor-pointer p-3 w-full flex items-center justify-between hover:bg-[#2F3D3D] rounded-md">
+                        TURMA
+                        <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-180': open_turma}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+
+                     <div x-show="open_turma" x-cloak x-transition
+                            @click.outside="open_turma = false"
+                            class="m-2 bg-[#3D2F2F] dark:bg-[#464a4f]">
+
+                            <div class="p-0.5">
+                                <a href="#"
+                                @click.prevent="$dispatch('abrir-add-turma'); open_turma = false"
+                                class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]">
+                                    CADASTRAR
+                                </a>
+                            </div>
+
+                            <div class="p-0.5"> 
+                             <a href="{{ route('turma.index') }}" 
+                             {{-- @click.prevent="$dispatch('abrir-consultar-turma'); open_turma = false" --}}
+                            class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]">
+                                 CONSULTAR
+                             </a>
+                         </div>
+                     </div>
+                 </div>
          
-                 <div x-data="{ open_livros: false }" class="relative">
+                 <div x-data="{ open_livro: false }" class="relative">
          
-                     <button @click="open_livros = !open_livros" 
+                     <button @click="open_livro = !open_livro" 
                         class="cursor-pointer p-3 w-full flex items-center justify-between hover:bg-[#2F3D3D] rounded-md">
                          LIVROS  
                          
-                         <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-180': open_livros}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                         <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-180': open_livro}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                          </svg>
                      </button>
          
                      <div
-                         x-show="open_livros" 
-                         @click.away="open_livros = false"
+                         x-show="open_livro" 
+                         @click.away="open_livro = false"
                          x-transition
                          class="m-2 bg-[#3D2F2F] dark:bg-[#464a4f]"
-                     >
-                         <div class="p-0.5">
-                             <a class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]">
-                                 CADASTRAR
-                             </a> 
+                        >
+                        <div class="p-0.5">
+                                <a href="#"
+                                @click.prevent="$dispatch('abrir-add-livro'); open_livro = false"
+                                class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]">
+                                    CADASTRAR
+                                </a>
+                            </div>
+
+                            <div class="p-0.5"> 
+                             <a href="{{ route('livro.index') }}" 
+                             {{-- @click.prevent="$dispatch('abrir-consultar-livro'); open_livro = false" --}}
+                            class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]">
+                                 CONSULTAR
+                             </a>
                          </div>
+                     </div>
+                 </div>
+
+                 <div x-data="{ open_emprestimo: false }" class="relative">
+
+                     <button @click="open_emprestimo = !open_emprestimo"
+                        class="cursor-pointer p-3 w-full flex items-center justify-between hover:bg-[#2F3D3D] rounded-md">
+                         EMPRÉSTIMOS
+
+                         <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-180': open_emprestimo}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                         </svg>
+                     </button>
+
+                     <div
+                         x-show="open_emprestimo"
+                         @click.away="open_emprestimo = false"
+                         x-transition
+                         class="m-2 bg-[#3D2F2F] dark:bg-[#464a4f]"
+                        >
                          <div class="p-0.5">
-                             <a class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]">
-                                 EMPRESTAR
+                             <a href="#"
+                                 @click.prevent="$dispatch('abrir-add-emprestimo'); open_emprestimo = false"
+                                 class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]">
+                                     CADASTRAR
+                             </a>
+                         </div>
+
+                         <div class="p-0.5">
+                             <a href="{{ route('emprestimo.index') }}"
+                                class="block w-full p-2 rounded-md hover:bg-[#2F3D3D]">
+                                  CONSULTAR
                              </a>
                          </div>
                      </div>

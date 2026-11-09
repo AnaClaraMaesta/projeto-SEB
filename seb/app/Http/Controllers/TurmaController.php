@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+
 use App\Models\Turma;
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TurmaController extends Controller
 {
@@ -24,7 +24,7 @@ class TurmaController extends Controller
                 $query->where('turno_turma', 'like', "%{$request->turno_turma}%");
             })
             ->orderBy('nome_turma')
-            ->paginate(15)  
+            ->paginate(15)
             ->withQueryString();
 
         return view('turma.dashboard', compact('turmas'));
@@ -34,30 +34,32 @@ class TurmaController extends Controller
      * Show the form for creating a new resource.
      */
     public function create(Request $request)
-    {   
-       $turmas = Turma::all();
+    {
+        $turmas = Turma::all();
+
         return view('turma.turmasBody', compact('turmas'));
     }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {   
+    {
         $dados = $request->validate([
-            'nome_turma'    => 'required|string|max:255',
-            'turno_turma'   => ['required', 'in:manha,tarde,noite,integral'],
-            'ano_turma'     => ['required', 'in:fundamentali,fundamentalii,em'],
-            'deleted_at'    => 'nullable|timestamp',
-            'created_at'    => 'nullable|timestamp',
-            'updated_at'    => 'nullable|timestamp',
+            'nome_turma' => 'required|string|max:255',
+            'turno_turma' => ['required', 'in:manha,tarde,noite,integral'],
+            'ano_turma' => ['required', 'in:fundamentali,fundamentalii,em'],
+            'deleted_at' => 'nullable|timestamp',
+            'created_at' => 'nullable|timestamp',
+            'updated_at' => 'nullable|timestamp',
         ]);
 
         $dados['user_id'] = Auth::id();
-        
+
         Turma::create($dados);
 
         return redirect()->route('turma.index')->with('success', 'Turma criada com sucesso!');
-    }  
+    }
 
     /**
      * Display the specified resource.
@@ -65,6 +67,7 @@ class TurmaController extends Controller
     public function show(string $id)
     {
         $turma = Turma::findOrFail($id);
+
         return view('turma.show', compact('turma'));
     }
 
@@ -74,6 +77,7 @@ class TurmaController extends Controller
     public function edit(string $id)
     {
         $turma = Turma::findOrFail($id);
+
         return view('turma.turmasBody', compact('turma'));
     }
 
@@ -85,9 +89,9 @@ class TurmaController extends Controller
         $turma = Turma::findOrFail($id);
 
         $dados = $request->validate([
-            'nome_turma'    => 'required|string|max:255',
-            'turno_turma'   => ['required', 'in:manha,tarde,noite,integral'],
-            'ano_turma'     => ['required', 'in:fundamentali,fundamentalii,em'],
+            'nome_turma' => 'required|string|max:255',
+            'turno_turma' => ['required', 'in:manha,tarde,noite,integral'],
+            'ano_turma' => ['required', 'in:fundamentali,fundamentalii,em'],
         ]);
 
         $turma->update($dados);
@@ -123,7 +127,7 @@ class TurmaController extends Controller
 
         $pdf = Pdf::loadView('turma.pdf', compact('turmas'));
         $pdf->setPaper('a4', 'portrait');
+
         return $pdf->download('relatorio_turmas.pdf');
     }
-
 }

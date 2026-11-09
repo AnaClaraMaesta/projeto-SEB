@@ -48,7 +48,7 @@ class CustomEmailResetSenha extends Notification
         ->greeting('Ola')
         ->line('Para redefinir a sua senha, basta clicar no botão abaixo')
         ->action('Redefinir Senha', $verificacaoURL)
-        ->line('Este link de Redefinição expira em ' . Config::get('auth.passwords.users.expire', 1) . ' minutos.')
+        ->line('Este link de Redefinição expira em ' . Config::get('auth.passwords.users.expire', 30) . ' minutos.')
         ->line('Se você não criou nenhuma conta em nosso sistema, ignore essa mensagem')
         ->salutation('Atenciosamente, Equipe SEB ;)');
     }
@@ -57,7 +57,7 @@ class CustomEmailResetSenha extends Notification
     {
        return URL::temporarySignedRoute(
             'password.reset',
-            Carbon::now()->addMinutes(Config::get('auth.passwords.users.expire', 1)),
+            Carbon::now()->addMinutes(Config::get('auth.passwords.users.expire', 30)),
             [
                 'token'=> $this->token,
                 'email' => $notifiable->getEmailForPasswordReset()
