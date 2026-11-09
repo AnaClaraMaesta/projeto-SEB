@@ -3,6 +3,7 @@
 use App\Http\Controllers\AlunoController;
 use App\Http\Controllers\Auth\EsqueciSenhaController;
 use App\Http\Controllers\Auth\ResetSenhaController;
+use App\Http\Controllers\EmprestimoController;
 use App\Http\Controllers\LivroController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TurmaController;
@@ -62,6 +63,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/livros', [LivroController::class, 'store'])->name('livro.store');
     Route::put('/livros/{livro}', [LivroController::class, 'update'])->name('livro.update');
     Route::delete('/livros/{livro}', [LivroController::class, 'destroy'])->name('livro.destroy');
+
+    /* Empréstimos */
+    Route::get('/emprestimo', [EmprestimoController::class, 'index'])->name('emprestimo.index');
+    Route::post('/emprestimo', [EmprestimoController::class, 'store'])->name('emprestimo.store');
+    Route::put('/emprestimo/{emprestimo}/devolver', [EmprestimoController::class, 'devolver'])->name('emprestimo.devolver');
 
 });
 

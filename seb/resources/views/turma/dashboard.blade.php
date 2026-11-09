@@ -21,7 +21,7 @@
 
 
 
-        <form class="max-w-2xl w-full" method="GET" action="{{ route('turma.index') }}">
+        <form class="max-w-2xl w-full">
             <div x-data="{open_filter:false}" @click.away="open_filter = false" class="relative flex rounded-md bg-[#3D2F2F] text-white">
                 <button @click="open_filter = !open_filter" type="button" class="inline-flex items-center shrink-0 z-10 text-body bg-[#3D2F2F] box-border border cursor-pointer hover:bg-[#2F3D3D] hover:text-heading focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded-s-base text-sm px-4 py-2.5 focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600 hover:text-gray-900 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -30,26 +30,31 @@
                 </button>
                 
                 <div x-show="open_filter" class="absolute left-0 top-full mt-1 z-20 w-44 shadow-lg bg-[#3D2F2F] rounded-base shadow-lg w-44">
-                    <select class="p-2 text-sm text-body font-medium" aria-labelledby="dropdown-button" name="turno_turma">
-                            <option value="">Todos</option>
-                            <option value="manha" @selected(request('turno_turma') === 'manha')>Manhã</option>
-   
-                            <option value="tarde" @selected(request('turno_turma') === 'tarde')>Tarde</option>
-
-                            <option value="noite" @selected(request('turno_turma') === 'noite')>Noite</option>
-
-                            <option value="integral" @selected(request('turno_turma') === 'integral')>Integral</option>
-                    </select>
+                    <ul class="p-2 text-sm text-body font-medium" aria-labelledby="dropdown-button">
+                        <li>
+                            <a href="#" class="block p-2 hover:bg-[#2F3D3D] hover:text-heading rounded-md">Manhã</a>
+                        </li>   
+                        <li>
+                            <a href="#" class="block p-2 hover:bg-[#2F3D3D] hover:text-heading rounded-md">Tarde</a>
+                        </li>
+                        <li>
+                            <a href="#" class="block p-2 hover:bg-[#2F3D3D] hover:text-heading rounded-md">Noite</a>
+                        </li>
+                        <li>
+                            <a href="#" class="block p-2 hover:bg-[#2F3D3D] hover:text-heading rounded-md">Integral</a>
+                        </li>
+                    </ul>
                 </div>
 
-                <input type="search" name="search" value="{{ request()->input('search') }}" class="px-3 py-2.5 bg-neutral-secondary-medium border text-heading text-sm focus:ring-brand focus:border-brand block w-full placeholder:text-body" placeholder="Search for products">
-                <button type="submit" class="inline-flex items-center box-border border text-white bg-[#3D2F2F] box-border border cursor-pointer hover:bg-[#2F3D3D] box-border border border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-e-base text-sm px-4 py-2.5 focus:outline-none">
+                <input type="search" class="px-3 py-2.5 bg-neutral-secondary-medium border text-heading text-sm focus:ring-brand focus:border-brand block w-full placeholder:text-body" placeholder="Search for products" required>
+                <button type="button" class="inline-flex items-center box-border border text-white bg-[#3D2F2F] box-border border cursor-pointer hover:bg-[#2F3D3D] box-border border border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-e-base text-sm px-4 py-2.5 focus:outline-none">
                 <svg class="w-4 h-4 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg>
                     Buscar
                 </button>
             </div>
         </form>
     </div>    
+            
 
     <div class="m-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
     @forelse ($turmas as $turma)

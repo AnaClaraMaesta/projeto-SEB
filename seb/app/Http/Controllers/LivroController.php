@@ -36,7 +36,14 @@ class LivroController extends Controller
     }
 
     public function destroy(Livro $livro)
-    {
+    {   
+        // Um livro com empréstimo em aberto não pode ser removido do acervo.
+        // O livro é compartilhado, então verificamos todos os usuários (sem o global scope).
+        if ($livro->emprestimo()->withoutGlobalScope('user_turmas')->ativos()->exists()) {
+            return redirect()->route('livro.index')
+                ->with('error', 'Este livro possui empréstimo ativo e não pode ser removido.');
+        }
+
         $livro->delete();
 
         return redirect()->route('livro.index')->with('success', 'Livro removido com sucesso!');
@@ -75,7 +82,7 @@ class LivroController extends Controller
             'codigo' => [
                 'required',
                 'integer',
-                'max:999999',
+                'min:1',
                 Rule::unique('livros', 'codigo')->ignore($livro),
             ],
             'estoque' => 'required|integer|min:0',

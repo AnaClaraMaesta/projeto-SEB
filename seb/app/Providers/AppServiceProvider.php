@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Auth\Notifications\VerifyEmail;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Aluno;
+use App\Models\Livro;
 use App\Models\Turma;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,9 +24,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-         View::composer('layouts.*', function ($view) {
+        View::composer('layouts.app', function ($view) {
             $view->with('turmasNav', Auth::check()
                 ? Turma::where('user_id', Auth::id())->orderBy('nome_turma')->get()
+                : collect());
+
+            $view->with('alunosNav', Auth::check()
+                ? Aluno::with('turma')->orderBy('nome')->get()
+                : collect());
+
+            // Apenas livros que podem ser emprestados (o último exemplar fica na biblioteca).
+            $view->with('livrosNav', Auth::check()
+                ? Livro::where('estoque', '>', 1)->orderBy('titulo')->get()
                 : collect());
         });
     }

@@ -23,9 +23,13 @@
             </div>
      @auth
         <x-modal-aluno :turmas="$turmasNav" />
+        <x-modal-livro />
+          <x-modal-turma />
+          <x-modal-emprestimo :alunos="$alunosNav" :livros="$livrosNav" />
         @yield('turmas')
         @yield('alunos')
         @yield('livros')
+        @yield('emprestimo')
     @endauth
     @stack('scripts')
 </body>
