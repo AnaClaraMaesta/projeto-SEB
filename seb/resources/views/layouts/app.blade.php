@@ -29,11 +29,9 @@
         @yield('turmas')
         @yield('alunos')
         @yield('livros')
-<<<<<<< HEAD
         @yield('edit-user')
-=======
         @yield('emprestimo')
->>>>>>> 684ba9c9ad6d82d47b88b5fe154faf4067940c07
+        @yield('logout')
     @endauth
     @stack('scripts')
 </body>

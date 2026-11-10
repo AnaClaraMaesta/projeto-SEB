@@ -77,13 +77,11 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('status', 'verification-link-sent');
 })->middleware('throttle:6,1')->name('verification.send');
 
-Route::post('/logout', function (Request $request) {
-    Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
+Route::middleware('auth')->group(function () {
+    Route::get('/logout', fn () => view('usuario.logout'))->name('usuarios.logout');
 
-    return redirect('/login');
-})->name('logout');
+    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+});
 
 Route::get('/email/verify', fn () => view('email.VerificacaoEmail'))->name('verification.notice');
 

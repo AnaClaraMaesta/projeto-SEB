@@ -99,7 +99,7 @@ class UserController extends Controller
 
 
     }
-
+    
     public function logout(Request $request)
     {
         Auth::logout();
