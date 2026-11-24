@@ -32,9 +32,9 @@
             </p>
 
             <!-- Alerta de confirmação de reenvio -->
-            @if (session('status') == 'verification-link-sent')
+            @if (session('status'))
                 <div class="mb-4 text-sm font-medium text-green-800 bg-green-100 p-3 rounded-md text-center border border-green-200">
-                    Um novo link de verificação foi enviado para o endereço de e-mail fornecido no cadastro.
+                    {{ session('status') }}
                 </div>
             @endif
 

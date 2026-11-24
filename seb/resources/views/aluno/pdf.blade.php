@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -99,11 +99,11 @@
                     <td>{{ $aluno->turma?->nome_turma ?? 'Sem Turma' }}</td>
                     <td>{{ $aluno->turma?->turno_turma ?? 'N/A' }}</td>
                     <td>{{ $aluno->turma?->ano_turma ?? 'N/A' }}</td>
-                    <td>{{ $aluno->livro?->nome_livro ?? 'N/A' }}</td>
-                    <td>{{ $aluno->data_emprestimo ?? 'N/A' }}</td>
-                    <td>{{ $aluno->data_devolucao ?? 'N/A' }}</td>
-                    <td>{{ $aluno->data_previsao ?? 'N/A' }}</td>
-                    <td>{{ $aluno->status ?? 'N/A' }}</td>
+                    <td>{{ $aluno->emprestimoAtivo?->livro?->titulo ?? $aluno->livro?->titulo ?? 'N/A' }}</td>
+                    <td>{{ $aluno->emprestimoAtivo?->data_emprestimo?->format('d/m/Y') ?? $aluno->data_emprestimo?->format('d/m/Y') ?? 'N/A' }}</td>
+                    <td>{{ $aluno->data_devolucao?->format('d/m/Y') ?? 'N/A' }}</td>
+                    <td>{{ $aluno->emprestimoAtivo?->data_devolucao_prevista?->format('d/m/Y') ?? $aluno->data_devolucao_prevista?->format('d/m/Y') ?? 'N/A' }}</td>
+                    <td>{{ $aluno->statusLabel }}</td>
                 </tr>
             @endforeach
         </tbody>

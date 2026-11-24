@@ -10,11 +10,13 @@ use Illuminate\Validation\Rule;
 
 class LivroController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $livros = $this->livrosOrdenados();
+        $search = $request->input('search_livros');
 
-        return view('livro.index', compact('livros'));
+        $livros = $this->livrosOrdenados($request);
+
+        return view('livro.index', compact('livros', 'search'));
     }
 
     public function store(Request $request)
@@ -36,7 +38,7 @@ class LivroController extends Controller
     }
 
     public function destroy(Livro $livro)
-    {   
+    {
         // Um livro com empréstimo em aberto não pode ser removido do acervo.
         // O livro é compartilhado, então verificamos todos os usuários (sem o global scope).
         if ($livro->emprestimo()->withoutGlobalScope('user_turmas')->ativos()->exists()) {
@@ -49,9 +51,9 @@ class LivroController extends Controller
         return redirect()->route('livro.index')->with('success', 'Livro removido com sucesso!');
     }
 
-    public function gerarPDF()
+    public function gerarPDF(Request $request)
     {
-        $livros = $this->livrosOrdenados();
+        $livros = $this->livrosOrdenados($request);
         $pdf = Pdf::loadView('livro.pdf', compact('livros'));
         $pdf->setPaper('A4', 'landscape');
 
@@ -59,12 +61,22 @@ class LivroController extends Controller
     }
 
     /**
-     * Ordena numericamente pelo código (12 < 50 < 102), sem depender
-     * de CAST específico de banco. Funciona em PostgreSQL e SQLite.
+     * Filtra por título, autor, código ou ano e ordena numericamente pelo
+     * código (12 < 50 < 102), sem depender de CAST específico de banco.
+     * Funciona em PostgreSQL e SQLite.
      */
-    private function livrosOrdenados(): Collection
+    private function livrosOrdenados(Request $request): Collection
     {
-        return Livro::query()
+        $search = $request->input('search_livros');
+
+        return Livro::when($search, function ($query, $search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereLike('titulo', "%{$search}%", caseSensitive: false)
+                    ->orWhereLike('autor', "%{$search}%", caseSensitive: false)
+                    ->orWhereRaw('CAST(codigo AS TEXT) LIKE ?', ["%{$search}%"])
+                    ->orWhereRaw('CAST(ano_publicacao AS TEXT) LIKE ?', ["%{$search}%"]);
+            });
+        })
             ->get()
             ->sortBy('codigo', SORT_NATURAL)
             ->values();
@@ -81,8 +93,9 @@ class LivroController extends Controller
             'ano_publicacao' => 'required|integer|min:1|max:2100',
             'codigo' => [
                 'required',
-                'integer',
-                'min:1',
+                'string',
+                'max:6',
+                'regex:/^\d+$/',
                 Rule::unique('livros', 'codigo')->ignore($livro),
             ],
             'estoque' => 'required|integer|min:0',

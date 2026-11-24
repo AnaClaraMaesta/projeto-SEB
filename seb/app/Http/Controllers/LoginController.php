@@ -19,6 +19,10 @@ class LoginController extends Controller
         $dados = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+        ], [
+            'email.required' => 'O campo e-mail é obrigatório.',
+            'email.email' => 'Digite um endereço de e-mail válido.',
+            'password.required' => 'O campo senha é obrigatório.',
         ]);
 
         if (Auth::attempt($dados, $request->boolean('remember'))) {
@@ -26,9 +30,15 @@ class LoginController extends Controller
             /** @var User $user */
             $user = Auth::user();
             if (! $user->hasVerifiedEmail()) {
+                // Mantém o destino original para depois da verificação.
+                if (! $request->session()->has('url.intended')) {
+                    $request->session()->put('url.intended', route('turma.index'));
+                }
+
                 $user->sendEmailVerificationNotification();
 
-                return redirect()->route('verification.notice');
+                return redirect()->route('verification.notice')
+                    ->with('status', 'Confirme seu e-mail para acessar o sistema.');
             }
 
             return redirect()->intended(route('turma.index'));

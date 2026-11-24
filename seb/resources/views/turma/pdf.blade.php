@@ -66,7 +66,8 @@
             <tr>
                 <th>Turma</th>
                 <th>Turno</th>
-                <th>Nível/Ano</th>
+                <th>Nível</th>
+                <th>Professor responsável</th>
             </tr>
         </thead>
         <tbody>
@@ -75,6 +76,7 @@
                 <td>{{ $turma->nome_turma }}</td>
                 <td>{{ ucfirst($turma->turno_turma) }}</td>
                 <td>{{ ucfirst($turma->ano_turma) }}</td>
+                <td>{{ $turma->professor?->nome ?? '-' }}</td>
             </tr>
             @endforeach
         </tbody>

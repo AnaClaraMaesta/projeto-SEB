@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Turma;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class TurmaPolicy
 {
@@ -13,7 +12,7 @@ class TurmaPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +20,7 @@ class TurmaPolicy
      */
     public function view(User $user, Turma $turma): bool
     {
-        return $user->id === $turma->user_id;
+        return (int) $user->id === (int) $turma->user_id;
     }
 
     /**
@@ -29,7 +28,7 @@ class TurmaPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +36,7 @@ class TurmaPolicy
      */
     public function update(User $user, Turma $turma): bool
     {
-        return $user->id === $turma->user_id;
+        return (int) $user->id === (int) $turma->user_id;
     }
 
     /**
@@ -45,7 +44,7 @@ class TurmaPolicy
      */
     public function delete(User $user, Turma $turma): bool
     {
-        return $user->id === $turma->user_id;
+        return (int) $user->id === (int) $turma->user_id;
     }
 
     /**
