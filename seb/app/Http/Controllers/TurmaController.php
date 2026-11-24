@@ -68,6 +68,8 @@ class TurmaController extends Controller
     {
         $turma = Turma::findOrFail($id);
 
+        $turma->load(['alunos' => fn ($query) => $query->comEmprestimos()]);
+
         return view('turma.show', compact('turma'));
     }
 
@@ -122,6 +124,7 @@ class TurmaController extends Controller
                 $query->where('turno_turma', 'like', "%{$request->turno_turma}%");
             })
             ->orderBy('nome_turma')
+            ->with(['alunos' => fn ($query) => $query->comEmprestimos()])
             ->paginate(15)  
             ->withQueryString();
 

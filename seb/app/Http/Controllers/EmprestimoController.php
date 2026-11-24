@@ -24,7 +24,9 @@ class EmprestimoController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return view('emprestimo.index', compact('emprestimo'));
+        $devolvidos = Emprestimo::whereNotNull('data_devolucao')->count();
+
+        return view('emprestimo.index', compact('emprestimo', 'devolvidos'));
     }
 
     /**
@@ -119,5 +121,36 @@ class EmprestimoController extends Controller
         }
 
         return back()->with('success', 'Devolução registrada com sucesso!');
+    }
+
+    /**
+     * Exclui um registro de devolução (não altera estoque).
+     */
+    public function destroy(Emprestimo $emprestimo)
+    {
+        $this->authorize('delete', $emprestimo);
+
+        if (! $emprestimo->data_devolucao) {
+            return redirect()->route('emprestimo.index')
+                ->with('error', 'Só é possível excluir empréstimos já devolvidos.');
+        }
+
+        $emprestimo->delete();
+
+        return redirect()->route('emprestimo.index')
+            ->with('success', 'Registro de devolução excluído com sucesso!');
+    }
+
+    /**
+     * Exclui todo o histórico de devoluções do usuário logado.
+     */
+    public function destroyDevolvidos()
+    {
+        $this->authorize('viewAny', Emprestimo::class);
+
+        $quantidade = Emprestimo::whereNotNull('data_devolucao')->delete();
+
+        return redirect()->route('emprestimo.index')
+            ->with('success', "{$quantidade} registro(s) de devolução excluído(s).");
     }
 }

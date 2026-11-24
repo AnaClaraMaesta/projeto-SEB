@@ -55,14 +55,6 @@
                     class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
                 </div>
 
-                <div class="flex flex-col gap-1 p-1.5">
-                    <label for="status" class="font-bold">Status:</label>
-                    <select name="status" id="status" class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
-                        <option value="Sem emprestimo" class="text-black">Sem empréstimo</option>
-                        <option value="No prazo" class="text-black">No prazo</option>
-                        <option value="Atrasado" class="text-black">Atrasado</option>
-                    </select>
-                </div>
 
 
                 <div class="flex justify-end p-1.5" class="w-full max-w-lg rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">

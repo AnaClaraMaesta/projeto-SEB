@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aluno;
-use App\Models\Livro;
 use App\Models\Turma;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -15,7 +14,7 @@ class AlunoController extends Controller
      */
     public function index()
     {
-        $alunos = Aluno::with('turma')->get();
+        $alunos = Aluno::with('turma')->comEmprestimos()->get();
 
         return view('aluno.index', compact('alunos'));
     }
@@ -103,10 +102,11 @@ class AlunoController extends Controller
             ->with('success', 'Aluno removido!');
     }
 
-    public function gerarPDF(Turma $turma, Livro $livro)
+    public function gerarPDF(Turma $turma)
     {
         $alunos = Aluno::where('turma_id', $turma->id)
-            ->with(['turma', 'livro'])
+            ->with('turma')
+            ->comEmprestimos()
             ->orderBy('nome')
             ->get();
 
@@ -118,7 +118,7 @@ class AlunoController extends Controller
 
     public function gerarPdfGeral()
     {
-        $alunos = Aluno::whereHas('turma')->with(['turma', 'livro'])->orderBy('nome')->get();
+        $alunos = Aluno::whereHas('turma')->with('turma')->comEmprestimos()->orderBy('nome')->get();
         $pdf = Pdf::loadView('aluno.pdf', compact('alunos'));
         $pdf->setPaper('A4', 'landscape');
 

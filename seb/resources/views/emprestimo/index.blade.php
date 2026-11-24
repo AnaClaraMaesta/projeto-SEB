@@ -16,7 +16,14 @@
                     class="cursor-pointer text-white bg-[#3D2F2F] hover:bg-[#2F3D3D] px-4 py-2 rounded-md whitespace-nowrap">
                 + Novo Empréstimo
             </button>
-            
+
+            @if ($devolvidos > 0)
+                <button type="button"
+                        @click="$dispatch('abrir-excluir-historico', { total: {{ $devolvidos }} })"
+                        class="cursor-pointer text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded-md whitespace-nowrap">
+                    Excluir histórico ({{ $devolvidos }})
+                </button>
+            @endif
         </div>
 
         <div class="overflow-x-auto m-3 shadow-lg rounded-lg">
@@ -69,7 +76,17 @@
                                     Devolver
                                 </button>
                             @else
-                                <span class="text-gray-500 dark:text-gray-400">-</span>
+                                <button type="button"
+                                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-1.5 px-3 rounded inline-flex items-center cursor-pointer"
+                                    @click="$dispatch('abrir-excluir-emprestimo', {
+                                        emprestimo: @js([
+                                            'id' => $registro->id,
+                                            'aluno' => $registro->aluno?->nome,
+                                            'livro' => $registro->livro?->titulo,
+                                        ])
+                                    })">
+                                    Excluir
+                                </button>
                             @endif
                         </td>
                     </tr>

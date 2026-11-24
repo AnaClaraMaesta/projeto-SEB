@@ -32,7 +32,7 @@ Route::middleware(['auth', 'signed'])->group(function () {
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
 
-        return redirect('/login');
+        return redirect('/turmas');
     })->name('verification.verify');
 });
 
@@ -67,7 +67,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     /* Empréstimos */
     Route::get('/emprestimo', [EmprestimoController::class, 'index'])->name('emprestimo.index');
     Route::post('/emprestimo', [EmprestimoController::class, 'store'])->name('emprestimo.store');
+
+    // Excluir histórico precisa vir antes da rota com {emprestimo}
+    Route::delete('/emprestimo/devolvidos', [EmprestimoController::class, 'destroyDevolvidos'])
+        ->name('emprestimo.destroyDevolvidos');
+
     Route::put('/emprestimo/{emprestimo}/devolver', [EmprestimoController::class, 'devolver'])->name('emprestimo.devolver');
+    Route::delete('/emprestimo/{emprestimo}', [EmprestimoController::class, 'destroy'])->name('emprestimo.destroy');
 
 });
 

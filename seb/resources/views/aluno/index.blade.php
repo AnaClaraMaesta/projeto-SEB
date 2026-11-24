@@ -31,11 +31,9 @@
                     <th class="px-4 py-3">Contato</th>
                     <th class="px-4 py-3">Turma</th>
                     <th class="px-4 py-3">Turno</th>
-                    <th class="px-4 py-3">Livro</th>
-                    <th class="px-4 py-3">Empréstimo</th>
-                    <th class="px-4 py-3">Devolução</th>
-                    <th class="px-4 py-3">Previsão</th>
-                    <th class="px-4 py-3">Status</th>
+                    <th class="px-4 py-3 text-center">Empréstimos</th>
+                    <th class="px-4 py-3 text-center">Devoluções</th>
+                    <th class="px-4 py-3 text-center">Status</th>
                     <th class="px-4 py-3 text-center">Ações</th>
                 </tr>
                 </thead>
@@ -45,19 +43,17 @@
                     <tr class="bg-white dark:bg-[#3a3d41] hover:bg-[#e6eaf0] dark:hover:bg-[#52565b]">
                     <td class="px-4 py-3 font-medium">{{ $aluno->nome }}</td>
                     <td class="px-4 py-3 font-medium">{{ $aluno->telefone }}</td>
-                    <td class="px-4 py-3 font-medium">{{ $aluno->turma->nome_turma }}</td>
-                    <td class="px-4 py-3 font-medium">{{ $aluno->turma->turno_turma }}</td>
-                    <td class="px-4 py-3">{{ $aluno->livro?->titulo ?? '-' }}</td>
-                    <td class="px-4 py-3">{{ $aluno->data_emprestimo?->format('d/m/Y') ?? '-' }}</td>
-                    <td class="px-4 py-3">{{ $aluno->data_devolucao?->format('d/m/Y') ?? '-' }}</td>
-                    <td class="px-4 py-3">{{ $aluno->data_devolucao_prevista?->format('d/m/Y') ?? '-' }}</td>
-                     <td class="px-4 py-3 text-center">
-                        @if ($aluno->status === 'No prazo')
-                        <span class="inline-block rounded-full bg-green-500/15 text-green-700 dark:text-green-400 border border-green-500/40 px-3 py-0.5 text-xs font-medium">No prazo</span>
-                        @elseif ($aluno->status === 'Atrasado')
-                        <span class="inline-block rounded-full bg-red-500/15 text-red-700 dark:text-red-400 border border-red-500/40 px-3 py-0.5 text-xs font-medium">Atrasado</span>
-                        @elseif( $aluno->status === 'Sem emprestimo')
-                        <span class="inline-block rounded-full bg-gray-500/15 text-gray-600 dark:text-gray-300 border border-gray-500/30 px-3 py-0.5 text-xs font-medium">Sem empréstimo</span>
+                    <td class="px-4 py-3 font-medium">{{ $aluno->turma?->nome_turma ?? '-' }}</td>
+                    <td class="px-4 py-3 font-medium">{{ $aluno->turma?->turno_turma ?? '-' }}</td>
+                    <td class="px-4 py-3 text-center">{{ $aluno->emprestimos_total }}</td>
+                    <td class="px-4 py-3 text-center">{{ $aluno->devolucoes_total }}</td>
+                    <td class="px-4 py-3 text-center">
+                        @if ($aluno->status_emprestimo === 'Atrasado')
+                            <span class="inline-block rounded-full bg-red-500/15 text-red-700 dark:text-red-400 border border-red-500/40 px-3 py-0.5 text-xs font-medium">Atrasado</span>
+                        @elseif ($aluno->status_emprestimo === 'No prazo')
+                            <span class="inline-block rounded-full bg-green-500/15 text-green-700 dark:text-green-400 border border-green-500/40 px-3 py-0.5 text-xs font-medium">No prazo</span>
+                        @else
+                            <span class="inline-block rounded-full bg-gray-500/15 text-gray-600 dark:text-gray-300 border border-gray-500/30 px-3 py-0.5 text-xs font-medium">Sem empréstimo</span>
                         @endif
                     </td>
 

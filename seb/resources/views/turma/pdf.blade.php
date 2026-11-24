@@ -67,14 +67,27 @@
                 <th>Turma</th>
                 <th>Turno</th>
                 <th>Nível/Ano</th>
+                <th>Alunos</th>
+                <th>Empréstimos</th>
+                <th>Devoluções</th>
+                <th>Em atraso</th>
             </tr>
         </thead>
         <tbody>
             @foreach($turmas as $turma)
+            @php
+                $emprestimos = $turma->alunos->sum('emprestimos_total');
+                $devolucoes = $turma->alunos->sum('devolucoes_total');
+                $emAtraso = $turma->alunos->filter(fn ($aluno) => $aluno->status_emprestimo === 'Atrasado')->count();
+            @endphp
             <tr>
                 <td>{{ $turma->nome_turma }}</td>
                 <td>{{ ucfirst($turma->turno_turma) }}</td>
                 <td>{{ ucfirst($turma->ano_turma) }}</td>
+                <td>{{ $turma->alunos->count() }}</td>
+                <td>{{ $emprestimos }}</td>
+                <td>{{ $devolucoes }}</td>
+                <td>{{ $emAtraso }}</td>
             </tr>
             @endforeach
         </tbody>
