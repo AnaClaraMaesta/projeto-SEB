@@ -10,10 +10,12 @@
             </div>
         </div>
 
-        <div class="m-3 flex gap-2">
-            <button type="button"
-                    @click="$dispatch('abrir-add-emprestimo')"
-                    class="cursor-pointer text-white bg-[#3D2F2F] hover:bg-[#2F3D3D] px-4 py-2 rounded-md whitespace-nowrap">
+        <div class="m-3 flex gap-2 justify-between">
+            <div class="justify-start">
+
+                <button type="button"
+                @click="$dispatch('abrir-add-emprestimo')"
+                class="cursor-pointer text-white bg-[#3D2F2F] hover:bg-[#2F3D3D] px-4 py-2 rounded-md whitespace-nowrap">
                 + Novo Empréstimo
             </button>
 
@@ -25,6 +27,42 @@
                 </button>
             @endif
         </div>
+
+
+            <div class="justify-end">
+
+                <form class="max-w-2xl w-full" method="GET" action="{{ route('emprestimo.index') }}">
+                    <div x-data="{open_filter:false}" @click.away="open_filter = false" class="relative flex rounded-md bg-[#3D2F2F] text-white">
+                        <button @click="open_filter = !open_filter" type="button" class="inline-flex items-center shrink-0 z-10 text-body bg-[#3D2F2F] box-border border cursor-pointer hover:bg-[#2F3D3D] hover:text-heading focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded-s-base text-sm px-4 py-2.5 focus:outline-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600 hover:text-gray-900 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                            </svg>
+                        </button>
+
+                        <input type="search" value="{{ $search }}" name="search_emprestimo"
+                        class="px-3 py-2.5 bg-neutral-secondary-medium border text-heading text-sm focus:ring-brand focus:border-brand block w-full placeholder:text-body" placeholder="Buscar por aluno, livro ou código">
+                        <button type="submit" class="inline-flex items-center box-border border text-white bg-[#3D2F2F] box-border border cursor-pointer hover:bg-[#2F3D3D] box-border border border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-e-base text-sm px-4 py-2.5 focus:outline-none">
+                            <svg class="w-4 h-4 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg>
+                            Buscar
+                        </button>
+
+                        @if ($search)
+                            <a href="{{ route('emprestimo.index') }}"
+                                class="inline-flex items-center box-border border text-white bg-[#3D2F2F] box-border border cursor-pointer hover:bg-[#2F3D3D] box-border border border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-e-base text-sm px-4 py-2.5 focus:outline-none">
+                                Limpar
+                            </a>
+                        @endif
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        @if ($errors->any())
+            <div class="m-3 rounded-md border border-red-500 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-400">
+                {{ $errors->first() }}
+            </div>
+        @endif
 
         <div class="overflow-x-auto m-3 shadow-lg rounded-lg">
             <table class="w-full text-sm text-left">
@@ -52,7 +90,7 @@
                         <td class="px-4 py-3">{{ $registro->data_devolucao?->format('d/m/Y') ?? '-' }}</td>
                         <td class="px-4 py-3 text-center">
                             @if ($registro->status === 'No prazo')
-                                <span class="inline-block rounded-full bg-green-500/15 text-green-700 dark:text-green-400 border border-green-500/40 px-3 py-0.5 text-xs font-medium">No prazo</span>
+                                <span class="inline-block rounded-full bg-green-500/15 text-green-700 dark:text-green-400 border border-green-500/40 px-3 py-0.5 text-xs font-medium">Empréstimo ativo</span>
                             @elseif ($registro->status === 'Atrasado')
                                 <span class="inline-block rounded-full bg-red-500/15 text-red-700 dark:text-red-400 border border-red-500/40 px-3 py-0.5 text-xs font-medium">Atrasado</span>
                             @elseif ($registro->status === 'Devolvido')
@@ -104,6 +142,10 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <div class="m-3">
+            {{ $emprestimo->links() }}
         </div>
 
     </div>

@@ -6,28 +6,57 @@ use App\Http\Controllers\Auth\ResetSenhaController;
 use App\Http\Controllers\EmprestimoController;
 use App\Http\Controllers\LivroController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\TurmaController;
 use App\Http\Controllers\UserController;
-use App\Services\Login;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-// passar as rotas de senha para ca quando o logout estiver pronto
+/* Autenticação (apenas visitantes) */
 Route::middleware('guest')->group(function () {
-        
-Route::post('/forgot-password', [EsqueciSenhaController::class, 'enviarLinkResetEmail'])->name('password.email');
-Route::get('forgot-password', [EsqueciSenhaController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('/reset-password', [ResetSenhaController::class, 'resetSenha'])->name('password.update');
+    Route::get('/login', [LoginController::class, 'index'])->name('login');
+    Route::post('/login', [LoginController::class, 'store'])
+        ->middleware('throttle:6,1')
+        ->name('login.store');
+
+    Route::get('/usuario/create', [UserController::class, 'create'])->name('usuarios.create');
+    Route::post('/usuario/create', [UserController::class, 'store'])
+        ->middleware('throttle:6,1')
+        ->name('usuarios.store');
+
+    Route::get('forgot-password', [EsqueciSenhaController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('/forgot-password', [EsqueciSenhaController::class, 'enviarLinkResetEmail'])
+        ->middleware('throttle:6,1')
+        ->name('password.email');
+    Route::post('/reset-password', [ResetSenhaController::class, 'resetSenha'])->name('password.update');
 });
 
-// rotas que n precisam necessariamente do email autenticado mas o usuario precisa existir
+/* Link assinado para redefinição de senha */
+Route::middleware('signed')->group(function () {
+    Route::get('/reset-password/{token}', [ResetSenhaController::class, 'showResetForm'])->name('password.reset');
+});
+
+/* Usuário autenticado, mas ainda sem e-mail verificado */
 Route::middleware('auth')->group(function () {
     Route::get('/email/verify', fn () => view('email.VerificacaoEmail'))->name('verification.notice');
+
+    Route::post('/email/verification-notification', function (Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+
+        return back()->with('status', 'Enviamos um novo link de verificação para o seu e-mail.');
+    })->middleware('throttle:6,1')->name('verification.send');
+
+    Route::get('/logout', fn () => view('usuario.logout'))->name('usuarios.logout');
+    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+
+    /* Conta do próprio usuário */
+    Route::get('/usuario/{usuario}/edit', [UserController::class, 'edit'])->name('usuarios.edit');
+    Route::put('/usuario/{usuario}', [UserController::class, 'update'])->name('usuarios.update');
+    Route::delete('/usuario/{usuario}', [UserController::class, 'destroy'])->name('usuarios.destroy');
 });
 
-// rota que faz a verificação do email
+/* Verificação do e-mail (link assinado) */
 Route::middleware(['auth', 'signed'])->group(function () {
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
@@ -36,12 +65,7 @@ Route::middleware(['auth', 'signed'])->group(function () {
     })->name('verification.verify');
 });
 
-// gera uma url temporaria
-Route::middleware(['signed'])->group(function () {
-    Route::get('/reset-password/{token}', [ResetSenhaController::class, 'showResetForm'])->name('password.reset');
-});
-
-// rotas para quando é necessario o email estar autenticado
+/* Rotas que exigem e-mail verificado */
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/turmas/pdf', [TurmaController::class, 'gerarPDF'])->name('turma.pdf');
     Route::post('/turmas', [TurmaController::class, 'store'])->name('turma.store');
@@ -50,12 +74,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/turmas/{turma}', [TurmaController::class, 'destroy'])->name('turma.destroy');
     Route::get('/turmas', [TurmaController::class, 'index'])->name('turma.index');
 
-    Route::get('alunos/pdf', [AlunoController::class, 'gerarPDFGeral'])->name('aluno.pdfGeral');
+    Route::get('alunos/pdf', [AlunoController::class, 'gerarPdfGeral'])->name('aluno.pdfGeral');
     Route::get('/turmas/{turma}/aluno/pdf', [AlunoController::class, 'gerarPDF'])->name('aluno.pdf');
     Route::get('/alunos', [AlunoController::class, 'index'])->name('aluno.index');
     Route::post('/turmas/{turma}/aluno', [AlunoController::class, 'store'])->name('aluno.store');
     Route::put('/turmas/{turma}/aluno/{aluno}', [AlunoController::class, 'update'])->name('aluno.update');
     Route::delete('/turmas/{turma}/aluno/{aluno}', [AlunoController::class, 'destroy'])->name('aluno.destroy');
+
+    /* Professores */
+    Route::get('/professores', [ProfessorController::class, 'index'])->name('professor.index');
+    Route::post('/professores', [ProfessorController::class, 'store'])->name('professor.store');
+    Route::put('/professores/{professor}', [ProfessorController::class, 'update'])->name('professor.update');
+    Route::delete('/professores/{professor}', [ProfessorController::class, 'destroy'])->name('professor.destroy');
 
     /* Livros */
     Route::get('/livros', [LivroController::class, 'index'])->name('livro.index');
@@ -76,28 +106,3 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/emprestimo/{emprestimo}', [EmprestimoController::class, 'destroy'])->name('emprestimo.destroy');
 
 });
-
-Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-
-    return back()->with('status', 'verification-link-sent');
-})->middleware('throttle:6,1')->name('verification.send');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/logout', fn () => view('usuario.logout'))->name('usuarios.logout');
-
-    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
-});
-
-Route::get('/email/verify', fn () => view('email.VerificacaoEmail'))->name('verification.notice');
-
-/* Login */
-Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::post('/login', [LoginController::class, 'store'])->name('login.store');
-
-/* Usuario */
-Route::get('/usuario/create', [userController::class, 'create'])->name('usuarios.create');
-Route::post('/usuario/create', [userController::class, 'store']) -> name('usuarios.store');
-Route::get('/usuario/{usuario}/edit', [userController::class, 'edit'])->name('usuarios.edit');
-Route::put('/usuario/{usuario}', [userController::class, 'update'])->name('usuarios.update');
-Route::delete('/usuario/{usuario}', [userController::class, 'destroy'])->name('usuarios.destroy');

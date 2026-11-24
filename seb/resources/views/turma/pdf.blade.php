@@ -71,6 +71,7 @@
                 <th>Empréstimos</th>
                 <th>Devoluções</th>
                 <th>Em atraso</th>
+                <th>Professor responsável</th>
             </tr>
         </thead>
         <tbody>
@@ -88,6 +89,7 @@
                 <td>{{ $emprestimos }}</td>
                 <td>{{ $devolucoes }}</td>
                 <td>{{ $emAtraso }}</td>
+                <td>{{ $turma->professor?->nome ?? '-' }}</td>
             </tr>
             @endforeach
         </tbody>

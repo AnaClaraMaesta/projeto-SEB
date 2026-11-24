@@ -9,18 +9,45 @@
                 </a>
             </div>
         </div>
-        
-        <div class="m-3 flex gap-2">
-            <button type="button"
-                    @click="$dispatch('abrir-add-livro')"
-                    class="cursor-pointer text-white bg-[#3D2F2F] hover:bg-[#2F3D3D] px-4 py-2 rounded-md whitespace-nowrap">
-                + Novo Livro
-            </button>
 
-            <a href="{{ route('livro.pdf') }}" 
-                class="cursor-pointer text-white bg-[#3D2F2F] hover:bg-[#2F3D3D] px-4 py-2 rounded-md whitespace-nowrap inline-flex items-center">
-                Emitir relatório
-            </a>
+        @if ($errors->any())
+            <div class="m-3 rounded-md border border-red-500 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-400">
+                {{ $errors->first() }}
+            </div>
+        @endif
+
+        <div class="m-3 flex flex-wrap gap-2 justify-between">
+            <div class="flex gap-2">
+                <button type="button"
+                        @click="$dispatch('abrir-add-livro')"
+                        class="cursor-pointer text-white bg-[#3D2F2F] hover:bg-[#2F3D3D] px-4 py-2 rounded-md whitespace-nowrap">
+                    + Novo Livro
+                </button>
+
+                <a href="{{ route('livro.pdf', ['search_livros' => $search]) }}"
+                    class="cursor-pointer text-white bg-[#3D2F2F] hover:bg-[#2F3D3D] px-4 py-2 rounded-md whitespace-nowrap inline-flex items-center">
+                    Emitir relatório
+                </a>
+            </div>
+
+            <form class="max-w-2xl w-full sm:w-auto" method="GET" action="{{ route('livro.index') }}">
+                <div class="relative flex rounded-md bg-[#3D2F2F] text-white">
+                    <input type="search" value="{{ $search }}" name="search_livros"
+                        class="px-3 py-2.5 bg-neutral-secondary-medium border text-heading text-sm focus:ring-brand focus:border-brand block w-full placeholder:text-body"
+                        placeholder="Buscar por título, autor, código ou ano">
+                    <button type="submit" class="inline-flex items-center box-border border text-white bg-[#3D2F2F] cursor-pointer hover:bg-[#2F3D3D] border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-e-base text-sm px-4 py-2.5 focus:outline-none">
+                        <svg class="w-4 h-4 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg>
+                        Buscar
+                    </button>
+
+                    @if ($search)
+                        <a href="{{ route('livro.index') }}"
+                            class="inline-flex items-center text-white bg-[#3D2F2F] hover:bg-[#2F3D3D] text-sm px-4 py-2.5 focus:outline-none">
+                            Limpar
+                        </a>
+                    @endif
+                </div>
+            </form>
         </div>
 
         <div class="overflow-x-auto m-3 shadow-lg rounded-lg">
@@ -37,7 +64,7 @@
                         <th class="px-4 py-3 text-center">Ações</th>
                     </tr>
                 </thead>
-                
+
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
                     @forelse($livros as $livro)
                     <tr class="bg-white dark:bg-[#3a3d41] hover:bg-[#e6eaf0] dark:hover:bg-[#52565b]">

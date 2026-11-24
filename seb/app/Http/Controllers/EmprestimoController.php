@@ -14,11 +14,22 @@ class EmprestimoController extends Controller
     /**
      * Lista os empréstimos do usuário logado (o global scope do model já filtra).
      */
-    public function index()
+    public function index(Request $request)
     {
-        $this->authorize('viewAny', Emprestimo::class);
+        $search = $request->input('search_emprestimo');
 
         $emprestimo = Emprestimo::with(['aluno.turma', 'livro'])
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->orWhereHas('aluno', function ($n) use ($search) {
+                        $n->whereLike('nome', "%{$search}%", caseSensitive: false);
+                    })
+                        ->orWhereHas('livro', function ($l) use ($search) {
+                            $l->whereLike('titulo', "%{$search}%", caseSensitive: false)
+                                ->orWhereRaw('CAST(codigo AS TEXT) LIKE ?', ["%{$search}%"]);
+                        });
+                });
+            })
             ->orderByRaw('CASE WHEN data_devolucao IS NULL THEN 0 ELSE 1 END')
             ->orderBy('data_devolucao_prevista')
             ->paginate(15)
@@ -27,6 +38,7 @@ class EmprestimoController extends Controller
         $devolvidos = Emprestimo::whereNotNull('data_devolucao')->count();
 
         return view('emprestimo.index', compact('emprestimo', 'devolvidos'));
+        return view('emprestimo.index', compact('emprestimo', 'search'));
     }
 
     /**
@@ -77,8 +89,8 @@ class EmprestimoController extends Controller
         }
 
         return redirect()->route('emprestimo.index')
-        ->with('success', 'Empréstimo realizado com sucesso!');
-      
+            ->with('success', 'Empréstimo realizado com sucesso!');
+
     }
 
     /**

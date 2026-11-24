@@ -21,7 +21,7 @@ class EmprestimoPolicy
      */
     public function view(User $user, Emprestimo $emprestimo): bool
     {
-        return $emprestimo->aluno?->turma?->user_id === $user->id;
+        return (int) $emprestimo->aluno?->turma?->user_id === (int) $user->id;
     }
 
     /**
@@ -29,7 +29,7 @@ class EmprestimoPolicy
      */
     public function create(User $user, Aluno $aluno): bool
     {
-        return $aluno->turma?->user_id === $user->id;
+        return (int) $aluno->turma?->user_id === (int) $user->id;
     }
 
     /**
@@ -37,7 +37,7 @@ class EmprestimoPolicy
      */
     public function update(User $user, Emprestimo $emprestimo): bool
     {
-        return $emprestimo->aluno?->turma?->user_id === $user->id;
+        return (int) $emprestimo->aluno?->turma?->user_id === (int) $user->id;
     }
 
     /**

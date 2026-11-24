@@ -12,6 +12,12 @@
             </div>
             
             <div class="px-8 pb-8 pt-6">
+                @if (session('status'))
+                    <div class="mb-4 rounded-lg bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 px-4 py-3 text-sm text-green-700 dark:text-green-300">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
                 @if ($errors->any())
                     <div class="mb-4 rounded-lg bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-300">
                         {{ $errors->first() }}

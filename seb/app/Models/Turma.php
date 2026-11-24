@@ -14,6 +14,7 @@ class Turma extends Model
 
     protected $fillable = [
         'user_id',
+        'professor_id',
         'nome_turma',
         'turno_turma',
         'ano_turma',
@@ -22,6 +23,11 @@ class Turma extends Model
     public function alunos()
     {
         return $this->hasMany(Aluno::class, 'turma_id');
+    }
+
+    public function professor(): BelongsTo
+    {
+        return $this->belongsTo(Professor::class, 'professor_id');
     }
 
     public function user(): BelongsTo
@@ -39,6 +45,13 @@ class Turma extends Model
         });
 
         static::deleting(function (Turma $turma) {
+            // Não permite excluir a turma enquanto houver empréstimo em aberto.
+            if ($turma->alunos()
+                ->whereHas('emprestimo', fn (Builder $query) => $query->whereNull('data_devolucao'))
+                ->exists()) {
+                return false;
+            }
+
             $turma->alunos()->delete();
         });
 

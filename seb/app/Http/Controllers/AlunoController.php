@@ -15,16 +15,13 @@ class AlunoController extends Controller
     public function index()
     {
         $alunos = Aluno::with('turma')->comEmprestimos()->get();
+        $this->authorize('viewAny', Aluno::class);
+
+        $alunos = Aluno::with(['turma', 'emprestimoAtivo.livro', 'livro'])
+            ->orderBy('nome')
+            ->get();
 
         return view('aluno.index', compact('alunos'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request)
-    {
-        return view('turma.show');
     }
 
     /**
@@ -32,15 +29,9 @@ class AlunoController extends Controller
      */
     public function store(Request $request, Turma $turma)
     {
-        $dados = $request->validate([
-            'nome' => 'required|string|max:255',
-            'telefone' => 'required|string|max:15',
-            'livro_id' => 'nullable|integer|exists:livros,id',
-            'data_emprestimo' => 'nullable|date',
-            'data_devolucao' => 'nullable|date',
-            'data_devolucao_prevista' => 'nullable|date',
-            'status' => ['in:Sem emprestimo,No prazo,Atrasado'],
-        ]);
+        $this->authorize('create', [Aluno::class, $turma]);
+
+        $dados = $this->validatedData($request);
 
         $turma->alunos()->create($dados);
 
@@ -50,43 +41,21 @@ class AlunoController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        $aluno = Aluno::findOrFail($id);
-
-        return view('turma.show', compact('aluno'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Turma $turma, string $id)
+    public function update(Request $request, Turma $turma, Aluno $aluno)
     {
-        $aluno = Aluno::findOrFail($id);
+        abort_unless((int) $aluno->turma_id === (int) $turma->id, 404);
 
-        $dados = $request->validate([
-            'nome' => 'required|string|max:255',
-            'telefone' => 'required|string|max:15',
-            'livro_id' => 'nullable|integer|exists:livros,id',
-            'data_emprestimo' => 'nullable|date',
-            'data_devolucao' => 'nullable|date',
-            'data_devolucao_prevista' => 'nullable|date',
-            'status' => ['in:Sem emprestimo,No prazo,Atrasado'],
-        ]);
+        $this->authorize('update', $aluno);
+
+        $dados = $this->validatedData($request);
 
         $aluno->update($dados);
 
-        return redirect()->route('turma.show', $turma)->with('success', 'aluno updated');
+        return redirect()
+            ->route('turma.show', $turma)
+            ->with('success', 'Aluno atualizado com sucesso!');
     }
 
     /**
@@ -94,7 +63,16 @@ class AlunoController extends Controller
      */
     public function destroy(Turma $turma, Aluno $aluno)
     {
-        $aluno = Aluno::findOrFail($aluno->id);
+        abort_unless((int) $aluno->turma_id === (int) $turma->id, 404);
+
+        $this->authorize('delete', $aluno);
+
+        if ($aluno->emprestimo()->whereNull('data_devolucao')->exists()) {
+            return redirect()
+                ->route('turma.show', $turma)
+                ->with('error', 'Este aluno possui empréstimo em aberto e não pode ser excluído.');
+        }
+
         $aluno->delete();
 
         return redirect()
@@ -104,9 +82,12 @@ class AlunoController extends Controller
 
     public function gerarPDF(Turma $turma)
     {
+        $this->authorize('view', $turma);
+
         $alunos = Aluno::where('turma_id', $turma->id)
             ->with('turma')
             ->comEmprestimos()
+            ->with(['turma', 'emprestimoAtivo.livro', 'livro'])
             ->orderBy('nome')
             ->get();
 
@@ -119,9 +100,32 @@ class AlunoController extends Controller
     public function gerarPdfGeral()
     {
         $alunos = Aluno::whereHas('turma')->with('turma')->comEmprestimos()->orderBy('nome')->get();
+        $this->authorize('viewAny', Aluno::class);
+
+        $alunos = Aluno::whereHas('turma')
+            ->with(['turma', 'emprestimoAtivo.livro', 'livro'])
+            ->orderBy('nome')
+            ->get();
+
         $pdf = Pdf::loadView('aluno.pdf', compact('alunos'));
         $pdf->setPaper('A4', 'landscape');
 
         return $pdf->download('alunos_geral.pdf');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function validatedData(Request $request): array
+    {
+        return $request->validate([
+            'nome' => 'required|string|max:255',
+            'telefone' => 'required|string|max:11',
+            'livro_id' => 'nullable|integer|exists:livros,id',
+            'data_emprestimo' => 'nullable|date',
+            'data_devolucao' => 'nullable|date',
+            'data_devolucao_prevista' => 'nullable|date',
+            'status' => ['nullable', 'in:Sem emprestimo,No prazo,Atrasado'],
+        ]);
     }
 }

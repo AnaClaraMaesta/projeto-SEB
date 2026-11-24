@@ -17,6 +17,9 @@
         - storage:/var/www/html/storage
         - bootstrap-cache:/var/www/html/bootstrap/cache
       command: sh -c "docker-php-entrypoint apache2-foreground"
+      # ATENÇÃO: env_file injeta DB_CONNECTION/DB_* no ambiente do processo.
+      # Os testes só permanecem no SQLite em memória porque phpunit.xml usa
+      # force="true". Não remova esses atributos (evita migrate:fresh no Supabase).
       env_file:
         - .env
     mailpit:

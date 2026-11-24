@@ -85,6 +85,12 @@
                         class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
                 </div>
 
+                <label class="inline-flex items-center gap-2 text-sm">
+                    <input type="checkbox" name="confirmado" value="1"
+                        class="rounded border-white/30 bg-white/10">
+                    Confirmo o empréstimo mesmo que o aluno tenha pendência em atraso
+                </label>
+
                 <div class="flex justify-end gap-2 pt-4">
                     <button type="button" @click="fechar()" class="px-4 py-2 rounded bg-white/10 hover:bg-white/20">Cancelar</button>
                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">

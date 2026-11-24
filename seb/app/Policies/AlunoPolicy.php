@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Aluno;
+use App\Models\Turma;
 use App\Models\User;
 
 class AlunoPolicy
@@ -12,7 +13,7 @@ class AlunoPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -20,15 +21,15 @@ class AlunoPolicy
      */
     public function view(User $user, Aluno $aluno): bool
     {
-        return $aluno->turma && $aluno->turma->user_id === $user->id;
+        return $aluno->turma && (int) $aluno->turma->user_id === (int) $user->id;
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Turma $turma): bool
     {
-        return false;
+        return (int) $turma->user_id === (int) $user->id;
     }
 
     /**
@@ -36,7 +37,7 @@ class AlunoPolicy
      */
     public function update(User $user, Aluno $aluno): bool
     {
-        return $aluno->turma && $aluno->turma->user_id === $user->id;
+        return $aluno->turma && (int) $aluno->turma->user_id === (int) $user->id;
 
     }
 
@@ -45,7 +46,7 @@ class AlunoPolicy
      */
     public function delete(User $user, Aluno $aluno): bool
     {
-        return $aluno->turma && $aluno->turma->user_id === $user->id;
+        return $aluno->turma && (int) $aluno->turma->user_id === (int) $user->id;
 
     }
 
