@@ -21,7 +21,7 @@
             <h1 class="text-center text-2xl font-bold">{{ $turma->nome_turma }}</h1>
 
             <p class="text-center text-lg mt-2">
-                Professor responsável: <span class="font-semibold">{{ $turma->professor?->nome ?? 'Não definido' }}</span>
+                Responsável: <span class="font-semibold">{{ $turma->user?->name ?? 'Não definido' }}</span>
             </p>
         </div>
 
@@ -65,9 +65,9 @@
                     <td class="px-4 py-3 text-center">{{ $aluno->emprestimos_total }}</td>
                     <td class="px-4 py-3 text-center">{{ $aluno->devolucoes_total }}</td>
                      <td class="px-4 py-3 text-center">
-                        @if ($aluno->status_emprestimo === 'Atrasado')
-                        <span class="inline-block rounded-full bg-red-500/15 text-red-700 dark:text-red-400 border border-red-500/40 px-3 py-0.5 text-xs font-medium">Atrasado</span>
-                        @elseif ($aluno->status_emprestimo === 'No prazo')
+                        @if ($aluno->statusLabel === 'Em atraso')
+                        <span class="inline-block rounded-full bg-red-500/15 text-red-700 dark:text-red-400 border border-red-500/40 px-3 py-0.5 text-xs font-medium">Em atraso</span>
+                        @elseif ($aluno->statusLabel === 'No prazo')
                         <span class="inline-block rounded-full bg-green-500/15 text-green-700 dark:text-green-400 border border-green-500/40 px-3 py-0.5 text-xs font-medium">No prazo</span>
                         @else
                         <span class="inline-block rounded-full bg-gray-500/15 text-gray-600 dark:text-gray-300 border border-gray-500/30 px-3 py-0.5 text-xs font-medium">Sem empréstimo</span>
@@ -115,11 +115,7 @@
                     </tr>
                     @empty
                         <tr>
-<<<<<<< HEAD
                             <td colspan="9">
-=======
-                            <td colspan="10">
->>>>>>> e10c74d373551f311afbf796e3655f1e3957b348
                                 <div class="flex flex-col items-center justify-center text-center py-16">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="size-16 mb-3 text-gray-400 dark:text-gray-500" viewBox="0 0 16 16">
                                         <path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5H2zm13-3H1V2h14v1z"/>

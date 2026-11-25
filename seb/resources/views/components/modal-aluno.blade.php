@@ -203,7 +203,7 @@
 
         <div x-show="modal === 'edit'" class="w-[64vw] h-[90vh] flex flex-col rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
             <h2 class="text-lg font-bold mb-3">Editar aluno</h2>
-            <form :action="actionEdit" method="POST">
+            <form :action="actionEdit" method="POST" @submit="loading = true">
                 @csrf
                 @method('PUT')
 
@@ -231,7 +231,7 @@
                     x-model="aluno.status">
                         <option value="Sem emprestimo" class="text-black">Sem empréstimo</option>
                         <option value="No prazo" class="text-black">No prazo</option>
-                        <option value="Atrasado" class="text-black">Atrasado</option>
+                        <option value="Atrasado" class="text-black">Em atraso</option>
                     </select>
                 </div>
 
@@ -252,14 +252,15 @@
 
         <div x-show="modal === 'del'" class="w-full max-w-md rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
             <h2 class="text-lg font-bold mb-3">Deletar aluno</h2>
-            <form :action="actionDel" method="POST" class="flex flex-col gap-4">
+            <form :action="actionDel" method="POST" class="flex flex-col gap-4" @submit="loading = true">
                 @csrf
                 @method('DELETE')
                 <p>Tem certeza que deseja deletar o aluno <span class="font-bold" x-text="aluno.nome"></span>?</p>
                 <div class="flex justify-end gap-2">
                     <button type="button" @click="fechar()" class="px-4 py-2 rounded bg-white/10 hover:bg-white/20">Cancelar</button>
-                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                        Deletar
+                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                        :disabled="loading">
+                        <span x-text="loading ? 'Excluindo...' : 'Deletar'">Deletar</span>
                     </button>
                 </div>
             </form>

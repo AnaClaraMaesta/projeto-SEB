@@ -48,7 +48,7 @@
                 </div>
 
                 <input type="search" value="{{ $search }}" name="search"
-                class="px-3 py-2.5 bg-neutral-secondary-medium border text-heading text-sm focus:ring-brand focus:border-brand block w-full placeholder:text-body" placeholder="Buscar por turma, turno, nível ou professor">
+                class="px-3 py-2.5 bg-neutral-secondary-medium border text-heading text-sm focus:ring-brand focus:border-brand block w-full placeholder:text-body" placeholder="Buscar por turma, turno ou nível">
                     <button type="submit" class="inline-flex items-center box-border border text-white bg-[#3D2F2F] box-border border cursor-pointer hover:bg-[#2F3D3D] box-border border border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-e-base text-sm px-4 py-2.5 focus:outline-none">
                         <svg class="w-4 h-4 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg>
                         Buscar
@@ -91,7 +91,7 @@
                 @endif
 
                 <p class="mt-2 {{ $turma->cor ? 'opacity-80' : 'text-gray-300' }}">
-                    Professor: {{ $turma->professor?->nome ?? 'Não definido' }}
+                    Responsável: {{ $turma->user?->name ?? 'Não definido' }}
                 </p>
 
             </div>
@@ -105,7 +105,7 @@
 
                 <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
                     @click="$dispatch('abrir-edit-turma', {
-                    turma: @js($turma->only(['id', 'nome_turma', 'turno_turma', 'ano_turma', 'cor', 'professor_id']))
+                    turma: @js($turma->only(['id', 'nome_turma', 'turno_turma', 'ano_turma', 'cor']))
                 })">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>

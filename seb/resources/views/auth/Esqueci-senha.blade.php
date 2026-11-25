@@ -6,7 +6,7 @@
     <div class="shadow-sm card rounded-xl bg-[#e6eaf0] dark:bg-[#464a4f]" style="width: 25rem">
     
         <div class="card-body p-6 mt-3">
-            <form method="POST" action="{{ route('password.email') }}">
+            <form method="POST" action="{{ route('password.email') }}" x-data="{ loading: false }" @submit="loading = true">
                 @csrf
     
                 <div class="card-header text-center p-8 rounded-top-xl">
@@ -40,8 +40,8 @@
                 @enderror
     
                 <div class="  flex items-center justify-center mt-3 mb-3 rounded-sm bg-[#3D2F2F] hover:bg-[#2F3D3D] cursor-pointer "> 
-                 <button type="submit" class="flex items-center justify-center  btn btn-primary py-2 text-white w-full">
-                     ENVIAR EMAIL
+                 <button type="submit" :disabled="loading" class="flex items-center justify-center btn btn-primary py-2 text-white w-full disabled:opacity-50 disabled:cursor-not-allowed">
+                     <span x-text="loading ? 'ENVIANDO...' : 'ENVIAR EMAIL'">ENVIAR EMAIL</span>
                  </button>
                 </div>
             </form>

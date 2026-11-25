@@ -42,18 +42,18 @@
             <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                 
                 <!-- Formulário para Reenviar E-mail -->
-                <form method="POST" action="{{ route('verification.send') }}" class="w-full sm:w-auto">
+                <form method="POST" action="{{ route('verification.send') }}" class="w-full sm:w-auto" x-data="{ loading: false }" @submit="loading = true">
                     @csrf
-                    <button type="submit" class="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                        Reenviar e-mail
+                    <button type="submit" :disabled="loading" class="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span x-text="loading ? 'Enviando...' : 'Reenviar e-mail'">Reenviar e-mail</span>
                     </button>
                 </form>
 
                 <!-- Formulário para Sair (Logout) -->
-                <form method="POST" action="{{ route('logout') }}" class="w-full sm:w-auto">
+                <form method="POST" action="{{ route('logout') }}" class="w-full sm:w-auto" x-data="{ loading: false }" @submit="loading = true">
                     @csrf
-                    <button type="submit" class="w-full sm:w-auto text-sm  hover:text-white underline text-center focus:outline-none">
-                        Sair da conta
+                    <button type="submit" :disabled="loading" class="w-full sm:w-auto text-sm hover:text-white underline text-center focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span x-text="loading ? 'Saindo...' : 'Sair da conta'">Sair da conta</span>
                     </button>
                 </form>
 

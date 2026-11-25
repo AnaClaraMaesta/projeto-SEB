@@ -158,6 +158,10 @@
                 <td class="destaque">{{ $emprestimo->aluno?->nome ?? '-' }}</td>
             </tr>
             <tr>
+                <th>Professor</th>
+                <td class="destaque">{{ Auth::user()?->name ?? '-' }}</td>
+            </tr>
+            <tr>
                 <th>Turma</th>
                 <td>
                     {{ $emprestimo->aluno?->turma?->nome_turma ?? '-' }}

@@ -21,7 +21,7 @@
     
             <div class="card-body p-6 mt-3">
     
-                <form method="POST" action="{{ route('usuarios.store') }}" class="">
+                <form method="POST" action="{{ route('usuarios.store') }}" class="" x-data="{ loading: false }" @submit="loading = true">
                     @csrf
                     
                     <div class='mb-3 rounded-xs'>
@@ -103,7 +103,10 @@
                     </div>
                          
                     <div class="w-full py-4 rounded-lg text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-offset-2"> 
-                        <button type="submit" class="flex items-center rounded-sm w-full justify-center bg-[#3D2F2F] hover:bg-[#2F3D3D] cursor-pointer btn py-2 text-white">ENTRAR</button>
+                        <button type="submit" :disabled="loading"
+                            class="flex items-center rounded-sm w-full justify-center bg-[#3D2F2F] hover:bg-[#2F3D3D] cursor-pointer btn py-2 text-white disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span x-text="loading ? 'CRIANDO...' : 'CRIAR CONTA'">CRIAR CONTA</span>
+                        </button>
                     </div>
                 </form>
                  <div class="mb-3 text-sm text-blue-500 dark:text-cyan-300">

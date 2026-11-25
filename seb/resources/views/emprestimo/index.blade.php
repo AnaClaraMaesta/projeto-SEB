@@ -90,9 +90,9 @@
                         <td class="px-4 py-3">{{ $registro->data_devolucao?->format('d/m/Y') ?? '-' }}</td>
                         <td class="px-4 py-3 text-center">
                             @if ($registro->status === 'No prazo')
-                                <span class="inline-block rounded-full bg-green-500/15 text-green-700 dark:text-green-400 border border-green-500/40 px-3 py-0.5 text-xs font-medium">Empréstimo ativo</span>
-                            @elseif ($registro->status === 'Atrasado')
-                                <span class="inline-block rounded-full bg-red-500/15 text-red-700 dark:text-red-400 border border-red-500/40 px-3 py-0.5 text-xs font-medium">Atrasado</span>
+                                <span class="inline-block rounded-full bg-green-500/15 text-green-700 dark:text-green-400 border border-green-500/40 px-3 py-0.5 text-xs font-medium">No prazo</span>
+                            @elseif ($registro->status === 'Em atraso')
+                                <span class="inline-block rounded-full bg-red-500/15 text-red-700 dark:text-red-400 border border-red-500/40 px-3 py-0.5 text-xs font-medium">Em atraso</span>
                             @elseif ($registro->status === 'Devolvido')
                                 <span class="inline-block rounded-full bg-gray-500/15 text-gray-600 dark:text-gray-300 border border-gray-500/30 px-3 py-0.5 text-xs font-medium">Devolvido</span>
                             @else

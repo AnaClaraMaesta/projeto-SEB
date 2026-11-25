@@ -71,7 +71,7 @@
                 <th>Empréstimos</th>
                 <th>Devoluções</th>
                 <th>Em atraso</th>
-                <th>Professor responsável</th>
+                <th>Responsável</th>
             </tr>
         </thead>
         <tbody>
@@ -79,7 +79,7 @@
             @php
                 $emprestimos = $turma->alunos->sum('emprestimos_total');
                 $devolucoes = $turma->alunos->sum('devolucoes_total');
-                $emAtraso = $turma->alunos->filter(fn ($aluno) => $aluno->status_emprestimo === 'Atrasado')->count();
+                $emAtraso = $turma->alunos->filter(fn ($aluno) => $aluno->status_emprestimo === 'Em atraso')->count();
             @endphp
             <tr>
                 <td>{{ $turma->nome_turma }}</td>
@@ -89,7 +89,7 @@
                 <td>{{ $emprestimos }}</td>
                 <td>{{ $devolucoes }}</td>
                 <td>{{ $emAtraso }}</td>
-                <td>{{ $turma->professor?->nome ?? '-' }}</td>
+                <td>{{ $turma->user?->name ?? '-' }}</td>
             </tr>
             @endforeach
         </tbody>

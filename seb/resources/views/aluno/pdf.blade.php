@@ -97,7 +97,7 @@
                     <td>{{ $aluno->turma?->ano_turma ?? 'N/A' }}</td>
                     <td>{{ $aluno->emprestimos_total }}</td>
                     <td>{{ $aluno->devolucoes_total }}</td>
-                    <td>{{ $aluno->status_emprestimo }}</td>
+                    <td>{{ $aluno->statusLabel }}</td>
                 </tr>
             @endforeach
         </tbody>

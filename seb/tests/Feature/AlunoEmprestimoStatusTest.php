@@ -80,7 +80,7 @@ class AlunoEmprestimoStatusTest extends TestCase
         $this->emprestar($turma, $aluno, $livro);
 
         $this->assertSame('No prazo', $aluno->fresh()->status);
-        $this->assertSame('Empréstimo ativo', $aluno->fresh()->statusLabel);
+        $this->assertSame('No prazo', $aluno->fresh()->statusLabel);
     }
 
     public function test_aluno_com_emprestimo_vencido_fica_atrasado(): void
@@ -95,7 +95,7 @@ class AlunoEmprestimoStatusTest extends TestCase
         ]);
 
         $this->assertSame('Atrasado', $aluno->fresh()->status);
-        $this->assertSame('Atrasado', $aluno->fresh()->statusLabel);
+        $this->assertSame('Em atraso', $aluno->fresh()->statusLabel);
     }
 
     public function test_consultar_alunos_mostra_status_e_botao_de_emprestimo_apenas_sem_emprestimo_ativo(): void
@@ -113,7 +113,7 @@ class AlunoEmprestimoStatusTest extends TestCase
         $this->actingAs($user)
             ->get(route('aluno.index'))
             ->assertOk()
-            ->assertSee('Empréstimo ativo')
+            ->assertSee('No prazo')
             ->assertDontSee("abrir-add-emprestimo', { aluno_id: {$aluno->id} })", false);
     }
 
@@ -132,7 +132,7 @@ class AlunoEmprestimoStatusTest extends TestCase
         $this->actingAs($user)
             ->get(route('turma.show', $turma))
             ->assertOk()
-            ->assertSee('Empréstimo ativo')
+            ->assertSee('No prazo')
             ->assertDontSee("abrir-add-emprestimo', { aluno_id: {$aluno->id} })", false);
     }
 
@@ -155,6 +155,6 @@ class AlunoEmprestimoStatusTest extends TestCase
             'turma' => $turma,
         ])->render();
 
-        $this->assertStringContainsString('Empréstimo ativo', $html);
+        $this->assertStringContainsString('No prazo', $html);
     }
 }

@@ -11,7 +11,7 @@
     </div>
     @endif
 
-        <form method="POST" action="{{ route('password.update') }}">
+        <form method="POST" action="{{ route('password.update') }}" x-data="{ loading: false }" @submit="loading = true">
             @csrf
             <!-- Token necessário para o Laravel validar a requisição -->
             <input type="hidden" name="token" value="{{ $token }}">
@@ -58,8 +58,8 @@
                             </div>
                 </div>
                 <div class=" flex items-center justify-center mt-3 mb-3 rounded-sm bg-[#3D2F2F] hover:bg-[#2F3D3D] cursor-pointer "> 
-                    <button type="submit" class="flex items-center justify-center  btn btn-primary py-2 text-white w-full">
-                        REDEFINIR SENHA
+                    <button type="submit" :disabled="loading" class="flex items-center justify-center btn btn-primary py-2 text-white w-full disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span x-text="loading ? 'SALVANDO...' : 'REDEFINIR SENHA'">REDEFINIR SENHA</span>
                     </button>
                 </div>
             

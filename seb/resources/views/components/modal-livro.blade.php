@@ -1,6 +1,7 @@
 <div x-data="{
     modal: null,
     livro: {},
+    loading: false,
     baseUrl: '{{ url('/livros') }}',
 
     abrir(tipoModal, dados = {}) {
@@ -47,7 +48,7 @@
         <div x-show="modal === 'add'" class="w-[64vw] max-h-[90vh] overflow-y-auto flex flex-col rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
             <h2 class="text-lg font-bold mb-3">Novo Livro</h2>
                 
-            <form :action="actionAdd" method="POST" class="flex flex-col gap-3 flex-1 min-h-0">
+            <form :action="actionAdd" method="POST" class="flex flex-col gap-3 flex-1 min-h-0" @submit="loading = true">
                 @csrf
 
                 <div class="flex flex-col gap-1">
@@ -107,8 +108,9 @@
 
                 <div class="flex justify-end gap-2 pt-4">
                     <button type="button" @click="fechar()" class="px-4 py-2 rounded bg-white/10 hover:bg-white/20">Cancelar</button>
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Cadastrar Livro
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                        :disabled="loading">
+                        <span x-text="loading ? 'Cadastrando...' : 'Cadastrar Livro'">Cadastrar Livro</span>
                     </button>
                 </div>
             </form>
@@ -118,7 +120,7 @@
         <div x-show="modal === 'edit'" class="w-[64vw] max-h-[90vh] overflow-y-auto flex flex-col rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
             <h2 class="text-lg font-bold mb-3">Editar Livro</h2>
                 
-            <form :action="actionEdit" method="POST" class="flex flex-col gap-3 flex-1 min-h-0">
+            <form :action="actionEdit" method="POST" class="flex flex-col gap-3 flex-1 min-h-0" @submit="loading = true">
                 @csrf
                 @method('PUT')
 
@@ -179,8 +181,9 @@
 
                 <div class="flex justify-end gap-2 pt-4">
                     <button type="button" @click="fechar()" class="px-4 py-2 rounded bg-white/10 hover:bg-white/20">Cancelar</button>
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Salvar Alterações
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                        :disabled="loading">
+                        <span x-text="loading ? 'Salvando...' : 'Salvar Alterações'">Salvar Alterações</span>
                     </button>
                 </div>
             </form>
@@ -189,14 +192,15 @@
         {{-- 3. DELETAR LIVRO --}}
         <div x-show="modal === 'del'" class="w-full max-w-md rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
             <h2 class="text-lg font-bold mb-3">Deletar Livro</h2>
-            <form :action="actionDel" method="POST" class="flex flex-col gap-4">
+            <form :action="actionDel" method="POST" class="flex flex-col gap-4" @submit="loading = true">
                 @csrf
                 @method('DELETE')
                 <p>Tem certeza que deseja deletar o livro <span class="font-bold" x-text="livro.titulo"></span>?</p>
                 <div class="flex justify-end gap-2">
                     <button type="button" @click="fechar()" class="px-4 py-2 rounded bg-white/10 hover:bg-white/20">Cancelar</button>
-                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                        Deletar
+                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                        :disabled="loading">
+                        <span x-text="loading ? 'Excluindo...' : 'Deletar'">Deletar</span>
                     </button>
                 </div>
             </form>

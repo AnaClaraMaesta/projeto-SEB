@@ -24,13 +24,11 @@
             </div>
      @auth
         <x-modal-aluno :turmas="$turmasNav" />
-        <x-modal-professor :turmas="$turmasNav" />
         <x-modal-livro />
-          <x-modal-turma :professores="$professoresNav" />
+          <x-modal-turma />
           <x-modal-emprestimo :alunos="$alunosNav" :livros="$livrosNav" />
         @yield('turmas')
         @yield('alunos')
-        @yield('professores')
         @yield('livros')
         @yield('edit-user')
         @yield('emprestimo')

@@ -6,15 +6,15 @@
         <h1 class="text-xl font-bold">Sair da conta</h1>
         <p class="mt-2 text-sm text-white/70">Tem certeza que deseja sair?</p>
 
-        <form method="POST" action="{{ route('logout') }}" class="mt-6 flex justify-end gap-3">
+        <form method="POST" action="{{ route('logout') }}" class="mt-6 flex justify-end gap-3" x-data="{ loading: false }" @submit="loading = true">
             @csrf
             <a href="{{ url()->previous() }}"
                class="rounded-lg px-4 py-2.5 text-sm font-medium text-white/70 hover:text-white hover:bg-white/10 transition">
                 Cancelar
             </a>
-            <button type="submit"
-                    class="rounded-lg bg-red-500 hover:bg-red-700 border border-white/20 px-6 py-2.5 text-sm font-semibold text-white transition cursor-pointer">
-                Sair
+            <button type="submit" :disabled="loading"
+                    class="rounded-lg bg-red-500 hover:bg-red-700 border border-white/20 px-6 py-2.5 text-sm font-semibold text-white transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                <span x-text="loading ? 'Saindo...' : 'Sair'">Sair</span>
             </button>
         </form>
     </div>

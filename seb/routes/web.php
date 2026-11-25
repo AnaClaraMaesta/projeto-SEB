@@ -6,7 +6,6 @@ use App\Http\Controllers\Auth\ResetSenhaController;
 use App\Http\Controllers\EmprestimoController;
 use App\Http\Controllers\LivroController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\TurmaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -80,12 +79,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/turmas/{turma}/aluno', [AlunoController::class, 'store'])->name('aluno.store');
     Route::put('/turmas/{turma}/aluno/{aluno}', [AlunoController::class, 'update'])->name('aluno.update');
     Route::delete('/turmas/{turma}/aluno/{aluno}', [AlunoController::class, 'destroy'])->name('aluno.destroy');
-
-    /* Professores */
-    Route::get('/professores', [ProfessorController::class, 'index'])->name('professor.index');
-    Route::post('/professores', [ProfessorController::class, 'store'])->name('professor.store');
-    Route::put('/professores/{professor}', [ProfessorController::class, 'update'])->name('professor.update');
-    Route::delete('/professores/{professor}', [ProfessorController::class, 'destroy'])->name('professor.destroy');
 
     /* Livros */
     Route::get('/livros', [LivroController::class, 'index'])->name('livro.index');

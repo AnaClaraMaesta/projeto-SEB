@@ -54,7 +54,7 @@ class Emprestimo extends Model
 
                 if (! empty($attributes['data_devolucao_prevista'])
                     && Carbon::parse($attributes['data_devolucao_prevista'])->lt(today())) {
-                    return 'Atrasado';
+                    return 'Em atraso';
                 }
 
                 return 'No prazo';

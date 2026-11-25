@@ -6,7 +6,6 @@ use App\Models\Turma;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 
 class TurmaController extends Controller
 {
@@ -19,9 +18,6 @@ class TurmaController extends Controller
                 $query->where(function ($q) use ($search) {
                     $q->whereLike('nome_turma', "%{$search}%", caseSensitive: false)
                         ->orWhereLike('turno_turma', "%{$search}%", caseSensitive: false)
-                        ->orWhereHas('professor', function ($professor) use ($search) {
-                            $professor->whereLike('nome', "%{$search}%", caseSensitive: false);
-                        })
                         ->orWhereRaw('CAST(ano_turma AS TEXT) LIKE ?', ["%{$search}%"]);
                 });
             })
@@ -41,7 +37,7 @@ class TurmaController extends Controller
         $search = $request->input('search');
 
         $turmas = $this->turmasFilter($request)
-            ->with('professor')
+            ->with('user')
             ->paginate(15)
             ->withQueryString();
 
@@ -60,7 +56,6 @@ class TurmaController extends Controller
             'turno_turma' => ['required', 'in:manha,tarde,noite,integral'],
             'ano_turma' => ['required', 'in:fundamentali,fundamentalii,em'],
             'cor' => ['nullable', 'regex:/^#[0-9a-fA-F]{6}$/'],
-            'professor_id' => $this->regraProfessor(),
         ]);
 
         $dados['user_id'] = Auth::id();
@@ -75,7 +70,6 @@ class TurmaController extends Controller
                 'turno_turma' => $turma->turno_turma,
                 'ano_turma' => $turma->ano_turma,
                 'cor' => $turma->cor,
-                'professor_id' => $turma->professor_id,
             ], 201);
         }
 
@@ -91,11 +85,11 @@ class TurmaController extends Controller
         $this->authorize('view', $turma);
 
         $turma->load([
-            'professor',
-            'alunos' => fn ($query) => $query->with(['emprestimoAtivo.livro', 'livro']),
+            'user',
+            'alunos' => fn ($query) => $query
+                ->with(['emprestimoAtivo.livro', 'livro'])
+                ->comEmprestimos(),
         ]);
-
-        $turma->load(['alunos' => fn ($query) => $query->comEmprestimos()]);
 
         return view('turma.show', compact('turma'));
     }
@@ -113,7 +107,6 @@ class TurmaController extends Controller
             'turno_turma' => ['required', 'in:manha,tarde,noite,integral'],
             'ano_turma' => ['required', 'in:fundamentali,fundamentalii,em'],
             'cor' => ['nullable', 'regex:/^#[0-9a-fA-F]{6}$/'],
-            'professor_id' => $this->regraProfessor(),
         ]);
 
         $turma->update($dados);
@@ -143,43 +136,15 @@ class TurmaController extends Controller
 
     public function gerarPDF(Request $request)
     {
-        $turmas = Turma::query()
-            ->when($request->input('search'), function ($query, $search) {
-                $query->where('nome_turma', 'like', "%{$search}%")
-                    ->orWhere('turno_turma', 'like', "%{$search}%")
-                    ->orWhere('ano_turma', 'like', "%{$search}%");
-            })
-            ->when($request->filled('turno_turma'), function ($query) use ($request) {
-                $query->where('turno_turma', 'like', "%{$request->turno_turma}%");
-            })
-            ->orderBy('nome_turma')
-            ->with(['alunos' => fn ($query) => $query->comEmprestimos()])
-            ->paginate(15)  
-            ->withQueryString();
         $this->authorize('viewAny', Turma::class);
 
-        $turmas = $this->turmasFilter($request)->with('professor')->get();
+        $turmas = $this->turmasFilter($request)
+            ->with(['user', 'alunos' => fn ($query) => $query->comEmprestimos()])
+            ->get();
 
         $pdf = Pdf::loadView('turma.pdf', compact('turmas'));
         $pdf->setPaper('a4', 'portrait');
 
         return $pdf->download('relatorio_turmas.pdf');
-    }
-
-    /**
-     * Regra do professor responsável: deve existir, pertencer ao usuário
-     * logado e não estar excluído.
-     *
-     * @return array<int, mixed>
-     */
-    private function regraProfessor(): array
-    {
-        return [
-            'nullable',
-            'integer',
-            Rule::exists('professores', 'id')->where(function ($query) {
-                $query->where('user_id', Auth::id())->whereNull('deleted_at');
-            }),
-        ];
     }
 }

@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Models\Aluno;
 use App\Models\Livro;
-use App\Models\Professor;
 use App\Models\Turma;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -31,11 +30,9 @@ class AppServiceProvider extends ServiceProvider
                 : collect());
 
             $view->with('alunosNav', Auth::check()
-                ? Aluno::with('turma')->orderBy('nome')->get()
-                : collect());
-
-            $view->with('professoresNav', Auth::check()
-                ? Professor::orderBy('nome')->get()
+                ? Aluno::with(['turma', 'emprestimo' => fn ($query) => $query->whereNull('data_devolucao')])
+                    ->orderBy('nome')
+                    ->get()
                 : collect());
 
             // Apenas livros que podem ser emprestados (o último exemplar fica na biblioteca).

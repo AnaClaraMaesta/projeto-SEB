@@ -1,13 +1,33 @@
 @props(['alunos' => [], 'livros' => []])
 
+@php
+    // Alunos com empréstimo ativo já vencido (usados na confirmação de cautela).
+    $alunosEmAtraso = collect($alunos)
+        ->filter(function ($aluno) {
+            $ativos = $aluno->relationLoaded('emprestimo')
+                ? $aluno->emprestimo->whereNull('data_devolucao')
+                : $aluno->emprestimo()->whereNull('data_devolucao')->get();
+
+            return $ativos->contains(fn ($emprestimo) => $emprestimo->data_devolucao_prevista?->lt(today()));
+        })
+        ->pluck('id')
+        ->values();
+@endphp
+
 <div x-data="{
     modal: null,
     emprestimo: {},
     totalDevolvidos: 0,
+    enviando: false,
+    confirmarAtraso: false,
+    alunosEmAtraso: @js($alunosEmAtraso),
+    nomesAlunos: @js(collect($alunos)->pluck('nome', 'id')),
     baseUrl: '{{ url('/emprestimo') }}',
 
     abrir(tipoModal, dados = {}) {
         this.modal = tipoModal;
+        this.enviando = false;
+        this.confirmarAtraso = false;
         this.emprestimo = dados.emprestimo ?? {};
         this.totalDevolvidos = dados.total ?? 0;
 
@@ -17,6 +37,10 @@
                 livro_id: dados.livro_id ? String(dados.livro_id) : '',
                 dias_prazo: '',
             };
+
+            if (this.$refs.confirmadoInput) {
+                this.$refs.confirmadoInput.value = '0';
+            }
         }
     },
 
@@ -27,7 +51,51 @@
     },
 
     fechar() { 
-        this.modal = null; 
+        this.modal = null;
+        this.enviando = false;
+        this.confirmarAtraso = false;
+    },
+
+    get alunoSelecionadoEmAtraso() {
+        return this.alunosEmAtraso.map(String).includes(String(this.formAdd.aluno_id));
+    },
+
+    get nomeAlunoSelecionado() {
+        return this.nomesAlunos[this.formAdd.aluno_id] ?? '';
+    },
+
+    enviarEmprestimo(evento) {
+        // Aluno em atraso: pede confirmação antes de enviar.
+        if (this.alunoSelecionadoEmAtraso) {
+            this.confirmarAtraso = true;
+
+            return;
+        }
+
+        this.enviando = true;
+        evento.target.submit();
+    },
+
+    confirmarEmprestimo() {
+        // Atualiza o campo direto no DOM: o Alpine aplica bindings de forma
+        // assíncrona e o submit logo em seguida poderia enviar o valor antigo.
+        if (this.$refs.confirmadoInput) {
+            this.$refs.confirmadoInput.value = '1';
+        }
+
+        this.confirmarAtraso = false;
+        this.enviando = true;
+        this.$refs.formAdd.submit();
+    },
+
+    aoEscape() {
+        if (this.confirmarAtraso) {
+            this.confirmarAtraso = false;
+
+            return;
+        }
+
+        this.fechar();
     },
 
     get actionAdd()              { return `${this.baseUrl}`; },
@@ -39,7 +107,7 @@
     @abrir-devolver-emprestimo.window="abrir('devolver', $event.detail ?? {})"
     @abrir-excluir-emprestimo.window="abrir('excluir', $event.detail ?? {})"
     @abrir-excluir-historico.window="abrir('excluir-historico', $event.detail ?? {})"
-    @keydown.escape.window="fechar()"
+    @keydown.escape.window="aoEscape()"
 >
 
     <!-- Fundo Escuro / Backdrop -->
@@ -49,8 +117,9 @@
         <div x-show="modal === 'add'" class="w-[64vw] max-h-[90vh] overflow-y-auto flex flex-col rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
             <h2 class="text-lg font-bold mb-3">Novo Empréstimo</h2>
                 
-            <form :action="actionAdd" method="POST" class="flex flex-col gap-3 flex-1 min-h-0">
+            <form x-ref="formAdd" :action="actionAdd" method="POST" class="flex flex-col gap-3 flex-1 min-h-0" @submit.prevent="enviarEmprestimo($event)">
                 @csrf
+                <input type="hidden" name="confirmado" value="0" x-ref="confirmadoInput">
 
                 <div class="flex flex-col gap-1">
                     <label for="aluno_id" class="font-bold">Aluno:</label>
@@ -85,26 +154,45 @@
                         class="rounded-md bg-white/10 border border-white/20 px-2 py-1">
                 </div>
 
-                <label class="inline-flex items-center gap-2 text-sm">
-                    <input type="checkbox" name="confirmado" value="1"
-                        class="rounded border-white/30 bg-white/10">
-                    Confirmo o empréstimo mesmo que o aluno tenha pendência em atraso
-                </label>
-
                 <div class="flex justify-end gap-2 pt-4">
                     <button type="button" @click="fechar()" class="px-4 py-2 rounded bg-white/10 hover:bg-white/20">Cancelar</button>
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Registrar Empréstimo
+                    <button type="submit" :disabled="enviando"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span x-text="enviando ? 'Registrando...' : 'Registrar Empréstimo'">Registrar Empréstimo</span>
                     </button>
                 </div>
             </form>
+
+            {{-- Confirmação de cautela: aluno com empréstimo em atraso --}}
+            <div x-show="confirmarAtraso" x-cloak x-transition.opacity
+                class="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm"
+                @click.self="confirmarAtraso = false">
+                <div class="w-full max-w-md rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
+                    <h2 class="text-lg font-bold mb-3">Empréstimo em atraso</h2>
+
+                    <p>
+                        O aluno <span class="font-bold" x-text="nomeAlunoSelecionado"></span>
+                        possui empréstimo em atraso.
+                    </p>
+
+                    <p class="text-sm text-gray-300">Deseja registrar um novo empréstimo mesmo assim?</p>
+
+                    <div class="flex justify-end gap-2 pt-4">
+                        <button type="button" @click="confirmarAtraso = false" class="px-4 py-2 rounded bg-white/10 hover:bg-white/20">Cancelar</button>
+                        <button type="button" @click="confirmarEmprestimo()" :disabled="enviando"
+                            class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span x-text="enviando ? 'Registrando...' : 'Confirmar empréstimo'">Confirmar empréstimo</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         {{-- 2. REGISTRAR DEVOLUÇÃO --}}
         <div x-show="modal === 'devolver'" class="w-full max-w-md rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
             <h2 class="text-lg font-bold mb-3">Registrar Devolução</h2>
 
-            <form :action="actionDevolver" method="POST" class="flex flex-col gap-4">
+            <form :action="actionDevolver" method="POST" class="flex flex-col gap-4" @submit="enviando = true">
                 @csrf
                 @method('PUT')
 
@@ -116,8 +204,9 @@
 
                 <div class="flex justify-end gap-2">
                     <button type="button" @click="fechar()" class="px-4 py-2 rounded bg-white/10 hover:bg-white/20">Cancelar</button>
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                        Devolver
+                    <button type="submit" :disabled="enviando"
+                        class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span x-text="enviando ? 'Devolvendo...' : 'Devolver'">Devolver</span>
                     </button>
                 </div>
             </form>
@@ -127,7 +216,7 @@
         <div x-show="modal === 'excluir'" class="w-full max-w-md rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
             <h2 class="text-lg font-bold mb-3">Excluir Registro de Devolução</h2>
 
-            <form :action="actionExcluir" method="POST" class="flex flex-col gap-4">
+            <form :action="actionExcluir" method="POST" class="flex flex-col gap-4" @submit="enviando = true">
                 @csrf
                 @method('DELETE')
 
@@ -141,8 +230,9 @@
 
                 <div class="flex justify-end gap-2">
                     <button type="button" @click="fechar()" class="px-4 py-2 rounded bg-white/10 hover:bg-white/20">Cancelar</button>
-                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                        Excluir
+                    <button type="submit" :disabled="enviando"
+                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span x-text="enviando ? 'Excluindo...' : 'Excluir'">Excluir</span>
                     </button>
                 </div>
             </form>
@@ -152,7 +242,7 @@
         <div x-show="modal === 'excluir-historico'" class="w-full max-w-md rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
             <h2 class="text-lg font-bold mb-3">Excluir Histórico de Devoluções</h2>
 
-            <form :action="actionExcluirHistorico" method="POST" class="flex flex-col gap-4">
+            <form :action="actionExcluirHistorico" method="POST" class="flex flex-col gap-4" @submit="enviando = true">
                 @csrf
                 @method('DELETE')
 
@@ -162,8 +252,9 @@
 
                 <div class="flex justify-end gap-2">
                     <button type="button" @click="fechar()" class="px-4 py-2 rounded bg-white/10 hover:bg-white/20">Cancelar</button>
-                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                        Excluir tudo
+                    <button type="submit" :disabled="enviando"
+                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span x-text="enviando ? 'Excluindo...' : 'Excluir tudo'">Excluir tudo</span>
                     </button>
                 </div>
             </form>

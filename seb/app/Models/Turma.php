@@ -15,7 +15,6 @@ class Turma extends Model
 
     protected $fillable = [
         'user_id',
-        'professor_id',
         'nome_turma',
         'turno_turma',
         'ano_turma',
@@ -50,11 +49,6 @@ class Turma extends Model
     public function alunos()
     {
         return $this->hasMany(Aluno::class, 'turma_id');
-    }
-
-    public function professor(): BelongsTo
-    {
-        return $this->belongsTo(Professor::class, 'professor_id');
     }
 
     public function user(): BelongsTo

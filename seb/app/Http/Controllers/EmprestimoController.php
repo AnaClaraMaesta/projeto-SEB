@@ -58,9 +58,15 @@ class EmprestimoController extends Controller
         $this->authorize('create', [Emprestimo::class, $aluno]);
 
         if ($aluno->temAtraso() && ! $request->boolean('confirmado')) {
-            throw ValidationException::withMessages([
-                'pendencia' => 'Este aluno possui empréstimo em atraso. Confirme para realizar um novo empréstimo.',
-            ]);
+            $mensagem = 'Este aluno possui empréstimo em atraso. Confirme para realizar um novo empréstimo.';
+
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $mensagem], 422);
+            }
+
+            return redirect()->route('emprestimo.index')
+                ->with('error', $mensagem)
+                ->withInput();
         }
 
         $emprestimo = null;
@@ -134,7 +140,7 @@ class EmprestimoController extends Controller
                 return response()->json(['message' => 'Este livro já foi devolvido.'], 422);
             }
 
-            return back()->with('error', 'Este livro já foi devolvido.');
+            return redirect()->route('emprestimo.index')->with('error', 'Este livro já foi devolvido.');
         }
 
         $registrada = DB::transaction(function () use ($emprestimo) {
@@ -167,6 +173,59 @@ class EmprestimoController extends Controller
             return response()->json(['message' => 'Devolução registrada com sucesso!']);
         }
 
-        return back()->with('success', 'Devolução registrada com sucesso!');
+        return redirect()->route('emprestimo.index')->with('success', 'Devolução registrada com sucesso!');
+    }
+
+    /**
+     * Envia ao usuário o e-mail confirmando a devolução. Uma falha no envio
+     * não deve impedir que a devolução já registrada seja confirmada na tela.
+     */
+    private function notificarDevolucao(?Emprestimo $emprestimo): void
+    {
+        $usuario = $emprestimo?->usuario();
+
+        if (! $usuario) {
+            return;
+        }
+
+        try {
+            $usuario->notify(new EmprestimoDevolvido($emprestimo));
+        } catch (Throwable $e) {
+            Log::warning('Falha ao enviar notificação de devolução do empréstimo.', [
+                'emprestimo_id' => $emprestimo->id,
+                'erro' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+     * Exclui um registro de devolução (não altera estoque).
+     */
+    public function destroy(Emprestimo $emprestimo)
+    {
+        $this->authorize('delete', $emprestimo);
+
+        if (! $emprestimo->data_devolucao) {
+            return redirect()->route('emprestimo.index')
+                ->with('error', 'Só é possível excluir empréstimos já devolvidos.');
+        }
+
+        $emprestimo->delete();
+
+        return redirect()->route('emprestimo.index')
+            ->with('success', 'Registro de devolução excluído com sucesso!');
+    }
+
+    /**
+     * Exclui todo o histórico de devoluções do usuário logado.
+     */
+    public function destroyDevolvidos()
+    {
+        $this->authorize('viewAny', Emprestimo::class);
+
+        $quantidade = Emprestimo::whereNotNull('data_devolucao')->delete();
+
+        return redirect()->route('emprestimo.index')
+            ->with('success', "{$quantidade} registro(s) de devolução excluído(s).");
     }
 }

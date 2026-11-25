@@ -102,10 +102,16 @@ class Aluno extends Model
     protected function statusLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => match ($this->status) {
-                'No prazo' => 'Empréstimo ativo',
-                'Sem emprestimo' => 'Sem empréstimo',
-                default => $this->status,
+            get: function () {
+                if ($this->status === 'Sem emprestimo') {
+                    return 'Sem empréstimo';
+                }
+
+                if ($this->status === 'Atrasado') {
+                    return 'Em atraso';
+                }
+
+                return $this->status;
             }
         );
     }
@@ -150,7 +156,7 @@ class Aluno extends Model
                 }
 
                 if ($ativos->contains(fn (Emprestimo $item) => $item->data_devolucao_prevista?->lt(today()))) {
-                    return 'Atrasado';
+                    return 'Em atraso';
                 }
 
                 return 'No prazo';
