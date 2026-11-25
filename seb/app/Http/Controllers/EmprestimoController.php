@@ -36,7 +36,9 @@ class EmprestimoController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return view('emprestimo.index', compact('emprestimo', 'search'));
+        $devolvidos = Emprestimo::whereNotNull('data_devolucao')->count();
+
+        return view('emprestimo.index', compact('emprestimo', 'devolvidos', 'dataInicio', 'dataFim'));
     }
 
     /**

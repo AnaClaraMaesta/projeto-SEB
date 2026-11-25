@@ -126,8 +126,6 @@
                                     })">
                                     Devolver
                                 </button>
-<<<<<<< HEAD
-=======
                             @else
                                 <button type="button"
                                     class="bg-red-500 hover:bg-red-700 text-white font-bold py-1.5 px-3 rounded inline-flex items-center cursor-pointer"
@@ -140,7 +138,6 @@
                                     })">
                                     Excluir
                                 </button>
->>>>>>> eb6c1ca8f7628e96477350071db6ea4f92ff8620
                             @endif
                         </td>
                     </tr>
