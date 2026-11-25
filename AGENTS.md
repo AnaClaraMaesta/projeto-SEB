@@ -16,6 +16,7 @@
 ## Verify
 
 - `composer test` / `php artisan test` passes. Tests use the in-memory SQLite configuration in `phpunit.xml` and `RefreshDatabase`. There are no seeders or factories; tests create data inline.
+- **Test safety:** every `<env>` in `phpunit.xml` uses `force="true"` so the process environment (including `docker-compose.yml`'s `env_file: .env`) cannot override `DB_CONNECTION=sqlite` / `DB_DATABASE=:memory:`. Never remove `force="true"`; without it `RefreshDatabase` can run `migrate:fresh` against the remote Supabase database. Prefer `docker compose exec -T app php artisan test`.
 - Format PHP with `vendor/bin/pint` (use `--dirty` to limit changes to modified files).
 - `npm run build` works. `resources/js/app.js` is currently a placeholder because the layouts still load Alpine, Tailwind, and SweetAlert2 from CDNs; do not assume a compiled Vite bundle is rendered.
 - Keep `npm audit` clean; the lockfile is currently free of reported vulnerabilities.
@@ -25,10 +26,10 @@
 - All HTTP routes are in `routes/web.php`; `routes/api.php` is empty. Guest routes handle login, registration, and password reset. Email verification/logout require `auth`; turmas, alunos, livros, and PDF routes require `auth` + `verified`.
 - Controllers and models use PSR-4 PascalCase (`AlunoController`, `Aluno`, `Livro`, ...). Keep new files consistent; Docker/Linux is case-sensitive.
 - `Turma` has a global scope filtering by `Auth::id()`, sets `user_id` on create, and soft-deletes/restores its `alunos`. `Aluno` has a global scope filtering by the owning turma. `TurmaPolicy` and `AlunoPolicy` are enforced through `authorize()` in the controllers. `Livro` is shared across users and has no ownership policy.
-- Routes and Blade views rely on route names. `resources/views/layouts/app.blade.php` yields `login`, `createUser`, `forgot-password`, `reset-password`, `turmas`, `alunos`, and `livros` sections, and renders the aluno modal for authenticated users.
+- Routes and Blade views rely on route names. `resources/views/layouts/app.blade.php` yields `login`, `createUser`, `forgot-password`, `reset-password`, `turmas`, `alunos`, `livros`, `edit-user`, `emprestimo`, and `logout` sections, and renders the aluno/turma/livro/emprestimo modals for authenticated users.
 - Turmas and alunos have nested CRUD; livros has full CRUD at `/livros` plus a PDF report. The `2026_11_06_000000_add_estoque_and_status_to_livros_table.php` migration adds `estoque` and `status` to `livros`.
-- Auth: `User implements MustVerifyEmail`. Verification and reset emails use the custom Portuguese notifications/templates in `app/Notifications` and `resources/views/{email,vendor/mail}`. Mail is sent to Mailpit. `MagicLinkController` and `MagicLoginNotification` are unused placeholders with no routes.
-- `app/Services/Login.php` is legacy dead code (JSON-file auth); the web login uses Laravel's session guard.
+- Auth: `User implements MustVerifyEmail`. Verification and reset emails use the custom Portuguese notifications/templates in `app/Notifications` and `resources/views/{email,vendor/mail}`. Mail is sent to Mailpit.
+- UI translations live in `lang/pt_BR/{validation,passwords,auth}.php`; the default locale is `pt_BR` (`APP_LOCALE`). `.env.example` defaults to SQLite and Mailpit.
 
 ## Conventions
 
