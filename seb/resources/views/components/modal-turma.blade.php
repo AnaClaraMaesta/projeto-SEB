@@ -14,13 +14,13 @@
     abrir(tipoModal, dados = {}){
         this.modal = tipoModal;
         this.turma = dados.turma
-            ? { ...dados.turma, professor_id: dados.turma.professor_id ? String(dados.turma.professor_id) : '' }
+            ? { ...dados.turma, professor_id: dados.turma.professor_id ? String(dados.turma.professor_id) : '', cor: dados.turma.cor ?? '' }
             : {};
         this.professorErro = '';
         this.mostrarNovoProfessor = false;
 
         if(tipoModal === 'add') {
-            this.formAdd = { nome_turma: '', turno_turma: '', ano_turma: '', professor_id: '' };
+            this.formAdd = { nome_turma: '', turno_turma: '', ano_turma: '', cor: '', professor_id: '' };
             this.novoProfessor = { nome: '', email: '', telefone: '' };
         }
     },
@@ -29,6 +29,7 @@
         nome_turma: '',
         turno_turma: '',
         ano_turma: '',
+        cor: '',
         professor_id: ''
     },
 
@@ -161,8 +162,29 @@
                 </div>
 
                 <div class="flex flex-col gap-1 p-1.5">
-                    <label for="professor_turma" class="font-bold">Professor responsável:</label>
+                    <label for="cor_turma" class="font-bold">Cor da turma:</label>
 
+                    <div class="flex flex-wrap items-center gap-2">
+                        <input type="color" id="cor_turma"
+                            :value="formAdd.cor || '#3D2F2F'"
+                            @input="formAdd.cor = $event.target.value"
+                            class="h-9 w-14 cursor-pointer rounded-md border border-white/20 bg-white/10 p-1">
+
+                        <button type="button"
+                            @click="formAdd.cor = ''"
+                            class="rounded-md px-3 py-1.5 text-sm bg-white/10 hover:bg-white/20"
+                            :class="formAdd.cor === '' ? 'ring-1 ring-white/60' : ''">
+                            Padrão
+                        </button>
+
+                        <input type="hidden" name="cor" :value="formAdd.cor">
+
+                        <span class="text-xs text-white/50">Sem cor, usa o padrão do tema claro/escuro.</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-1 p-1.5">
+                    <label for="professor_turma" class="font-bold">Professor responsável:</label>
                     <div class="flex items-center gap-2">
                         <select name="professor_id" id="professor_turma" x-model="formAdd.professor_id"
                             class="flex-1 rounded-md bg-white/10 border border-white/20 px-2 py-1">
@@ -264,6 +286,28 @@
                         <option value="fundamentalii" class="text-black">Fundamental II</option>
                         <option value="em" class="text-black">Ensino Médio</option>
                     </select>
+                </div>
+
+                <div class="flex flex-col gap-1 p-1.5">
+                    <label for="cor_turma_edit" class="font-bold">Cor da turma:</label>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <input type="color" id="cor_turma_edit"
+                            :value="turma.cor || '#3D2F2F'"
+                            @input="turma.cor = $event.target.value"
+                            class="h-9 w-14 cursor-pointer rounded-md border border-white/20 bg-white/10 p-1">
+
+                        <button type="button"
+                            @click="turma.cor = ''"
+                            class="rounded-md px-3 py-1.5 text-sm bg-white/10 hover:bg-white/20"
+                            :class="! turma.cor ? 'ring-1 ring-white/60' : ''">
+                            Padrão
+                        </button>
+
+                        <input type="hidden" name="cor" :value="turma.cor">
+
+                        <span class="text-xs text-white/50">Sem cor, usa o padrão do tema claro/escuro.</span>
+                    </div>
                 </div>
 
                 <div class="flex flex-col gap-1 p-1.5">

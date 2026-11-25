@@ -22,12 +22,14 @@ class Emprestimo extends Model
         'data_emprestimo',
         'data_devolucao_prevista',
         'data_devolucao',
+        'notificado_atraso_em',
     ];
 
     protected $casts = [
         'data_emprestimo' => 'date',
         'data_devolucao_prevista' => 'date',
         'data_devolucao' => 'date',
+        'notificado_atraso_em' => 'date',
     ];
 
     protected static function booted(): void
@@ -69,6 +71,14 @@ class Emprestimo extends Model
     {
         // Mantém o histórico visível mesmo que o livro tenha sido removido (soft delete).
         return $this->belongsTo(Livro::class)->withTrashed();
+    }
+
+    /**
+     * Usuário responsável pela turma do aluno (destinatário das notificações).
+     */
+    public function usuario(): ?User
+    {
+        return $this->aluno?->turma?->user;
     }
 
     /**

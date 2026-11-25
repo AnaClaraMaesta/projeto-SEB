@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,7 +19,33 @@ class Turma extends Model
         'nome_turma',
         'turno_turma',
         'ano_turma',
+        'cor',
     ];
+
+    /**
+     * Cor de texto que mantém contraste legível sobre a cor personalizada.
+     * Sem cor definida, o tema claro/escuro cuida do contraste.
+     */
+    protected function corTexto(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $cor = ltrim((string) $this->cor, '#');
+
+                if (strlen($cor) !== 6 || ! ctype_xdigit($cor)) {
+                    return '#ffffff';
+                }
+
+                $r = hexdec(substr($cor, 0, 2));
+                $g = hexdec(substr($cor, 2, 2));
+                $b = hexdec(substr($cor, 4, 2));
+
+                $luminancia = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255;
+
+                return $luminancia > 0.6 ? '#111827' : '#ffffff';
+            }
+        );
+    }
 
     public function alunos()
     {

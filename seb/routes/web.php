@@ -97,6 +97,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     /* Empréstimos */
     Route::get('/emprestimo', [EmprestimoController::class, 'index'])->name('emprestimo.index');
+    Route::get('/emprestimo/{emprestimo}/nota', [EmprestimoController::class, 'nota'])->name('emprestimo.nota');
     Route::post('/emprestimo', [EmprestimoController::class, 'store'])->name('emprestimo.store');
     Route::put('/emprestimo/{emprestimo}/devolver', [EmprestimoController::class, 'devolver'])->name('emprestimo.devolver');
 });

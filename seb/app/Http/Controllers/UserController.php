@@ -63,6 +63,7 @@ class UserController extends Controller
         $dados = $request->validate([
             'name' => 'required|string|max:255|regex:/^[\p{L}\s]+$/u',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'foto_url' => ['nullable', 'url', 'max:2048'],
             'password' => 'nullable|string|min:8',
         ], [
             'name.required' => 'O campo nome é obrigatório.',
@@ -70,6 +71,7 @@ class UserController extends Controller
             'email.required' => 'O campo e-mail é obrigatório.',
             'email.email' => 'Por favor, insira um endereço de e-mail válido.',
             'email.unique' => 'Já existe uma conta com esse e-mail.',
+            'foto_url.url' => 'Informe uma URL válida para a foto de perfil.',
             'password.min' => 'A senha precisa ter pelo menos 8 caracteres.',
         ]);
 

@@ -67,7 +67,8 @@
 
     <div class="m-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
     @forelse ($turmas as $turma)
-        <div class="relative rounded-lg overflow-hidden shadow-lg bg-[#3D2F2F] dark:bg-[#464a4f] text-white flex flex-col transition-transform duration-300 ease-out hover:scale-105">
+        <div class="relative rounded-lg overflow-hidden shadow-lg bg-[#3D2F2F] dark:bg-[#464a4f] text-white flex flex-col transition-transform duration-300 ease-out hover:scale-105"
+            @if ($turma->cor) style="background-color: {{ $turma->cor }}; color: {{ $turma->cor_texto }};" @endif>
 
             <a href="{{ route('turma.show', $turma->id) }}" class="absolute inset-0 z-0  "
                 aria-label="Abrir turma {{ $turma->nome_turma }}">
@@ -80,16 +81,16 @@
             <div class="p-4 flex-1 transition-transform duration-300">
 
                 @if($turma->ano_turma == "fundamentali")
-                    <p class="text-gray-300">Fundamental I</p>
+                    <p class="{{ $turma->cor ? 'opacity-80' : 'text-gray-300' }}">Fundamental I</p>
                 @endif
                 @if($turma->ano_turma == "fundamentalii")
-                    <p class="text-gray-300">Fundamental II</p>
+                    <p class="{{ $turma->cor ? 'opacity-80' : 'text-gray-300' }}">Fundamental II</p>
                 @endif
                 @if($turma->ano_turma == "em")
-                    <p class="text-gray-300">Ensino Médio</p>
+                    <p class="{{ $turma->cor ? 'opacity-80' : 'text-gray-300' }}">Ensino Médio</p>
                 @endif
 
-                <p class="text-gray-300 mt-2">
+                <p class="mt-2 {{ $turma->cor ? 'opacity-80' : 'text-gray-300' }}">
                     Professor: {{ $turma->professor?->nome ?? 'Não definido' }}
                 </p>
 
@@ -104,7 +105,7 @@
 
                 <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
                     @click="$dispatch('abrir-edit-turma', {
-                    turma: @js($turma->only(['id', 'nome_turma', 'turno_turma', 'ano_turma', 'professor_id']))
+                    turma: @js($turma->only(['id', 'nome_turma', 'turno_turma', 'ano_turma', 'cor', 'professor_id']))
                 })">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>

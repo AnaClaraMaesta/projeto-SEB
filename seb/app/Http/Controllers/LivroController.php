@@ -98,6 +98,7 @@ class LivroController extends Controller
                 'regex:/^\d+$/',
                 Rule::unique('livros', 'codigo')->ignore($livro),
             ],
+            'capa_url' => ['nullable', 'url', 'max:2048'],
             'estoque' => 'required|integer|min:0',
         ];
     }

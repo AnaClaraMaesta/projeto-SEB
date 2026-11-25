@@ -10,7 +10,7 @@
             </div>
         </div>
 
-        <div class="m-3 flex gap-2 justify-between">
+        <div class="m-3 flex flex-wrap gap-2 justify-between">
             <div class="justify-start">
 
                 <button type="button"
@@ -21,31 +21,31 @@
         </div>
 
 
-            <div class="justify-end">
+            <div class="justify-end w-full sm:w-auto">
 
-                <form class="max-w-2xl w-full" method="GET" action="{{ route('emprestimo.index') }}">
-                    <div x-data="{open_filter:false}" @click.away="open_filter = false" class="relative flex rounded-md bg-[#3D2F2F] text-white">
-                        <button @click="open_filter = !open_filter" type="button" class="inline-flex items-center shrink-0 z-10 text-body bg-[#3D2F2F] box-border border cursor-pointer hover:bg-[#2F3D3D] hover:text-heading focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded-s-base text-sm px-4 py-2.5 focus:outline-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600 hover:text-gray-900 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                            </svg>
-                        </button>
+                <form id="form-periodo-emprestimo" class="w-full sm:w-80" method="GET" action="{{ route('emprestimo.index') }}">
+                    <div class="flex items-center rounded-md bg-[#3D2F2F] text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-3 shrink-0 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
 
-                        <input type="search" value="{{ $search }}" name="search_emprestimo"
-                        class="px-3 py-2.5 bg-neutral-secondary-medium border text-heading text-sm focus:ring-brand focus:border-brand block w-full placeholder:text-body" placeholder="Buscar por aluno, livro ou código">
-                        <button type="submit" class="inline-flex items-center box-border border text-white bg-[#3D2F2F] box-border border cursor-pointer hover:bg-[#2F3D3D] box-border border border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-e-base text-sm px-4 py-2.5 focus:outline-none">
-                            <svg class="w-4 h-4 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg>
-                            Buscar
-                        </button>
+                        <input type="text" id="periodo-emprestimo" readonly
+                            placeholder="Selecione o período"
+                            class="w-full bg-transparent border-0 px-3 py-2.5 text-sm text-white placeholder:text-white/60 focus:ring-0 focus:outline-none cursor-pointer">
 
-                        @if ($search)
+                        <input type="hidden" name="data_inicio" id="periodo-data-inicio" value="{{ $dataInicio }}">
+                        <input type="hidden" name="data_fim" id="periodo-data-fim" value="{{ $dataFim }}">
+
+                        @if ($dataInicio || $dataFim)
                             <a href="{{ route('emprestimo.index') }}"
-                                class="inline-flex items-center box-border border text-white bg-[#3D2F2F] box-border border cursor-pointer hover:bg-[#2F3D3D] box-border border border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-e-base text-sm px-4 py-2.5 focus:outline-none">
-                                Limpar
+                                class="mr-2 shrink-0 rounded p-1 text-white/70 hover:bg-white/10 hover:text-white"
+                                title="Limpar período" aria-label="Limpar período">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
                             </a>
                         @endif
                     </div>
-
                 </form>
             </div>
         </div>
@@ -93,9 +93,22 @@
                         </td>
 
                         <td class="px-4 py-3 text-center whitespace-nowrap">
+                            {{-- Reimpressão da nota do empréstimo --}}
+                            <a href="{{ route('emprestimo.nota', $registro) }}"
+                                target="_blank" rel="noopener"
+                                title="Reimprimir nota do empréstimo"
+                                aria-label="Reimprimir nota do empréstimo"
+                                class="bg-[#3D2F2F] hover:bg-[#2F3D3D] text-white font-bold py-1.5 px-3 rounded inline-flex items-center cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
+                                    <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
+                                    <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/>
+                                </svg>
+                                <span class="ml-1">Nota</span>
+                            </a>
+
                             @if (! $registro->data_devolucao)
                                 <button type="button"
-                                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-3 rounded inline-flex items-center cursor-pointer"
+                                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-3 rounded inline-flex items-center ml-1 cursor-pointer"
                                     @click="$dispatch('abrir-devolver-emprestimo', {
                                         emprestimo: @js([
                                             'id' => $registro->id,
@@ -105,8 +118,6 @@
                                     })">
                                     Devolver
                                 </button>
-                            @else
-                                <span class="text-gray-500 dark:text-gray-400">-</span>
                             @endif
                         </td>
                     </tr>
@@ -175,4 +186,139 @@
             <button type="button" @click="show = false" class="ml-2 opacity-70 hover:opacity-100" aria-label="Fechar">✕</button>
         </div>
 @endif
+
+@if (session('nota_emprestimo_id'))
+    {{-- Gera e baixa automaticamente a nota do empréstimo recém-cadastrado. --}}
+    <a id="nota-emprestimo-gerada"
+        href="{{ route('emprestimo.nota', ['emprestimo' => session('nota_emprestimo_id'), 'download' => 1]) }}"
+        download="nota_emprestimo.pdf"
+        style="display: none;"
+        aria-hidden="true"></a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const nota = document.getElementById('nota-emprestimo-gerada');
+
+            if (nota) {
+                nota.click();
+            }
+        });
+    </script>
+@endif
+
+@push('styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        .flatpickr-calendar {
+            border-radius: 8px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, .18);
+        }
+
+        .flatpickr-day.selected,
+        .flatpickr-day.startRange,
+        .flatpickr-day.endRange,
+        .flatpickr-day.selected.inRange,
+        .flatpickr-day.startRange.inRange,
+        .flatpickr-day.endRange.inRange {
+            background: #3D2F2F;
+            border-color: #3D2F2F;
+        }
+
+        .flatpickr-day.inRange {
+            background: #e6eaf0;
+            border-color: #e6eaf0;
+            box-shadow: -5px 0 0 #e6eaf0, 5px 0 0 #e6eaf0;
+        }
+
+        .flatpickr-day.today {
+            border-color: #3D2F2F;
+        }
+
+        .flatpickr-day.today:hover {
+            background: #3D2F2F;
+            border-color: #3D2F2F;
+            color: #fff;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .flatpickr-calendar {
+                background: #3a3d41;
+                box-shadow: 0 12px 24px rgba(0, 0, 0, .45);
+            }
+
+            .flatpickr-months .flatpickr-month,
+            .flatpickr-current-month .flatpickr-monthDropdown-months,
+            .flatpickr-current-month input.cur-year,
+            .flatpickr-weekdays,
+            span.flatpickr-weekday,
+            .flatpickr-day {
+                color: #e5e7eb;
+                fill: #e5e7eb;
+            }
+
+            .flatpickr-day:hover {
+                background: #52565b;
+                border-color: #52565b;
+            }
+
+            .flatpickr-day.prevMonthDay,
+            .flatpickr-day.nextMonthDay {
+                color: #8b9096;
+            }
+
+            .flatpickr-day.inRange {
+                background: #52565b;
+                border-color: #52565b;
+                box-shadow: -5px 0 0 #52565b, 5px 0 0 #52565b;
+            }
+        }
+    </style>
+@endpush
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const campo = document.getElementById('periodo-emprestimo');
+
+            if (! campo || typeof flatpickr === 'undefined') {
+                return;
+            }
+
+            const formulario = document.getElementById('form-periodo-emprestimo');
+            const inicio = document.getElementById('periodo-data-inicio');
+            const fim = document.getElementById('periodo-data-fim');
+
+            const paraISO = (data) => {
+                const mes = String(data.getMonth() + 1).padStart(2, '0');
+                const dia = String(data.getDate()).padStart(2, '0');
+
+                return `${data.getFullYear()}-${mes}-${dia}`;
+            };
+
+            const datasIniciais = [inicio.value, fim.value]
+                .filter(Boolean)
+                .map((valor) => new Date(`${valor}T00:00:00`));
+
+            flatpickr(campo, {
+                mode: 'range',
+                dateFormat: 'd/m/Y',
+                rangeSeparator: ' até ',
+                locale: 'pt',
+                disableMobile: true,
+                defaultDate: datasIniciais.length ? datasIniciais : null,
+                onChange: function (datas) {
+                    if (datas.length !== 2) {
+                        return;
+                    }
+
+                    inicio.value = paraISO(datas[0]);
+                    fim.value = paraISO(datas[1]);
+                    formulario.submit();
+                },
+            });
+        });
+    </script>
+@endpush
 @endsection

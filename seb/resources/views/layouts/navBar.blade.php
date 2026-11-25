@@ -27,9 +27,17 @@
         
           <div x-data="{ open_user: false }" class="relative p-2" >
                      <button @click="open_user = !open_user" class="btn cursor-pointer p-3 w-full items-center justify-between gap-3 flex">
-                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                         </svg>
+                         <span class="relative inline-flex size-6 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white/10">
+                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                             </svg>
+
+                             @if (auth()->user()->foto_url)
+                                 <img src="{{ auth()->user()->foto_url }}" alt="Foto de {{ auth()->user()->name }}"
+                                     class="absolute inset-0 h-full w-full object-cover"
+                                     x-on:error="$el.remove()">
+                             @endif
+                         </span>
 
          
                           <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-180': open_user}" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -16,6 +16,7 @@ class Livro extends Model
         'autor',
         'ano_publicacao',
         'codigo',
+        'capa_url',
         'estoque',
     ];
 

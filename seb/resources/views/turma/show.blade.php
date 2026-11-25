@@ -16,7 +16,8 @@
             </div>
         @endif
 
-        <div class="bg-[#f0f0f0] dark:bg-[#3a3d41] p-10 rounded-lg shadow-md w-full max-w-xl mx-auto">
+        <div class="bg-[#f0f0f0] dark:bg-[#3a3d41] p-10 rounded-lg shadow-md w-full max-w-xl mx-auto"
+            @if ($turma->cor) style="background-color: {{ $turma->cor }}; color: {{ $turma->cor_texto }};" @endif>
             <h1 class="text-center text-2xl font-bold">{{ $turma->nome_turma }}</h1>
 
             <p class="text-center text-lg mt-2">

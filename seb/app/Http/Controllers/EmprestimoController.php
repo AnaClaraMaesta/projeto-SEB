@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Aluno;
 use App\Models\Emprestimo;
 use App\Models\Livro;
+use App\Notifications\EmprestimoDevolvido;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class EmprestimoController extends Controller
 {
@@ -16,26 +20,23 @@ class EmprestimoController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->input('search_emprestimo');
+        $request->validate([
+            'data_inicio' => ['nullable', 'date'],
+            'data_fim' => ['nullable', 'date', 'after_or_equal:data_inicio'],
+        ]);
+
+        $dataInicio = $request->input('data_inicio');
+        $dataFim = $request->input('data_fim');
 
         $emprestimo = Emprestimo::with(['aluno.turma', 'livro'])
-            ->when($search, function ($query, $search) {
-                $query->where(function ($q) use ($search) {
-                    $q->orWhereHas('aluno', function ($n) use ($search) {
-                        $n->whereLike('nome', "%{$search}%", caseSensitive: false);
-                    })
-                        ->orWhereHas('livro', function ($l) use ($search) {
-                            $l->whereLike('titulo', "%{$search}%", caseSensitive: false)
-                                ->orWhereRaw('CAST(codigo AS TEXT) LIKE ?', ["%{$search}%"]);
-                        });
-                });
-            })
+            ->when($dataInicio, fn ($query, $data) => $query->whereDate('data_emprestimo', '>=', $data))
+            ->when($dataFim, fn ($query, $data) => $query->whereDate('data_emprestimo', '<=', $data))
             ->orderByRaw('CASE WHEN data_devolucao IS NULL THEN 0 ELSE 1 END')
             ->orderBy('data_devolucao_prevista')
             ->paginate(15)
             ->withQueryString();
 
-        return view('emprestimo.index', compact('emprestimo', 'search'));
+        return view('emprestimo.index', compact('emprestimo', 'dataInicio', 'dataFim'));
     }
 
     /**
@@ -60,7 +61,9 @@ class EmprestimoController extends Controller
             ]);
         }
 
-        DB::transaction(function () use ($aluno, $dados) {
+        $emprestimo = null;
+
+        DB::transaction(function () use ($aluno, $dados, &$emprestimo) {
             $livro = Livro::lockForUpdate()->findOrFail($dados['livro_id']);
 
             // Regra de negócio: o último exemplar permanece na biblioteca.
@@ -70,7 +73,7 @@ class EmprestimoController extends Controller
                 ]);
             }
 
-            Emprestimo::create([
+            $emprestimo = Emprestimo::create([
                 'aluno_id' => $aluno->id,
                 'livro_id' => $livro->id,
                 'data_emprestimo' => today(),
@@ -82,12 +85,39 @@ class EmprestimoController extends Controller
         });
 
         if ($request->expectsJson()) {
-            return response()->json(['message' => 'Empréstimo realizado com sucesso!']);
+            return response()->json([
+                'message' => 'Empréstimo realizado com sucesso!',
+                'emprestimo_id' => $emprestimo->id,
+                'nota_url' => route('emprestimo.nota', $emprestimo),
+            ]);
         }
 
+        // A nota do empréstimo é gerada automaticamente na tela de consulta.
         return redirect()->route('emprestimo.index')
-            ->with('success', 'Empréstimo realizado com sucesso!');
+            ->with('success', 'Empréstimo realizado com sucesso! A nota do empréstimo foi gerada.')
+            ->with('nota_emprestimo_id', $emprestimo->id);
 
+    }
+
+    /**
+     * Gera a nota (comprovante) do empréstimo para impressão.
+     */
+    public function nota(Request $request, Emprestimo $emprestimo)
+    {
+        $this->authorize('view', $emprestimo);
+
+        $emprestimo->load(['aluno.turma', 'livro']);
+
+        $pdf = Pdf::loadView('emprestimo.nota', compact('emprestimo'));
+        $pdf->setPaper('a4', 'portrait');
+
+        $arquivo = 'nota_emprestimo_'.$emprestimo->id.'.pdf';
+
+        // O botão da listagem abre a nota para impressão; a geração automática
+        // logo após o cadastro baixa o arquivo diretamente.
+        return $request->boolean('download')
+            ? $pdf->download($arquivo)
+            : $pdf->stream($arquivo);
     }
 
     /**
@@ -105,11 +135,11 @@ class EmprestimoController extends Controller
             return back()->with('error', 'Este livro já foi devolvido.');
         }
 
-        DB::transaction(function () use ($emprestimo) {
+        $registrada = DB::transaction(function () use ($emprestimo) {
             $emprestimo = Emprestimo::lockForUpdate()->findOrFail($emprestimo->id);
 
             if ($emprestimo->data_devolucao) {
-                return;
+                return false;
             }
 
             $livro = $emprestimo->livro()->lockForUpdate()->first();
@@ -123,12 +153,40 @@ class EmprestimoController extends Controller
                     'emprestimos_ativos' => max(0, (int) $livro->emprestimos_ativos - 1),
                 ])->save();
             }
+
+            return true;
         });
+
+        if ($registrada) {
+            $this->notificarDevolucao($emprestimo->fresh(['aluno.turma.user', 'livro']));
+        }
 
         if ($request->expectsJson()) {
             return response()->json(['message' => 'Devolução registrada com sucesso!']);
         }
 
         return back()->with('success', 'Devolução registrada com sucesso!');
+    }
+
+    /**
+     * Envia ao usuário o e-mail confirmando a devolução. Uma falha no envio
+     * não deve impedir que a devolução já registrada seja confirmada na tela.
+     */
+    private function notificarDevolucao(?Emprestimo $emprestimo): void
+    {
+        $usuario = $emprestimo?->usuario();
+
+        if (! $usuario) {
+            return;
+        }
+
+        try {
+            $usuario->notify(new EmprestimoDevolvido($emprestimo));
+        } catch (Throwable $e) {
+            Log::warning('Falha ao enviar notificação de devolução do empréstimo.', [
+                'emprestimo_id' => $emprestimo->id,
+                'erro' => $e->getMessage(),
+            ]);
+        }
     }
 }

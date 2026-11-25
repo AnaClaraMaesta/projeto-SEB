@@ -43,6 +43,33 @@
                     @enderror
                 </div>
 
+                <div x-data="{ foto: @js(old('foto_url', $user->foto_url ?? '')) }">
+                    <label for="foto_url" class="block text-sm font-medium mb-1">
+                        Foto de perfil <span class="text-white/40 font-normal">(URL da imagem, opcional)</span>
+                    </label>
+
+                    <div class="flex items-center gap-3">
+                        <div class="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-white/20 bg-black/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-full w-full p-3 text-white/40">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                            </svg>
+
+                            <img x-show="foto" :src="foto" alt="Prévia da foto de perfil"
+                                class="absolute inset-0 h-full w-full object-cover"
+                                x-on:error="$el.style.display = 'none'">
+                        </div>
+
+                        <div class="flex-1">
+                            <input type="url" id="foto_url" name="foto_url" x-model="foto"
+                                placeholder="https://exemplo.com/foto.jpg"
+                                class="w-full rounded-lg border border-gray-300 px-3 py-2 text-black">
+                            @error('foto_url')
+                                <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
                 <div x-data="{ valor: '', minimo: 8, showPassword: false }">
                     <label for="password" class="block text-sm font-medium mb-1">
                         Nova senha <span class="text-white/40 font-normal">(opcional)</span>

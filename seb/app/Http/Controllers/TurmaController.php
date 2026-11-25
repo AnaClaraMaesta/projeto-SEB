@@ -59,6 +59,7 @@ class TurmaController extends Controller
             'nome_turma' => 'required|string|max:255',
             'turno_turma' => ['required', 'in:manha,tarde,noite,integral'],
             'ano_turma' => ['required', 'in:fundamentali,fundamentalii,em'],
+            'cor' => ['nullable', 'regex:/^#[0-9a-fA-F]{6}$/'],
             'professor_id' => $this->regraProfessor(),
         ]);
 
@@ -73,6 +74,7 @@ class TurmaController extends Controller
                 'nome_turma' => $turma->nome_turma,
                 'turno_turma' => $turma->turno_turma,
                 'ano_turma' => $turma->ano_turma,
+                'cor' => $turma->cor,
                 'professor_id' => $turma->professor_id,
             ], 201);
         }
@@ -108,6 +110,7 @@ class TurmaController extends Controller
             'nome_turma' => 'required|string|max:255',
             'turno_turma' => ['required', 'in:manha,tarde,noite,integral'],
             'ano_turma' => ['required', 'in:fundamentali,fundamentalii,em'],
+            'cor' => ['nullable', 'regex:/^#[0-9a-fA-F]{6}$/'],
             'professor_id' => $this->regraProfessor(),
         ]);
 
