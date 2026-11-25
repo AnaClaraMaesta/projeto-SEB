@@ -50,16 +50,14 @@
     }
 
   
-    th:nth-child(1), td:nth-child(1) { width: 15%; }
-    th:nth-child(2), td:nth-child(2) { width: 10%; }
-    th:nth-child(3), td:nth-child(3) { width: 8%;  }
-    th:nth-child(4), td:nth-child(4) { width: 8%;  } 
-    th:nth-child(5), td:nth-child(5) { width: 10%; } 
-    th:nth-child(6), td:nth-child(6) { width: 12%; }
-    th:nth-child(7), td:nth-child(7) { width: 9%;  } 
-    th:nth-child(8), td:nth-child(8) { width: 9%;  } 
-    th:nth-child(9), td:nth-child(9) { width: 9%;  } 
-    th:nth-child(10), td:nth-child(10) { width: 10%; } 
+    th:nth-child(1), td:nth-child(1) { width: 22%; }
+    th:nth-child(2), td:nth-child(2) { width: 14%; }
+    th:nth-child(3), td:nth-child(3) { width: 18%; }
+    th:nth-child(4), td:nth-child(4) { width: 10%; }
+    th:nth-child(5), td:nth-child(5) { width: 9%;  }
+    th:nth-child(6), td:nth-child(6) { width: 9%;  }
+    th:nth-child(7), td:nth-child(7) { width: 9%;  }
+    th:nth-child(8), td:nth-child(8) { width: 9%;  }
 
     .footer {
         position: fixed;
@@ -80,14 +78,12 @@
         <thead>
             <tr>
                 <th>Nome</th>
-                <th>CONTATO</th>
+                <th>Contato</th>
                 <th>Turma</th>
                 <th>Turno</th>
                 <th>Ano</th>
-                <th>Livro</th>
-                <th>Empréstimo</th>
-                <th>Devolução</th>
-                <th>Previsão</th>
+                <th>Empréstimos</th>
+                <th>Devoluções</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -95,15 +91,13 @@
             @foreach ($alunos as $aluno)
                 <tr>
                     <td>{{ $aluno->nome }}</td>
-                    <td>{{ $aluno->telefone }}</td>
+                    <td>{{ $aluno->telefone ?? 'N/A' }}</td>
                     <td>{{ $aluno->turma?->nome_turma ?? 'Sem Turma' }}</td>
                     <td>{{ $aluno->turma?->turno_turma ?? 'N/A' }}</td>
                     <td>{{ $aluno->turma?->ano_turma ?? 'N/A' }}</td>
-                    <td>{{ $aluno->emprestimoAtivo?->livro?->titulo ?? $aluno->livro?->titulo ?? 'N/A' }}</td>
-                    <td>{{ $aluno->emprestimoAtivo?->data_emprestimo?->format('d/m/Y') ?? $aluno->data_emprestimo?->format('d/m/Y') ?? 'N/A' }}</td>
-                    <td>{{ $aluno->data_devolucao?->format('d/m/Y') ?? 'N/A' }}</td>
-                    <td>{{ $aluno->emprestimoAtivo?->data_devolucao_prevista?->format('d/m/Y') ?? $aluno->data_devolucao_prevista?->format('d/m/Y') ?? 'N/A' }}</td>
-                    <td>{{ $aluno->statusLabel }}</td>
+                    <td>{{ $aluno->emprestimos_total }}</td>
+                    <td>{{ $aluno->devolucoes_total }}</td>
+                    <td>{{ $aluno->status_emprestimo }}</td>
                 </tr>
             @endforeach
         </tbody>

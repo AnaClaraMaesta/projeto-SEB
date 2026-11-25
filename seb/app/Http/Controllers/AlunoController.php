@@ -14,6 +14,7 @@ class AlunoController extends Controller
      */
     public function index()
     {
+        $alunos = Aluno::with('turma')->comEmprestimos()->get();
         $this->authorize('viewAny', Aluno::class);
 
         $alunos = Aluno::with(['turma', 'emprestimoAtivo.livro', 'livro'])
@@ -84,6 +85,8 @@ class AlunoController extends Controller
         $this->authorize('view', $turma);
 
         $alunos = Aluno::where('turma_id', $turma->id)
+            ->with('turma')
+            ->comEmprestimos()
             ->with(['turma', 'emprestimoAtivo.livro', 'livro'])
             ->orderBy('nome')
             ->get();
@@ -96,6 +99,7 @@ class AlunoController extends Controller
 
     public function gerarPdfGeral()
     {
+        $alunos = Aluno::whereHas('turma')->with('turma')->comEmprestimos()->orderBy('nome')->get();
         $this->authorize('viewAny', Aluno::class);
 
         $alunos = Aluno::whereHas('turma')

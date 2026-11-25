@@ -45,6 +45,6 @@ class EmprestimoPolicy
      */
     public function delete(User $user, Emprestimo $emprestimo): bool
     {
-        return false;
+        return $emprestimo->aluno?->turma?->user_id === $user->id;
     }
 }

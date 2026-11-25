@@ -120,4 +120,41 @@ class Aluno extends Model
             ->whereDate('data_devolucao_prevista', '<', today())
             ->exists();
     }
+
+    /**
+     * Carrega as contagens e os empréstimos ativos de cada aluno (evita N+1).
+     */
+    public function scopeComEmprestimos(Builder $query): Builder
+    {
+        return $query
+            ->withCount([
+                'emprestimo as emprestimos_total',
+                'emprestimo as devolucoes_total' => fn ($q) => $q->whereNotNull('data_devolucao'),
+            ])
+            ->with(['emprestimo' => fn ($q) => $q->whereNull('data_devolucao')->with('livro')]);
+    }
+
+    /**
+     * Status calculado a partir da tabela emprestimo (não usa a coluna legada alunos.status).
+     */
+    protected function statusEmprestimo(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $ativos = $this->relationLoaded('emprestimo')
+                    ? $this->emprestimo->whereNull('data_devolucao')
+                    : $this->emprestimo()->whereNull('data_devolucao')->get();
+
+                if ($ativos->isEmpty()) {
+                    return 'Sem empréstimo';
+                }
+
+                if ($ativos->contains(fn (Emprestimo $item) => $item->data_devolucao_prevista?->lt(today()))) {
+                    return 'Atrasado';
+                }
+
+                return 'No prazo';
+            }
+        );
+    }
 }

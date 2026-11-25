@@ -3,11 +3,13 @@
 <div x-data="{
     modal: null,
     emprestimo: {},
+    totalDevolvidos: 0,
     baseUrl: '{{ url('/emprestimo') }}',
 
     abrir(tipoModal, dados = {}) {
         this.modal = tipoModal;
         this.emprestimo = dados.emprestimo ?? {};
+        this.totalDevolvidos = dados.total ?? 0;
 
         if (tipoModal === 'add') {
             this.formAdd = {
@@ -28,11 +30,15 @@
         this.modal = null; 
     },
 
-    get actionAdd()     { return `${this.baseUrl}`; },
-    get actionDevolver() { return `${this.baseUrl}/${this.emprestimo.id}/devolver`; }
+    get actionAdd()              { return `${this.baseUrl}`; },
+    get actionDevolver()         { return `${this.baseUrl}/${this.emprestimo.id}/devolver`; },
+    get actionExcluir()          { return `${this.baseUrl}/${this.emprestimo.id}`; },
+    get actionExcluirHistorico() { return `${this.baseUrl}/devolvidos`; }
 }"
     @abrir-add-emprestimo.window="abrir('add', $event.detail ?? {})"
     @abrir-devolver-emprestimo.window="abrir('devolver', $event.detail ?? {})"
+    @abrir-excluir-emprestimo.window="abrir('excluir', $event.detail ?? {})"
+    @abrir-excluir-historico.window="abrir('excluir-historico', $event.detail ?? {})"
     @keydown.escape.window="fechar()"
 >
 
@@ -112,6 +118,52 @@
                     <button type="button" @click="fechar()" class="px-4 py-2 rounded bg-white/10 hover:bg-white/20">Cancelar</button>
                     <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
                         Devolver
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        {{-- 3. EXCLUIR REGISTRO DE DEVOLUÇÃO --}}
+        <div x-show="modal === 'excluir'" class="w-full max-w-md rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
+            <h2 class="text-lg font-bold mb-3">Excluir Registro de Devolução</h2>
+
+            <form :action="actionExcluir" method="POST" class="flex flex-col gap-4">
+                @csrf
+                @method('DELETE')
+
+                <p>
+                    Excluir o registro de devolução do livro
+                    <span class="font-bold" x-text="emprestimo.livro"></span>
+                    por <span class="font-bold" x-text="emprestimo.aluno"></span>?
+                </p>
+
+                <p class="text-sm text-gray-300">O estoque do livro não será alterado.</p>
+
+                <div class="flex justify-end gap-2">
+                    <button type="button" @click="fechar()" class="px-4 py-2 rounded bg-white/10 hover:bg-white/20">Cancelar</button>
+                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Excluir
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        {{-- 4. EXCLUIR HISTÓRICO DE DEVOLUÇÕES --}}
+        <div x-show="modal === 'excluir-historico'" class="w-full max-w-md rounded-xl bg-[#3D2F2F] dark:bg-[#464a4f] text-white p-6 shadow-2xl">
+            <h2 class="text-lg font-bold mb-3">Excluir Histórico de Devoluções</h2>
+
+            <form :action="actionExcluirHistorico" method="POST" class="flex flex-col gap-4">
+                @csrf
+                @method('DELETE')
+
+                <p>Excluir <span class="font-bold" x-text="totalDevolvidos"></span> registro(s) de devolução?</p>
+
+                <p class="text-sm text-gray-300">Esta ação remove os registros antigos da lista. O estoque não será alterado.</p>
+
+                <div class="flex justify-end gap-2">
+                    <button type="button" @click="fechar()" class="px-4 py-2 rounded bg-white/10 hover:bg-white/20">Cancelar</button>
+                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Excluir tudo
                     </button>
                 </div>
             </form>

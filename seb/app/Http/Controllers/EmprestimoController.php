@@ -36,7 +36,7 @@ class EmprestimoController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return view('emprestimo.index', compact('emprestimo', 'dataInicio', 'dataFim'));
+        return view('emprestimo.index', compact('emprestimo', 'search'));
     }
 
     /**
@@ -166,27 +166,5 @@ class EmprestimoController extends Controller
         }
 
         return back()->with('success', 'Devolução registrada com sucesso!');
-    }
-
-    /**
-     * Envia ao usuário o e-mail confirmando a devolução. Uma falha no envio
-     * não deve impedir que a devolução já registrada seja confirmada na tela.
-     */
-    private function notificarDevolucao(?Emprestimo $emprestimo): void
-    {
-        $usuario = $emprestimo?->usuario();
-
-        if (! $usuario) {
-            return;
-        }
-
-        try {
-            $usuario->notify(new EmprestimoDevolvido($emprestimo));
-        } catch (Throwable $e) {
-            Log::warning('Falha ao enviar notificação de devolução do empréstimo.', [
-                'emprestimo_id' => $emprestimo->id,
-                'erro' => $e->getMessage(),
-            ]);
-        }
     }
 }

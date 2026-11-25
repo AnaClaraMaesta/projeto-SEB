@@ -95,6 +95,8 @@ class TurmaController extends Controller
             'alunos' => fn ($query) => $query->with(['emprestimoAtivo.livro', 'livro']),
         ]);
 
+        $turma->load(['alunos' => fn ($query) => $query->comEmprestimos()]);
+
         return view('turma.show', compact('turma'));
     }
 
@@ -141,6 +143,19 @@ class TurmaController extends Controller
 
     public function gerarPDF(Request $request)
     {
+        $turmas = Turma::query()
+            ->when($request->input('search'), function ($query, $search) {
+                $query->where('nome_turma', 'like', "%{$search}%")
+                    ->orWhere('turno_turma', 'like', "%{$search}%")
+                    ->orWhere('ano_turma', 'like', "%{$search}%");
+            })
+            ->when($request->filled('turno_turma'), function ($query) use ($request) {
+                $query->where('turno_turma', 'like', "%{$request->turno_turma}%");
+            })
+            ->orderBy('nome_turma')
+            ->with(['alunos' => fn ($query) => $query->comEmprestimos()])
+            ->paginate(15)  
+            ->withQueryString();
         $this->authorize('viewAny', Turma::class);
 
         $turmas = $this->turmasFilter($request)->with('professor')->get();
